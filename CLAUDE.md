@@ -34,6 +34,7 @@ specs.md agents are slash commands: `/specsmd-master-agent`, `/specsmd-inception
 - Do only what the workbook, brief and requirement PDF ask. Do not add unrequested features, files or refactors.
 - If something is unclear: ask, record, decide, continue. Never invent requirements silently.
 - When a workbook prompt is given, use its exact wording. Do not paraphrase it.
+- End EVERY reply with a final line `Next step:` followed by what the user should do next (exact command/message to send, or which checkpoint is open).
 
 ## Domain rules that are easy to get wrong
 - Dummy OrgaTEX / Scale / Scanner / Printer APIs are **training contracts**. Never present them as the real OrgaTEX interface. The brief's open questions (A-01…A-15) stay unresolved.
