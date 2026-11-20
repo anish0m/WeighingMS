@@ -56,7 +56,7 @@ OrgaTEX read access: the browser-side OrgaTEX client and the server-side OrgaTEX
 
 - ✅ **1. Plan**: Approved → implementation-plan.md
 - ✅ **2. Implement**: Approved → source code + implementation-walkthrough.md
-- ⏳ **3. Test**: In progress → tests + test-walkthrough.md
+- ⏳ **3. Test**: Awaiting approval → tests + test-walkthrough.md
 
 ## Expected Outcome
 
