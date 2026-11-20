@@ -1,0 +1,110 @@
+{% extends "station/base.html" %}
+{% comment %}
+  Operator terminal (prototype device screen). Every value shown comes from
+  the APIs at runtime; this template contains no scenario data (FR-21).
+{% endcomment %}
+{% block screen %}
+<div class="screen" x-data="terminal()" x-cloak>
+
+  <div class="topbar">
+    <span class="brandmark"><span class="n">WeighingMS</span><span class="s">{{ station_name }}</span></span>
+    <span class="crumb" data-testid="crumb" x-show="batch">
+      <template x-if="batch">
+        <span>BATCH <b x-text="batch.batchId"></b> · ORDER <b x-text="batch.orderId"></b> · MACHINE <b x-text="batch.machine"></b></span>
+      </template>
+    </span>
+    <span class="spacer"></span>
+    <span class="op-chip" data-testid="operator">
+      <span class="dot" :class="{ off: !operator }"></span>
+      <template x-if="operator">
+        <span>Operator&nbsp;<b x-text="operator.name"></b> · Shift <span x-text="operator.shift"></span></span>
+      </template>
+      <template x-if="!operator"><span>No operator</span></template>
+    </span>
+  </div>
+
+  <div class="body">
+
+    <!-- Operator choice (story 005/001: before any batch can be weighed) -->
+    <div class="view" id="v-operator" :class="{ active: view === 'operator' }">
+      <div class="choose">
+        <div>
+          <div class="big">Choose operator</div>
+          <div class="sm">Touch your name to start weighing.</div>
+        </div>
+        <div class="choose-list">
+          <template x-for="op in operators" :key="op.operatorId">
+            <button type="button" class="key" x-text="op.display" @click="chooseOperator(op.operatorId)"></button>
+          </template>
+        </div>
+        <div class="notice" role="alert" x-show="message" x-text="message"></div>
+      </div>
+    </div>
+
+    <!-- View 1: batch queue -->
+    <div class="view" id="v-queue" :class="{ active: view === 'queue' }">
+      <div class="queue">
+        <div class="scan-prompt">
+          <div class="beam" aria-hidden="true"></div>
+          <div>
+            <div class="big">Scan a batch card to begin</div>
+            <div class="sm" data-testid="queue-received">
+              Or touch a row below.<template x-if="queueReceivedAt"><span> Queue received from OrgaTEX at <span x-text="queueReceivedAt"></span>.</span></template>
+            </div>
+          </div>
+        </div>
+        <div class="notice" role="alert" data-testid="message" x-show="message || queueError" x-text="message || queueError"></div>
+        <div style="overflow-x:auto" x-show="!queueError">
+          <table class="q">
+            <thead>
+              <tr><th>Batch</th><th>Order</th><th>Machine</th><th>Fabric / lot</th><th>Shade</th><th>Comp.</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <template x-for="row in queue" :key="row.batchId">
+                <tr tabindex="0" :data-batch="row.batchId"
+                    @click="select(row.batchId, 'touch')" @keydown.enter="select(row.batchId, 'touch')">
+                  <td class="mono" x-text="row.batchId"></td>
+                  <td class="mono" x-text="row.orderId"></td>
+                  <td class="mono" x-text="row.machine"></td>
+                  <td x-text="row.fabricLot"></td>
+                  <td x-text="row.shade"></td>
+                  <td class="mono" x-text="row.componentCount"></td>
+                  <td><span class="tag" x-text="row.status"></span></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 2: weighing (skeleton; the weigh view is built in bolt 011) -->
+    <div class="view" id="v-weigh" :class="{ active: view === 'weigh' }">
+      <div class="weigh">
+        <div class="weigh-head">
+          <div class="who" x-show="recipe">
+            <span class="nm" data-testid="recipe-name" x-text="recipe && recipe.recipeName"></span>
+            <span class="meta" x-show="batch" x-text="batch && (batch.componentCount + ' components')"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="strip" data-testid="status-bar">
+    <template x-for="device in devices" :key="device.key">
+      <span class="stat" :class="{ down: device.state !== 'ready' }" :data-device="device.key">
+        <span class="dot" :class="device.state === 'ready' ? 'up' : 'down'"></span><span x-text="deviceText(device)"></span>
+      </span>
+    </template>
+    <span class="stat" data-device="orgatex" :class="{ down: orgatex.state === 'unavailable' }">
+      <span class="dot" :class="{ up: orgatex.state === 'linked', warnd: orgatex.state === 'checking', down: orgatex.state === 'unavailable' }"></span><span x-text="orgatexText()"></span>
+    </span>
+    <span class="spacer"></span>
+    <span class="stat">EN</span>
+    <span class="stat" id="clock" data-testid="clock" x-text="clock"></span>
+  </div>
+
+</div>
+{% endblock %}

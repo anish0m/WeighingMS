@@ -1,0 +1,185 @@
+/* Operator terminal styles, taken from the prototype
+   (docs/customize-weighing-station.html) for the STEP 28 comparison (NFR-10).
+   Only the terminal is reproduced: the prototype's meeting aids (screen
+   switcher, simulate buttons, question pins, notes) are not part of it.
+   View 2/3 styles are added by the later UI bolts. */
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --page-bg:      #f2f3f5;
+  --page-accent:  #2f6f7d;
+
+  /* Device panel: constant across themes */
+  --hmi-bezel:    #0a0d11;
+  --hmi-bg:       #12161c;
+  --hmi-panel:    #1a2029;
+  --hmi-panel-2:  #212936;
+  --hmi-line:     #2c3644;
+  --hmi-ink:      #e9eef4;
+  --hmi-muted:    #8998a9;
+  --hmi-dim:      #63717f;
+  --ok:           #2fbf6b;
+  --warn:         #f0a726;
+  --over:         #e8503a;
+  --steel:        #5b8cc4;
+
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg:     #0f1216;
+    --page-accent: #6fb5c4;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  font-family: var(--sans);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+[x-cloak] { display: none !important; }
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+.spacer { flex: 1 1 auto; }
+
+button:focus-visible, .q tbody tr:focus-visible {
+  outline: 2px solid var(--page-accent); outline-offset: 2px;
+}
+
+/* ── Device ─────────────────────────────────────────────────────────── */
+.device {
+  background: var(--hmi-bezel);
+  border-radius: 10px;
+  padding: 16px 16px 30px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06);
+  position: relative;
+}
+.device::after {
+  content: "15\0022  INDUSTRIAL TOUCH TERMINAL";
+  position: absolute; bottom: 9px; left: 0; right: 0; text-align: center;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .18em; color: #3d4753;
+}
+.screen {
+  background: var(--hmi-bg); color: var(--hmi-ink);
+  border-radius: 3px; overflow: hidden;
+  display: grid; grid-template-rows: auto 1fr auto;
+  min-height: 660px;
+  font-size: 15px;
+}
+
+/* Screen top bar */
+.topbar {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 11px 18px; background: var(--hmi-panel);
+  border-bottom: 1px solid var(--hmi-line);
+}
+.brandmark { display: flex; align-items: baseline; gap: 9px; }
+.brandmark .n { font-weight: 700; letter-spacing: .01em; font-size: 15px; }
+.brandmark .s { font-family: var(--mono); font-size: 10.5px; color: var(--hmi-dim); letter-spacing: .1em; }
+.topbar .spacer { flex: 1 1 auto; }
+.crumb {
+  font-family: var(--mono); font-size: 12px; color: var(--hmi-muted);
+  display: flex; gap: 8px; align-items: center;
+}
+.crumb b { color: var(--hmi-ink); font-weight: 600; }
+.op-chip {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: var(--hmi-muted);
+  padding: 4px 10px; border: 1px solid var(--hmi-line); border-radius: 3px;
+}
+.op-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+.op-chip .dot.off { background: var(--hmi-dim); }
+.op-chip b { color: var(--hmi-ink); }
+
+/* Screen body */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── Operator choice (before view 1; story 005/001) ─────────────────── */
+.choose { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+.choose .big { font-size: 19px; font-weight: 600; }
+.choose .sm { font-size: 13px; color: var(--hmi-muted); }
+.choose-list { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Primary touch key (prototype action key; ≥ 57 px, NFR-8) */
+.key {
+  appearance: none; font: inherit; cursor: pointer;
+  min-height: 62px; min-width: 150px; padding: 0 26px;
+  border-radius: 3px; border: 1px solid var(--hmi-line);
+  background: var(--hmi-panel-2); color: var(--hmi-ink);
+  font-size: 16px; font-weight: 600; letter-spacing: .02em;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+}
+.key:hover:not(:disabled) { background: #2a3442; }
+.key:disabled { opacity: .34; cursor: not-allowed; }
+
+/* ── View 1: batch queue ────────────────────────────────────────────── */
+.queue { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+.scan-prompt {
+  display: flex; align-items: center; gap: 16px; padding: 20px 22px;
+  border: 1px dashed var(--hmi-line); border-radius: 3px; background: var(--hmi-panel);
+}
+.scan-prompt .big { font-size: 19px; font-weight: 600; }
+.scan-prompt .sm { font-size: 13px; color: var(--hmi-muted); }
+.beam { width: 46px; height: 46px; border: 2px solid var(--steel); border-radius: 3px; position: relative; flex: none; }
+.beam::before { content: ""; position: absolute; left: 6px; right: 6px; top: 50%; height: 2px; background: var(--over); animation: scan 2.4s ease-in-out infinite; }
+@keyframes scan { 0%,100% { transform: translateY(-13px); } 50% { transform: translateY(13px); } }
+@media (prefers-reduced-motion: reduce) { .beam::before { animation: none; } }
+
+/* Refusal / failure message on view 1 */
+.notice {
+  font-family: var(--mono); font-size: 13px; letter-spacing: .05em;
+  padding: 9px 13px; border-radius: 3px;
+  color: var(--over); border: 1px solid rgba(232,80,58,.45);
+  background: var(--hmi-panel);
+}
+
+table.q { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.q th {
+  text-align: left; font-size: 10px; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--hmi-dim); font-weight: 650; padding: 0 12px 8px 0; border-bottom: 1px solid var(--hmi-line);
+}
+table.q td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--hmi-line); font-variant-numeric: tabular-nums; }
+table.q td.mono { font-family: var(--mono); }
+table.q tbody tr { cursor: pointer; height: 57px; }
+table.q tbody tr:hover td { background: #1b222c; }
+table.q tr.sel td { background: var(--hmi-panel-2); }
+.tag {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .09em;
+  padding: 3px 8px; border-radius: 2px; border: 1px solid var(--hmi-line); color: var(--hmi-muted);
+}
+.tag.now { color: var(--warn); border-color: rgba(240,167,38,.5); }
+
+/* ── View 2 skeleton (full weigh view: bolt 011) ────────────────────── */
+.weigh { padding: 20px 24px; display: flex; flex-direction: column; gap: 18px; }
+.weigh-head { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.weigh-head .who { display: flex; flex-direction: column; gap: 4px; }
+.weigh-head .nm { font-size: 21px; font-weight: 650; letter-spacing: -.01em; }
+.weigh-head .meta { font-family: var(--mono); font-size: 11.5px; color: var(--hmi-muted); letter-spacing: .04em; }
+
+/* ── Status strip ───────────────────────────────────────────────────── */
+.strip {
+  display: flex; gap: 22px; flex-wrap: wrap; align-items: center;
+  padding: 10px 18px; background: var(--hmi-panel);
+  border-top: 1px solid var(--hmi-line);
+  font-family: var(--mono); font-size: 11px; color: var(--hmi-muted); letter-spacing: .04em;
+}
+.stat { display: flex; align-items: center; gap: 7px; }
+.stat .dot { width: 7px; height: 7px; border-radius: 50%; }
+.dot.up { background: var(--ok); }
+.dot.warnd { background: var(--warn); }
+.dot.down { background: var(--over); }
+.stat.down { color: var(--over); }
+.strip .spacer { flex: 1 1 auto; }

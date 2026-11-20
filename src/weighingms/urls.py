@@ -3,6 +3,7 @@
 Contract endpoints of the Dummy integrations are mounted under /api/.
 Training-only controls (simulate, failure modes) are under /api/training/.
 WeighingMS's own endpoints are under /station/api/ (ADR-002).
+The operator terminal page is served at /.
 """
 
 from django.urls import include, path
@@ -30,4 +31,5 @@ urlpatterns = [
     path("api/", include("dummy_printer.urls")),
     path("station/api/", include("batches.urls")),
     path("station/api/", include("weighing.urls")),
+    path("", include("station.urls")),
 ]

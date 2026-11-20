@@ -1,0 +1,27 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>WeighingMS — {{ station_name }}</title>
+  <link rel="stylesheet" href="{% static 'station/station.css' %}">
+  {# Integration clients: each one is the only file that knows its paths (IR-07). #}
+  <script src="{% static 'orgatex/orgatex-client.js' %}"></script>
+  <script src="{% static 'devices/device-status.js' %}"></script>
+  <script src="{% static 'devices/scale-client.js' %}"></script>
+  <script src="{% static 'devices/scanner-client.js' %}"></script>
+  <script src="{% static 'devices/printer-client.js' %}"></script>
+  <script src="{% static 'station/station-client.js' %}"></script>
+  <script src="{% static 'station/terminal.js' %}"></script>
+  {# Alpine.js is served locally, never from a CDN. #}
+  <script defer src="{% static 'station/vendor/alpine.min.js' %}"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="device">
+      {% block screen %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "devices",
     "batches",
     "weighing",
+    "station",
     "dummy_orgatex",
     "dummy_scale",
     "dummy_scanner",
@@ -50,7 +51,8 @@ WSGI_APPLICATION = "weighingms.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        # WEIGHINGMS_DB_PATH lets the Playwright server use its own database.
+        "NAME": os.environ.get("WEIGHINGMS_DB_PATH", BASE_DIR / "db.sqlite3"),
     }
 }
 
@@ -81,3 +83,6 @@ ORGATEX_TIMEOUT_SECONDS = float(os.environ.get("ORGATEX_TIMEOUT_SECONDS", "5"))
 SCALE_BASE_URL = os.environ.get("SCALE_BASE_URL", "http://localhost:8000/api")
 SCANNER_BASE_URL = os.environ.get("SCANNER_BASE_URL", "http://localhost:8000/api")
 DEVICE_TIMEOUT_SECONDS = float(os.environ.get("DEVICE_TIMEOUT_SECONDS", "2"))
+
+# Operator terminal (NFR-13): the station name shown in the header.
+STATION_NAME = os.environ.get("STATION_NAME", "STATION 01")
