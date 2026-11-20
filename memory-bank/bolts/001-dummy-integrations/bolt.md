@@ -3,16 +3,16 @@ id: 001-dummy-integrations
 unit: 001-dummy-integrations
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 001-seed-training-scenario
   - 002-dummy-orgatex-batch-endpoints
   - 003-dummy-orgatex-recipe-endpoint
   - 004-dummy-orgatex-consumption-endpoint
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-20T05:50:02Z
 completed: null
-current_stage: null
+current_stage: plan
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
@@ -54,7 +54,7 @@ Create the project skeleton and the Dummy OrgaTEX training contract with the pro
 
 ## Stages
 
-- [ ] **1. Plan**: Pending → implementation-plan.md
+- ⏳ **1. Plan**: In progress → implementation-plan.md
 - [ ] **2. Implement**: Pending → source code + implementation-walkthrough.md
 - [ ] **3. Test**: Pending → tests + test-walkthrough.md
 
