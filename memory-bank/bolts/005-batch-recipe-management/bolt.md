@@ -11,7 +11,7 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T08:37:50Z
 completed: null
-current_stage: implement
+current_stage: test
 stages_completed:
   - name: model
     completed: 2026-11-20T08:42:11Z
@@ -22,6 +22,9 @@ stages_completed:
   - name: adr
     completed: 2026-11-20T08:48:48Z
     artifact: adr-001-server-authoritative-selection.md, adr-002-station-api-namespace.md, adr-003-immutable-recipe-snapshot.md
+  - name: implement
+    completed: 2026-11-20T08:52:43Z
+    artifact: src/batches/
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [003-orgatex-integration, 004-device-integration]
@@ -64,8 +67,8 @@ Batch queue, selection and read-only recipe snapshot as a domain model.
 - [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete (ADR-001, ADR-002, ADR-003) → adr-*.md
-- [ ] **4. Implement**: ⏳ Awaiting approval → source code
-- [ ] **5. Test**: Pending → ddd-03-test-report.md
+- [x] **4. Implement**: ✅ Complete → source code
+- [ ] **5. Test**: ⏳ Awaiting approval → ddd-03-test-report.md
 
 ## Expected Outcome
 

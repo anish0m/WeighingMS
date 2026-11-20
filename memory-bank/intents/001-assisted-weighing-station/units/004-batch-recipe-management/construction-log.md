@@ -2,7 +2,7 @@
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 created: 2026-11-20T08:37:50Z
-last_updated: 2026-11-20T08:48:48Z
+last_updated: 2026-11-20T08:52:43Z
 ---
 
 # Construction Log: batch-recipe-management
@@ -37,6 +37,7 @@ last_updated: 2026-11-20T08:48:48Z
 | 2026-11-20T08:42:11Z | 005-batch-recipe-management | stage-complete | Domain Model → Technical Design (APPROVE MODEL; recommended decisions: no server queue endpoint, scale class in bolt 009, fresh snapshot per selection) |
 | 2026-11-20T08:45:16Z | 005-batch-recipe-management | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; app `batches`, `/station/api/selections`, immutable snapshot models) |
 | 2026-11-20T08:48:48Z | 005-batch-recipe-management | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-001 server-authoritative selection, ADR-002 `/station/api/` namespace, ADR-003 immutable recipe snapshot; all accepted) |
+| 2026-11-20T08:52:43Z | 005-batch-recipe-management | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
 
 ## Execution Summary
 
