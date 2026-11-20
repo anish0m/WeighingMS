@@ -2,11 +2,11 @@
 id: 002-select-batch-view
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 007-assisted-weighing-station-ui
-implemented: false
+implemented: true
 ---
 
 # Story: 002-select-batch-view
