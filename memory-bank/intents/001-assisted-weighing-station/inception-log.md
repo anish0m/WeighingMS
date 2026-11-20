@@ -20,7 +20,7 @@ status: in-progress
 | Intent (requirements draft) | ✅ Approved 2026-11-20T03:33:25Z | requirements.md |
 | Requirements | ✅ Approved 2026-11-20T03:57:49Z | requirements.md |
 | System Context | ✅ Approved 2026-11-20T04:17:25Z | system-context.md |
-| Units | [ ] | units.md |
+| Units | ✅ Approved 2026-11-20T04:26:59Z (7 units) | units.md |
 | Stories | [ ] | units/{unit-name}/stories/*.md |
 | Bolt Plan | [ ] | memory-bank/bolts/ |
 
@@ -30,7 +30,7 @@ status: in-progress
 |--------|-------|
 | Functional Requirements | 21 |
 | Non-Functional Requirements | 13 |
-| Units | – |
+| Units | 7 |
 | Stories | – |
 | Bolts Planned | – |
 
@@ -38,6 +38,13 @@ status: in-progress
 
 | Unit | Stories | Bolts | Priority |
 |------|---------|-------|----------|
+| 001-dummy-integrations | – | – | Must |
+| 002-orgatex-integration | – | – | Must |
+| 003-device-integration | – | – | Must |
+| 004-batch-recipe-management | – | – | Must |
+| 005-weighing-station | – | – | Must |
+| 006-ticket-printing | – | – | Must |
+| 007-assisted-weighing-station-ui | – | – | Must |
 
 ## Decision Log
 
@@ -50,6 +57,8 @@ status: in-progress
 | 2026-11-20T03:57:49Z | OQ-4 overshoot rule left open | Workbook STEP 24 requires a human decision | Pending |
 | 2026-11-20T04:17:25Z | System Context approved: real OrgaTEX/Scale/Scanner/Printer separated from Dummy substitutes; one adapter per integration over HTTP; minimum Dummy endpoints from workbook STEP 16 as training contracts | CHECKPOINT (STEP 9) | Yes (APPROVE SYSTEM CONTEXT) |
 | 2026-11-20T04:17:25Z | Brief IR-06 (OrgaTEX batch status write-back) not built | Not among approved FRs | Yes (APPROVE SYSTEM CONTEXT) |
+| 2026-11-20T04:26:59Z | 7 Units: 001-dummy-integrations, 002-orgatex-integration, 003-device-integration, 004-batch-recipe-management, 005-weighing-station, 006-ticket-printing, 007-assisted-weighing-station-ui; each FR owned by exactly one Unit | CHECKPOINT 3 (STEP 10) | Yes (APPROVE UNITS) |
+| 2026-11-20T04:26:59Z | Batch + Recipe & Material merged (004); Scale, Scanner, Printer adapters grouped in 003; scale selection rule in 005 | Same lifecycle / same fail-safe pattern | Yes (APPROVE UNITS) |
 
 ## Scope Changes
 
@@ -61,7 +70,7 @@ status: in-progress
 **Checklist**:
 - [x] All requirements documented
 - [x] System context defined
-- [ ] Units decomposed
+- [x] Units decomposed
 - [ ] Stories created for all units
 - [ ] Bolts planned
 - [ ] Human review complete
@@ -72,7 +81,8 @@ status: in-progress
 2. Requirements approved 2026-11-20T03:57:49Z (`APPROVE REQUIREMENTS`)
 3. ~~STEP 8 UI analysis~~ (done; findings in step notes)
 4. System Context approved 2026-11-20T04:17:25Z (`APPROVE SYSTEM CONTEXT`)
-5. Next: workbook STEP 10, decompose into Units
+5. Units approved 2026-11-20T04:26:59Z (`APPROVE UNITS`)
+6. Next: workbook STEP 11, create Stories
 
 ## Dependencies
 
