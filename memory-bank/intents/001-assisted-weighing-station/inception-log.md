@@ -22,7 +22,7 @@ status: in-progress
 | System Context | ✅ Approved 2026-11-20T04:17:25Z | system-context.md |
 | Units | ✅ Approved 2026-11-20T04:26:59Z (7 units) | units.md |
 | Stories | ✅ Approved 2026-11-20T04:56:11Z (42 stories) | units/{unit-name}/stories/*.md |
-| Bolt Plan | [ ] | memory-bank/bolts/ |
+| Bolt Plan | Draft 2026-11-20T05:15:14Z (17 bolts), awaiting APPROVE BOLT PLAN | memory-bank/bolts/ |
 
 ## Summary
 
@@ -32,19 +32,19 @@ status: in-progress
 | Non-Functional Requirements | 13 |
 | Units | 7 |
 | Stories | 42 |
-| Bolts Planned | – |
+| Bolts Planned | 17 |
 
 ## Units Breakdown
 
 | Unit | Stories | Bolts | Priority |
 |------|---------|-------|----------|
-| 001-dummy-integrations | 7 | – | Must |
-| 002-orgatex-integration | 3 | – | Must |
-| 003-device-integration | 5 | – | Must |
-| 004-batch-recipe-management | 5 | – | Must |
-| 005-weighing-station | 11 | – | Must |
-| 006-ticket-printing | 2 | – | Must |
-| 007-assisted-weighing-station-ui | 9 | – | Must |
+| 001-dummy-integrations | 7 | 2 | Must |
+| 002-orgatex-integration | 3 | 2 | Must |
+| 003-device-integration | 5 | 1 | Must |
+| 004-batch-recipe-management | 5 | 2 | Must |
+| 005-weighing-station | 11 | 5 | Must |
+| 006-ticket-printing | 2 | 1 | Must |
+| 007-assisted-weighing-station-ui | 9 | 4 | Must |
 
 ## Decision Log
 
@@ -61,6 +61,7 @@ status: in-progress
 | 2026-11-20T04:26:59Z | Batch + Recipe & Material merged (004); Scale, Scanner, Printer adapters grouped in 003; scale selection rule in 005 | Same lifecycle / same fail-safe pattern | Yes (APPROVE UNITS) |
 | 2026-11-20T04:56:11Z | 42 Stories (all Must, 132 acceptance criteria); each adds Requirements, UI/UX Impact, API Dependencies, Test Expectations sections to the specs.md template | CHECKPOINT (STEP 11) | Yes (APPROVE STORIES) |
 | 2026-11-20T04:56:11Z | Training simulation panel (007/008), dyestuff scan step (004/004, OQ-8), Quit records nothing vs Re-tare zeroes (005/003); overshoot story 005/007 criterion 3 refined after STEP 24 | Prototype demo controls / approved OQs | Yes (APPROVE STORIES) |
+| 2026-11-20T05:15:14Z | Browser calls the Dummy APIs directly via one JS client per integration; server stays authority (re-reads scale on confirm, stores records, supplies write-back payload/key and ticket content). Recorded as System Context clarification | Workbook STEP 19/21/26/27 Network-tab evidence expects the Dummy paths | Yes (user choice at STEP 12) |
 
 ## Scope Changes
 

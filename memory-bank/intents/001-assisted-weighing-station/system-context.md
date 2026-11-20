@@ -2,7 +2,7 @@
 intent: 001-assisted-weighing-station
 phase: inception
 status: context-defined
-updated: 2026-11-20T04:17:25Z
+updated: 2026-11-20T05:15:14Z
 ---
 
 # Assisted Dyestuff Weighing Station (WeighingMS) - System Context
@@ -153,6 +153,14 @@ WeighingMS never becomes a second source of truth for anything OrgaTEX owns (C-0
 
    These are **training contracts, not claims about the real OrgaTEX, scale, scanner or printer interfaces.** The brief's §10.1 endpoint shape is not adopted.
 5. **Not crossed.** No connection to dispensing machinery (C-03), no write to recipes (C-01), no change to OrgaTEX (C-02), no real device drivers.
+
+## Clarification (STEP 12, user decision 2026-11-20T05:15:14Z)
+
+Decided by the user while planning Bolts, because workbook STEP 19, 21, 26 and 27 expect the browser's Network tab to show the Dummy API calls (`GET /api/batches`, `GET /api/batches/B-24187/recipe`, `GET /api/scales/scale-3kg/weight`, `POST /api/batches/B-24187/consumption`, `POST /api/tickets`):
+
+- The **browser UI calls the Dummy APIs directly**, through **one JS client module per integration** (OrgaTEX, Scale, Scanner, Printer). No other JS file knows those paths (FR-21: the UI obtains data "only from the Dummy APIs over HTTP").
+- The **WeighingMS server stays the authority**: it snapshots the selected recipe and re-reads the scale through its own Python adapters (one per integration) before accepting a confirmation, stores all records, and supplies the consumption payload + idempotency key and the ticket content. The browser reports write-back and print results back to the server, which records them.
+- Integration boundary 1 ("one adapter per integration") therefore applies per runtime: one JS client and, where the server needs it, one Python adapter per integration. Domain code still never imports Dummy models.
 
 ## Failure Boundaries
 

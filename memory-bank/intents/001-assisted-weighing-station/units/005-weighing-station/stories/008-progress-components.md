@@ -5,7 +5,7 @@ intent: 001-assisted-weighing-station
 status: ready
 priority: must
 created: 2026-11-20T04:51:01Z
-assigned_bolt: null
+assigned_bolt: 010-weighing-station
 implemented: false
 ---
 
