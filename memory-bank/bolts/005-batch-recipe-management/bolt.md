@@ -3,15 +3,15 @@ id: 005-batch-recipe-management
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 001-view-batch-queue
   - 002-select-batch
   - 003-load-read-only-recipe
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T08:37:50Z
-completed: null
-current_stage: test
+completed: 2026-11-20T08:57:58Z
+current_stage: null
 stages_completed:
   - name: model
     completed: 2026-11-20T08:42:11Z
@@ -25,20 +25,24 @@ stages_completed:
   - name: implement
     completed: 2026-11-20T08:52:43Z
     artifact: src/batches/
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [003-orgatex-integration, 004-device-integration]
-enables_bolts: [007-assisted-weighing-station-ui, 008-batch-recipe-management, 009-weighing-station]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-20T08:57:58Z
+    artifact: ddd-03-test-report.md
+requires_bolts:
+  - 003-orgatex-integration
+  - 004-device-integration
+enables_bolts:
+  - 007-assisted-weighing-station-ui
+  - 008-batch-recipe-management
+  - 009-weighing-station
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 19"
+workbook_step: STEP 19
 ---
 
 # Bolt: 005-batch-recipe-management
@@ -68,7 +72,7 @@ Batch queue, selection and read-only recipe snapshot as a domain model.
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete (ADR-001, ADR-002, ADR-003) → adr-*.md
 - [x] **4. Implement**: ✅ Complete → source code
-- [ ] **5. Test**: ⏳ Awaiting approval → ddd-03-test-report.md
+- [x] **5. Test**: ✅ Complete → ddd-03-test-report.md
 
 ## Expected Outcome
 

@@ -2,11 +2,11 @@
 id: 001-view-batch-queue
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 005-batch-recipe-management
-implemented: false
+implemented: true
 ---
 
 # Story: 001-view-batch-queue

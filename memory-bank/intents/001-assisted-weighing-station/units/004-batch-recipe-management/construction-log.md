@@ -2,7 +2,7 @@
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 created: 2026-11-20T08:37:50Z
-last_updated: 2026-11-20T08:52:43Z
+last_updated: 2026-11-20T08:57:58Z
 ---
 
 # Construction Log: batch-recipe-management
@@ -26,7 +26,7 @@ last_updated: 2026-11-20T08:52:43Z
 
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
-| 005-batch-recipe-management | 001, 002, 003 | ⏳ in-progress | - |
+| 005-batch-recipe-management | 001, 002, 003 | ✅ completed | - |
 | 008-batch-recipe-management | 004, 005 | planned | - |
 
 ## Execution History
@@ -38,6 +38,7 @@ last_updated: 2026-11-20T08:52:43Z
 | 2026-11-20T08:45:16Z | 005-batch-recipe-management | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; app `batches`, `/station/api/selections`, immutable snapshot models) |
 | 2026-11-20T08:48:48Z | 005-batch-recipe-management | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-001 server-authoritative selection, ADR-002 `/station/api/` namespace, ADR-003 immutable recipe snapshot; all accepted) |
 | 2026-11-20T08:52:43Z | 005-batch-recipe-management | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
+| 2026-11-20T08:57:58Z | 005-batch-recipe-management | completed | All 5 stages done (APPROVE TESTS); 175/175 tests pass; stories 001–003 complete; unit stays open for bolt 008 |
 
 ## Execution Summary
 
@@ -45,11 +46,12 @@ last_updated: 2026-11-20T08:52:43Z
 |--------|-------|
 | Original bolts planned | 2 |
 | Current bolt count | 2 |
-| Bolts completed | 0 |
-| Bolts in progress | 1 |
+| Bolts completed | 1 |
+| Bolts in progress | 0 |
 | Bolts remaining | 1 |
 | Replanning events | 0 |
 
 ## Notes
 
 - Dummy APIs are training contracts, not the real OrgaTEX interface.
+- 2026-11-20T08:57:58Z: bolt 005 complete. ADR-001 (server-authoritative selection), ADR-002 (`/station/api/`), ADR-003 (immutable recipe snapshot) accepted and indexed in `standards/decision-index.md`. Story 001's queue screen and story 003's scale class are verified in bolts 007 and 009 (approved model decisions).
