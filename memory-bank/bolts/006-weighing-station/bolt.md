@@ -9,11 +9,14 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T09:02:10Z
 completed: null
-current_stage: design
+current_stage: adr
 stages_completed:
   - name: model
     completed: 2026-11-20T09:16:48Z
     artifact: ddd-01-domain-model.md
+  - name: design
+    completed: 2026-11-20T09:19:44Z
+    artifact: ddd-02-technical-design.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [001-dummy-integrations]
@@ -52,8 +55,8 @@ Weighing-session foundation: operator and supervisor identities and the Weighing
 ## Stages
 
 - [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
-- [ ] **2. Technical Design**: ⏳ Awaiting approval → ddd-02-technical-design.md
-- [ ] **3. ADR Analysis (optional)**: Pending → adr-*.md
+- [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
+- [ ] **3. ADR Analysis (optional)**: ⏳ Awaiting approval → adr-*.md
 - [ ] **4. Implement**: Pending → source code
 - [ ] **5. Test**: Pending → ddd-03-test-report.md
 
