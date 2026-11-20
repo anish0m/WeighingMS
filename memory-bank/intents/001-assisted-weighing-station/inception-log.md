@@ -19,7 +19,7 @@ status: in-progress
 |----------|--------|------|
 | Intent (requirements draft) | ✅ Approved 2026-11-20T03:33:25Z | requirements.md |
 | Requirements | ✅ Approved 2026-11-20T03:57:49Z | requirements.md |
-| System Context | [ ] | system-context.md |
+| System Context | ✅ Approved 2026-11-20T04:17:25Z | system-context.md |
 | Units | [ ] | units.md |
 | Stories | [ ] | units/{unit-name}/stories/*.md |
 | Bolt Plan | [ ] | memory-bank/bolts/ |
@@ -48,6 +48,8 @@ status: in-progress
 | 2026-11-20T03:57:49Z | Requirements approved as written: 21 FR, 13 NFR, Dummy behaviour DB-1–DB-10 | CHECKPOINT 2 | Yes |
 | 2026-11-20T03:57:49Z | Training defaults accepted: OQ-1 no offline sync, OQ-2 no reporting beyond batch history, OQ-3 seeded operator list + supervisor ID/PIN/reason, OQ-5 queued batches not selectable, OQ-6 B-24187 seeded with all 5 pending, OQ-7 lot/container from Dummy OrgaTEX seed, OQ-8 dyestuff scan step, OQ-9 no calibration blocking or manual reselection | Proposed defaults, user approved without changes | Yes |
 | 2026-11-20T03:57:49Z | OQ-4 overshoot rule left open | Workbook STEP 24 requires a human decision | Pending |
+| 2026-11-20T04:17:25Z | System Context approved: real OrgaTEX/Scale/Scanner/Printer separated from Dummy substitutes; one adapter per integration over HTTP; minimum Dummy endpoints from workbook STEP 16 as training contracts | CHECKPOINT (STEP 9) | Yes (APPROVE SYSTEM CONTEXT) |
+| 2026-11-20T04:17:25Z | Brief IR-06 (OrgaTEX batch status write-back) not built | Not among approved FRs | Yes (APPROVE SYSTEM CONTEXT) |
 
 ## Scope Changes
 
@@ -57,8 +59,8 @@ status: in-progress
 ## Ready for Construction
 
 **Checklist**:
-- [ ] All requirements documented
-- [ ] System context defined
+- [x] All requirements documented
+- [x] System context defined
 - [ ] Units decomposed
 - [ ] Stories created for all units
 - [ ] Bolts planned
@@ -68,7 +70,9 @@ status: in-progress
 
 1. ~~Human validation of the Intent~~ (approved 2026-11-20T03:33:25Z)
 2. Requirements approved 2026-11-20T03:57:49Z (`APPROVE REQUIREMENTS`)
-3. Next: workbook STEP 8 (UI analysis), then System Context (STEP 9)
+3. ~~STEP 8 UI analysis~~ (done; findings in step notes)
+4. System Context approved 2026-11-20T04:17:25Z (`APPROVE SYSTEM CONTEXT`)
+5. Next: workbook STEP 10, decompose into Units
 
 ## Dependencies
 
