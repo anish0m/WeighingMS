@@ -2,7 +2,7 @@
 unit: 001-dummy-integrations
 intent: 001-assisted-weighing-station
 created: 2026-11-20T05:50:02Z
-last_updated: 2026-11-20T06:37:52Z
+last_updated: 2026-11-20T06:39:40Z
 ---
 
 # Construction Log: dummy-integrations
@@ -27,7 +27,7 @@ last_updated: 2026-11-20T06:37:52Z
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
 | 001-dummy-integrations | 001, 002, 003, 004 | ✅ completed | - |
-| 002-dummy-integrations | 005, 006, 007 | [ ] planned | - |
+| 002-dummy-integrations | 005, 006, 007 | ⏳ in-progress | - |
 
 ## Execution History
 
@@ -37,6 +37,7 @@ last_updated: 2026-11-20T06:37:52Z
 | 2026-11-20T06:02:26Z | 001-dummy-integrations | stage-complete | Plan → Implement (APPROVE PLAN) |
 | 2026-11-20T06:34:18Z | 001-dummy-integrations | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
 | 2026-11-20T06:37:52Z | 001-dummy-integrations | completed | All 3 stages done (APPROVE TESTS); 31/31 tests pass |
+| 2026-11-20T06:39:40Z | 002-dummy-integrations | started | Stage 1: Plan |
 
 ## Execution Summary
 
@@ -45,7 +46,7 @@ last_updated: 2026-11-20T06:37:52Z
 | Original bolts planned | 2 |
 | Current bolt count | 2 |
 | Bolts completed | 1 |
-| Bolts in progress | 0 |
+| Bolts in progress | 1 |
 | Bolts remaining | 1 |
 | Replanning events | 0 |
 

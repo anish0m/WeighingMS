@@ -3,15 +3,15 @@ id: 002-dummy-integrations
 unit: 001-dummy-integrations
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 005-dummy-scale-api
   - 006-dummy-scanner-and-printer
   - 007-dummy-failure-toggles
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-20T06:39:40Z
 completed: null
-current_stage: null
+current_stage: plan
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
@@ -52,7 +52,7 @@ Complete the Dummy layer: Scale, Scanner, Printer and the training failure toggl
 
 ## Stages
 
-- [ ] **1. Plan**: Pending → implementation-plan.md
+- ⏳ **1. Plan**: In progress → implementation-plan.md
 - [ ] **2. Implement**: Pending → source code + implementation-walkthrough.md
 - [ ] **3. Test**: Pending → tests + test-walkthrough.md
 
