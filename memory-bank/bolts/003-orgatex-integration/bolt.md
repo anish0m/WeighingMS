@@ -3,13 +3,13 @@ id: 003-orgatex-integration
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 001-read-batches-and-recipe
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T07:43:38Z
-completed: null
-current_stage: test
+completed: 2026-11-20T08:18:31Z
+current_stage: null
 stages_completed:
   - name: plan
     completed: 2026-11-20T07:50:39Z
@@ -17,20 +17,22 @@ stages_completed:
   - name: implement
     completed: 2026-11-20T08:15:03Z
     artifact: implementation-walkthrough.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [001-dummy-integrations]
-enables_bolts: [005-batch-recipe-management, 014-orgatex-integration]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-20T08:18:31Z
+    artifact: test-walkthrough.md
+requires_bolts:
+  - 001-dummy-integrations
+enables_bolts:
+  - 005-batch-recipe-management
+  - 014-orgatex-integration
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 1
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 19"
+workbook_step: STEP 19
 ---
 
 # Bolt: 003-orgatex-integration
@@ -56,7 +58,7 @@ OrgaTEX read access: the browser-side OrgaTEX client and the server-side OrgaTEX
 
 - ✅ **1. Plan**: Approved → implementation-plan.md
 - ✅ **2. Implement**: Approved → source code + implementation-walkthrough.md
-- ⏳ **3. Test**: Awaiting approval → tests + test-walkthrough.md
+- ✅ **3. Test**: Approved → tests + test-walkthrough.md
 
 ## Expected Outcome
 

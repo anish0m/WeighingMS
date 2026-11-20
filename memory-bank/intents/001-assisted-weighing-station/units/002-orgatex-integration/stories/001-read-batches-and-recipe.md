@@ -2,11 +2,11 @@
 id: 001-read-batches-and-recipe
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 003-orgatex-integration
-implemented: false
+implemented: true
 ---
 
 # Story: 001-read-batches-and-recipe
