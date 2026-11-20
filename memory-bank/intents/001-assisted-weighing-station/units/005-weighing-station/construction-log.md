@@ -1,0 +1,59 @@
+---
+unit: 005-weighing-station
+intent: 001-assisted-weighing-station
+created: 2026-11-20T09:02:10Z
+last_updated: 2026-11-20T09:16:48Z
+---
+
+# Construction Log: weighing-station
+
+## Original Plan
+
+**From Inception**: 5 bolts planned
+**Planned Date**: 2026-11-20T05:15:14Z
+
+| Bolt ID | Stories | Type |
+|---------|---------|------|
+| 006-weighing-station | 001-identify-operator | ddd-construction-bolt |
+| 009-weighing-station | 002-select-scale-automatically, 004-target-and-remaining, 005-evaluate-inclusive-tolerance | ddd-construction-bolt |
+| 010-weighing-station | 003-tare-retare-and-quit, 006-confirm-weighing, 008-progress-components, 010-resume-after-reload | ddd-construction-bolt |
+| 012-weighing-station | 007-handle-overshoot | ddd-construction-bolt |
+| 015-weighing-station | 009-complete-batch, 011-retrieve-batch-history | ddd-construction-bolt |
+
+## Replanning History
+
+| Date | Action | Change | Reason | Approved |
+|------|--------|--------|--------|----------|
+
+## Current Bolt Structure
+
+| Bolt ID | Stories | Status | Changed |
+|---------|---------|--------|---------|
+| 006-weighing-station | 001 | ⏳ in-progress | - |
+| 009-weighing-station | 002, 004, 005 | planned | - |
+| 010-weighing-station | 003, 006, 008, 010 | planned | - |
+| 012-weighing-station | 007 | planned | - |
+| 015-weighing-station | 009, 011 | planned | - |
+
+## Execution History
+
+| Date | Bolt | Event | Details |
+|------|------|-------|---------|
+| 2026-11-20T09:02:10Z | 006-weighing-station | started | Stage 1: Domain Model |
+| 2026-11-20T09:16:48Z | 006-weighing-station | stage-complete | Domain Model → Technical Design (APPROVE MODEL; recommended decisions: own Operator/Supervisor entities with hashed PIN, current operator in the server-side Django session, seed OP-01 R. Karim · Shift A + SUP-01 training supervisor, existing open session returned) |
+
+## Execution Summary
+
+| Metric | Value |
+|--------|-------|
+| Original bolts planned | 5 |
+| Current bolt count | 5 |
+| Bolts completed | 0 |
+| Bolts in progress | 1 |
+| Bolts remaining | 4 |
+| Replanning events | 0 |
+
+## Notes
+
+- Dummy APIs are training contracts, not the real OrgaTEX / device interfaces.
+- OQ-4 (overshoot rule) stays open until workbook STEP 24; bolt 012 must stop for that human decision before implementing.
