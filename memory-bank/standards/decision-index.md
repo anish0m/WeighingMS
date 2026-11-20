@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-11-20T09:20:12Z
+last_updated: 2026-11-20T09:23:09Z
 total_decisions: 5
 ---
 
@@ -21,7 +21,7 @@ Use this to find relevant prior decisions when working on related features.
 <!-- Entries are appended below in reverse chronological order (newest first) -->
 
 ### ADR-005: The current operator is held in the server-side Django session; weighing actions read it only from there
-- **Status**: proposed
+- **Status**: accepted
 - **Date**: 2026-11-20
 - **Bolt**: 006-weighing-station (weighing-station)
 - **Path**: `bolts/006-weighing-station/adr-005-current-operator-in-server-session.md`
@@ -29,7 +29,7 @@ Use this to find relevant prior decisions when working on related features.
 - **Read when**: Adding any weighing action (tare, confirm, override, completion), storing who performed an action, building the header or operator choice in the UI, or working on resume after reload.
 
 ### ADR-004: Station identities are seeded Operator / Supervisor entities, not `django.contrib.auth` users
-- **Status**: proposed
+- **Status**: accepted
 - **Date**: 2026-11-20
 - **Bolt**: 006-weighing-station (weighing-station)
 - **Path**: `bolts/006-weighing-station/adr-004-seeded-station-identities.md`

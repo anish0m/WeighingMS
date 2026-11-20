@@ -1,7 +1,7 @@
 ---
 bolt: 006-weighing-station
 created: 2026-11-20T09:20:12Z
-status: proposed
+status: accepted
 superseded_by: null
 ---
 

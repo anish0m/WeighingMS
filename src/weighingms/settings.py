@@ -13,10 +13,12 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
+    "django.contrib.sessions",
     "django.contrib.staticfiles",
     "orgatex",
     "devices",
     "batches",
+    "weighing",
     "dummy_orgatex",
     "dummy_scale",
     "dummy_scanner",
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
 ]

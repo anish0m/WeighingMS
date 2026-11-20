@@ -29,4 +29,5 @@ urlpatterns = [
     path("api/", include("dummy_scanner.urls")),
     path("api/", include("dummy_printer.urls")),
     path("station/api/", include("batches.urls")),
+    path("station/api/", include("weighing.urls")),
 ]
