@@ -15,6 +15,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "dummy_orgatex",
     "dummy_scale",
+    "dummy_scanner",
+    "dummy_printer",
 ]
 
 MIDDLEWARE = [

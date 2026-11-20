@@ -115,12 +115,14 @@ RECIPES = {
 
 # Scale names and capacities from the prototype status bar ("SCALE 3 kg",
 # "SCALE 32 kg") and its scale labels ("3 kg precision", "32 kg floor").
+# Each scale reports in the unit of the components it weighs in the prototype:
+# the 3 kg precision scale in g (capacity 3 kg = 3000 g), the floor scale in kg.
 SCALES = [
     {
         "scale_id": "scale-3kg",
         "name": "3 kg precision",
-        "capacity": "3",
-        "unit": "kg",
+        "capacity": "3000",
+        "unit": "g",
     },
     {
         "scale_id": "scale-32kg",

@@ -103,3 +103,16 @@ class DummyConsumptionLine(models.Model):
 
     def __str__(self):
         return f"{self.code} {self.actual_qty} {self.unit}"
+
+
+class DummyOrgatexState(models.Model):
+    """Training failure switch for Dummy OrgaTEX (single row)."""
+
+    MODE_OK = "ok"
+    MODE_UNAVAILABLE = "unavailable"
+    MODE_CHOICES = ((MODE_OK, "OK"), (MODE_UNAVAILABLE, "Unavailable"))
+
+    mode = models.CharField(max_length=16, choices=MODE_CHOICES, default=MODE_OK)
+
+    def __str__(self):
+        return self.mode

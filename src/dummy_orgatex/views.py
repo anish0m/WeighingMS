@@ -4,7 +4,7 @@ The endpoints are CSRF-exempt because they stand in for an external system
 that the browser calls directly (STEP 12 decision).
 """
 
-import json
+from functools import wraps
 
 from django.http import JsonResponse
 from django.utils import timezone
@@ -12,10 +12,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods
 
 from dummy_orgatex import services
+from weighingms.api import InvalidJson, read_json
+from weighingms.api import json_error as _error
 
 
-def _error(status: int, code: str, message: str) -> JsonResponse:
-    return JsonResponse({"error": {"code": code, "message": message}}, status=status)
+def _require_available(view):
+    """Every OrgaTEX endpoint fails with 503 while the Dummy is unavailable."""
+
+    @wraps(view)
+    def wrapper(request, *args, **kwargs):
+        try:
+            services.ensure_available()
+        except services.OrgatexUnavailable:
+            return _error(503, "ORGATEX_UNAVAILABLE", "OrgaTEX unavailable")
+        return view(request, *args, **kwargs)
+
+    return wrapper
 
 
 def _batch_not_found(batch_id: str) -> JsonResponse:
@@ -67,6 +79,7 @@ def _consumption_json(consumption, duplicate=None) -> dict:
 
 
 @require_GET
+@_require_available
 def batch_list(request):
     batches = services.list_batches()
     return JsonResponse(
@@ -78,6 +91,7 @@ def batch_list(request):
 
 
 @require_GET
+@_require_available
 def batch_detail(request, batch_id):
     try:
         batch = services.get_batch(batch_id)
@@ -87,6 +101,7 @@ def batch_detail(request, batch_id):
 
 
 @require_GET
+@_require_available
 def batch_recipe(request, batch_id):
     try:
         recipe = services.get_recipe(batch_id)
@@ -107,6 +122,7 @@ def batch_recipe(request, batch_id):
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
+@_require_available
 def batch_consumption(request, batch_id):
     if request.method == "GET":
         try:
@@ -121,9 +137,9 @@ def batch_consumption(request, batch_id):
         )
 
     try:
-        payload = json.loads(request.body or b"")
-    except (json.JSONDecodeError, UnicodeDecodeError):
-        return _error(400, "VALIDATION_ERROR", "Body must be valid JSON")
+        payload = read_json(request)
+    except InvalidJson as exc:
+        return _error(400, "VALIDATION_ERROR", str(exc))
     try:
         consumption, duplicate = services.accept_consumption(batch_id, payload)
     except services.BatchNotFound:

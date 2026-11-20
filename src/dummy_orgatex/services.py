@@ -4,7 +4,7 @@ Training contract only, not the real OrgaTEX interface.
 """
 
 import logging
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 
 from django.db import IntegrityError, transaction
 from django.utils import timezone
@@ -14,10 +14,14 @@ from dummy_orgatex.models import (
     DummyBatch,
     DummyConsumption,
     DummyConsumptionLine,
+    DummyOrgatexState,
     DummyRecipe,
     DummyRecipeComponent,
 )
-from dummy_scale.models import DummyScale
+from dummy_printer import services as printer_services
+from dummy_scale import services as scale_services
+from dummy_scanner import services as scanner_services
+from weighingms.api import InvalidQuantity, parse_decimal_string
 
 logger = logging.getLogger(__name__)
 
@@ -38,15 +42,45 @@ class IdempotencyKeyConflict(Exception):
     """The idempotency key was already used for a different batch."""
 
 
+class OrgatexUnavailable(Exception):
+    """Dummy OrgaTEX is switched to "unavailable" (training failure mode)."""
+
+
+MODES = (DummyOrgatexState.MODE_OK, DummyOrgatexState.MODE_UNAVAILABLE)
+
+
+def _state() -> DummyOrgatexState:
+    state, _ = DummyOrgatexState.objects.get_or_create(pk=1)
+    return state
+
+
+def get_mode() -> str:
+    return _state().mode
+
+
+def set_mode(mode: str) -> None:
+    if mode not in MODES:
+        raise ValueError(f"mode must be one of {', '.join(MODES)}")
+    state = _state()
+    state.mode = mode
+    state.save(update_fields=["mode"])
+    logger.info("Dummy OrgaTEX mode set to %s", mode)
+
+
+def ensure_available() -> None:
+    if get_mode() == DummyOrgatexState.MODE_UNAVAILABLE:
+        raise OrgatexUnavailable()
+
+
 @transaction.atomic
 def seed_training_scenario() -> None:
-    """Reset Dummy OrgaTEX and Dummy Scale to the prototype scenario.
+    """Reset every Dummy to the prototype training scenario.
 
-    Deletes all existing rows first, so running it again gives the same state
-    without duplicates.
+    Deletes all existing Dummy rows first, so running it again gives the same
+    state without duplicates. All training failure modes go back to "ok".
     """
     DummyBatch.objects.all().delete()
-    DummyScale.objects.all().delete()
+    DummyOrgatexState.objects.all().delete()
 
     for position, row in enumerate(seed_data.BATCHES, start=1):
         batch = DummyBatch.objects.create(
@@ -73,15 +107,9 @@ def seed_training_scenario() -> None:
                 state=DummyRecipeComponent.STATE_PENDING,
             )
 
-    for scale in seed_data.SCALES:
-        DummyScale.objects.create(
-            scale_id=scale["scale_id"],
-            name=scale["name"],
-            capacity=Decimal(scale["capacity"]),
-            unit=scale["unit"],
-            net_weight=Decimal(0),
-            status=DummyScale.STATUS_READY,
-        )
+    scale_services.seed_scales(seed_data.SCALES)
+    scanner_services.reset()
+    printer_services.reset()
     logger.info("Training scenario seeded")
 
 
@@ -106,15 +134,10 @@ def get_recipe(batch_id: str) -> DummyRecipe:
 
 def _parse_quantity(value) -> Decimal:
     """Accept only decimal strings; JSON numbers would be floats."""
-    if not isinstance(value, str):
-        raise InvalidConsumption("actualQty must be a decimal string")
     try:
-        qty = Decimal(value)
-    except InvalidOperation as exc:
-        raise InvalidConsumption("actualQty is not a decimal") from exc
-    if not qty.is_finite() or qty < 0:
-        raise InvalidConsumption("actualQty must be a finite, non-negative decimal")
-    return qty
+        return parse_decimal_string(value, "actualQty")
+    except InvalidQuantity as exc:
+        raise InvalidConsumption(str(exc)) from exc
 
 
 def _validate_lines(recipe: DummyRecipe, components) -> list[dict]:
