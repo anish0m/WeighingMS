@@ -3,7 +3,7 @@ id: 001-dummy-integrations
 unit: 001-dummy-integrations
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 001-seed-training-scenario
   - 002-dummy-orgatex-batch-endpoints
@@ -11,8 +11,8 @@ stories:
   - 004-dummy-orgatex-consumption-endpoint
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T05:50:02Z
-completed: null
-current_stage: test
+completed: 2026-11-20T06:37:52Z
+current_stage: null
 stages_completed:
   - name: plan
     completed: 2026-11-20T06:02:26Z
@@ -20,20 +20,23 @@ stages_completed:
   - name: implement
     completed: 2026-11-20T06:34:18Z
     artifact: implementation-walkthrough.md
-
-# Bolt Dependencies (for execution ordering)
+  - name: test
+    completed: 2026-11-20T06:37:52Z
+    artifact: test-walkthrough.md
 requires_bolts: []
-enables_bolts: [002-dummy-integrations, 003-orgatex-integration, 006-weighing-station, 014-orgatex-integration]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+enables_bolts:
+  - 002-dummy-integrations
+  - 003-orgatex-integration
+  - 006-weighing-station
+  - 014-orgatex-integration
+requires_units: []
 blocks: false
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 1
   avg_uncertainty: 1
   max_dependencies: 1
   testing_scope: 2
-workbook_step: "STEP 14–16"
+workbook_step: STEP 14–16
 ---
 
 # Bolt: 001-dummy-integrations
@@ -62,7 +65,7 @@ Create the project skeleton and the Dummy OrgaTEX training contract with the pro
 
 - ✅ **1. Plan**: Approved → implementation-plan.md
 - ✅ **2. Implement**: Approved → source code + implementation-walkthrough.md
-- ⏳ **3. Test**: In progress → tests + test-walkthrough.md
+- ✅ **3. Test**: Approved → tests + test-walkthrough.md
 
 ## Expected Outcome
 

@@ -2,11 +2,11 @@
 id: 003-dummy-orgatex-recipe-endpoint
 unit: 001-dummy-integrations
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 001-dummy-integrations
-implemented: false
+implemented: true
 ---
 
 # Story: 003-dummy-orgatex-recipe-endpoint
