@@ -3,15 +3,15 @@ id: 005-batch-recipe-management
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 001-view-batch-queue
   - 002-select-batch
   - 003-load-read-only-recipe
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-20T08:37:50Z
 completed: null
-current_stage: null
+current_stage: model
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
@@ -52,7 +52,7 @@ Batch queue, selection and read-only recipe snapshot as a domain model.
 
 ## Stages
 
-- [ ] **1. Domain Model**: Pending → ddd-01-domain-model.md
+- [ ] **1. Domain Model**: ⏳ Awaiting approval → ddd-01-domain-model.md
 - [ ] **2. Technical Design**: Pending → ddd-02-technical-design.md
 - [ ] **3. ADR Analysis (optional)**: Pending → adr-*.md
 - [ ] **4. Implement**: Pending → source code
