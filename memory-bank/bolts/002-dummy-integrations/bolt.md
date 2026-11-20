@@ -11,11 +11,14 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T06:39:40Z
 completed: null
-current_stage: implement
+current_stage: test
 stages_completed:
   - name: plan
     completed: 2026-11-20T06:48:11Z
     artifact: implementation-plan.md
+  - name: implement
+    completed: 2026-11-20T06:53:50Z
+    artifact: implementation-walkthrough.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [001-dummy-integrations]
@@ -56,8 +59,8 @@ Complete the Dummy layer: Scale, Scanner, Printer and the training failure toggl
 ## Stages
 
 - ✅ **1. Plan**: Approved → implementation-plan.md
-- ⏳ **2. Implement**: In progress → source code + implementation-walkthrough.md
-- [ ] **3. Test**: Pending → tests + test-walkthrough.md
+- ✅ **2. Implement**: Approved → source code + implementation-walkthrough.md
+- ⏳ **3. Test**: In progress → tests + test-walkthrough.md
 
 ## Expected Outcome
 
