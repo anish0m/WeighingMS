@@ -3,13 +3,13 @@ id: 006-weighing-station
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 001-identify-operator
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T09:02:10Z
-completed: null
-current_stage: test
+completed: 2026-11-20T09:30:26Z
+current_stage: null
 stages_completed:
   - name: model
     completed: 2026-11-20T09:16:48Z
@@ -23,20 +23,24 @@ stages_completed:
   - name: implement
     completed: 2026-11-20T09:27:17Z
     artifact: src/weighing/
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [001-dummy-integrations]
-enables_bolts: [007-assisted-weighing-station-ui, 009-weighing-station, 010-weighing-station, 012-weighing-station]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-20T09:30:26Z
+    artifact: ddd-03-test-report.md
+requires_bolts:
+  - 001-dummy-integrations
+enables_bolts:
+  - 007-assisted-weighing-station-ui
+  - 009-weighing-station
+  - 010-weighing-station
+  - 012-weighing-station
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 1
   avg_uncertainty: 1
   max_dependencies: 1
   testing_scope: 2
-workbook_step: "STEP 19"
+workbook_step: STEP 19
 ---
 
 # Bolt: 006-weighing-station
@@ -64,7 +68,7 @@ Weighing-session foundation: operator and supervisor identities and the Weighing
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
 - [x] **4. Implement**: ✅ Complete → source code
-- [ ] **5. Test**: ⏳ Awaiting approval → ddd-03-test-report.md
+- [x] **5. Test**: ✅ Complete → ddd-03-test-report.md
 
 ## Expected Outcome
 

@@ -2,7 +2,7 @@
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:02:10Z
-last_updated: 2026-11-20T09:27:17Z
+last_updated: 2026-11-20T09:30:26Z
 ---
 
 # Construction Log: weighing-station
@@ -29,7 +29,7 @@ last_updated: 2026-11-20T09:27:17Z
 
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
-| 006-weighing-station | 001 | ⏳ in-progress | - |
+| 006-weighing-station | 001 | ✅ completed | - |
 | 009-weighing-station | 002, 004, 005 | planned | - |
 | 010-weighing-station | 003, 006, 008, 010 | planned | - |
 | 012-weighing-station | 007 | planned | - |
@@ -44,6 +44,7 @@ last_updated: 2026-11-20T09:27:17Z
 | 2026-11-20T09:19:44Z | 006-weighing-station | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; app `weighing`, `/station/api/operators`, `/operator`, `/sessions`; one open session per batch; seed migration) |
 | 2026-11-20T09:23:09Z | 006-weighing-station | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-004 seeded station identities, ADR-005 current operator in server session; both accepted) |
 | 2026-11-20T09:27:17Z | 006-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; app `weighing`, seed migration, sessions app + middleware enabled) |
+| 2026-11-20T09:30:26Z | 006-weighing-station | completed | All 5 stages done (APPROVE TESTS); 227/227 tests pass; story 001 complete; unit stays open for bolts 009, 010, 012, 015 |
 
 ## Execution Summary
 
@@ -51,8 +52,8 @@ last_updated: 2026-11-20T09:27:17Z
 |--------|-------|
 | Original bolts planned | 5 |
 | Current bolt count | 5 |
-| Bolts completed | 0 |
-| Bolts in progress | 1 |
+| Bolts completed | 1 |
+| Bolts in progress | 0 |
 | Bolts remaining | 4 |
 | Replanning events | 0 |
 
@@ -60,3 +61,4 @@ last_updated: 2026-11-20T09:27:17Z
 
 - Dummy APIs are training contracts, not the real OrgaTEX / device interfaces.
 - OQ-4 (overshoot rule) stays open until workbook STEP 24; bolt 012 must stop for that human decision before implementing.
+- 2026-11-20T09:30:26Z: bolt 006 complete. ADR-004 (seeded station identities) and ADR-005 (current operator in the server session) accepted and indexed. The sessions app and `SessionMiddleware` were enabled. Story 001's on-screen header is verified by Playwright in bolt 007.
