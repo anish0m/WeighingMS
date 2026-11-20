@@ -18,7 +18,7 @@ status: in-progress
 | Artifact | Status | File |
 |----------|--------|------|
 | Intent (requirements draft) | ✅ Approved 2026-11-20T03:33:25Z | requirements.md |
-| Requirements | [ ] | requirements.md |
+| Requirements | ✅ Approved 2026-11-20T03:57:49Z | requirements.md |
 | System Context | [ ] | system-context.md |
 | Units | [ ] | units.md |
 | Stories | [ ] | units/{unit-name}/stories/*.md |
@@ -28,8 +28,8 @@ status: in-progress
 
 | Metric | Count |
 |--------|-------|
-| Functional Requirements | – |
-| Non-Functional Requirements | – |
+| Functional Requirements | 21 |
+| Non-Functional Requirements | 13 |
 | Units | – |
 | Stories | – |
 | Bolts Planned | – |
@@ -45,6 +45,9 @@ status: in-progress
 |------|----------|-----------|----------|
 | 2026-11-19T10:18:31Z | Intent named `001-assisted-weighing-station`, type green-field | First intent; covers the whole V1 weighing flow in the brief | Yes (2026-11-20T03:33:25Z, APPROVE INTENT) |
 | 2026-11-19T10:18:31Z | External systems are Dummy APIs (OrgaTEX, Scale, Scanner, Printer) as training contracts | User instruction; brief A-01/A-02/A-04/A-05 unresolved | Yes (2026-11-20T03:33:25Z, APPROVE INTENT) |
+| 2026-11-20T03:57:49Z | Requirements approved as written: 21 FR, 13 NFR, Dummy behaviour DB-1–DB-10 | CHECKPOINT 2 | Yes |
+| 2026-11-20T03:57:49Z | Training defaults accepted: OQ-1 no offline sync, OQ-2 no reporting beyond batch history, OQ-3 seeded operator list + supervisor ID/PIN/reason, OQ-5 queued batches not selectable, OQ-6 B-24187 seeded with all 5 pending, OQ-7 lot/container from Dummy OrgaTEX seed, OQ-8 dyestuff scan step, OQ-9 no calibration blocking or manual reselection | Proposed defaults, user approved without changes | Yes |
+| 2026-11-20T03:57:49Z | OQ-4 overshoot rule left open | Workbook STEP 24 requires a human decision | Pending |
 
 ## Scope Changes
 
@@ -64,7 +67,8 @@ status: in-progress
 ## Next Steps
 
 1. ~~Human validation of the Intent~~ (approved 2026-11-20T03:33:25Z)
-2. Gather Requirements (`requirements` skill)
+2. Requirements approved 2026-11-20T03:57:49Z (`APPROVE REQUIREMENTS`)
+3. Next: workbook STEP 8 (UI analysis), then System Context (STEP 9)
 
 ## Dependencies
 
