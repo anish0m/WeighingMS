@@ -9,7 +9,7 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T09:02:10Z
 completed: null
-current_stage: implement
+current_stage: test
 stages_completed:
   - name: model
     completed: 2026-11-20T09:16:48Z
@@ -20,6 +20,9 @@ stages_completed:
   - name: adr
     completed: 2026-11-20T09:23:09Z
     artifact: adr-004-seeded-station-identities.md, adr-005-current-operator-in-server-session.md
+  - name: implement
+    completed: 2026-11-20T09:27:17Z
+    artifact: src/weighing/
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [001-dummy-integrations]
@@ -60,8 +63,8 @@ Weighing-session foundation: operator and supervisor identities and the Weighing
 - [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
-- [ ] **4. Implement**: ⏳ Awaiting approval → source code
-- [ ] **5. Test**: Pending → ddd-03-test-report.md
+- [x] **4. Implement**: ✅ Complete → source code
+- [ ] **5. Test**: ⏳ Awaiting approval → ddd-03-test-report.md
 
 ## Expected Outcome
 

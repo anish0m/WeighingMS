@@ -2,7 +2,7 @@
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:02:10Z
-last_updated: 2026-11-20T09:23:09Z
+last_updated: 2026-11-20T09:27:17Z
 ---
 
 # Construction Log: weighing-station
@@ -43,6 +43,7 @@ last_updated: 2026-11-20T09:23:09Z
 | 2026-11-20T09:16:48Z | 006-weighing-station | stage-complete | Domain Model → Technical Design (APPROVE MODEL; recommended decisions: own Operator/Supervisor entities with hashed PIN, current operator in the server-side Django session, seed OP-01 R. Karim · Shift A + SUP-01 training supervisor, existing open session returned) |
 | 2026-11-20T09:19:44Z | 006-weighing-station | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; app `weighing`, `/station/api/operators`, `/operator`, `/sessions`; one open session per batch; seed migration) |
 | 2026-11-20T09:23:09Z | 006-weighing-station | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-004 seeded station identities, ADR-005 current operator in server session; both accepted) |
+| 2026-11-20T09:27:17Z | 006-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; app `weighing`, seed migration, sessions app + middleware enabled) |
 
 ## Execution Summary
 
