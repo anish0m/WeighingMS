@@ -2,11 +2,11 @@
 id: 005-dummy-scale-api
 unit: 001-dummy-integrations
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 002-dummy-integrations
-implemented: false
+implemented: true
 ---
 
 # Story: 005-dummy-scale-api

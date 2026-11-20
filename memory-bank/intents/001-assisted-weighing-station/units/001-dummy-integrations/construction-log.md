@@ -2,7 +2,7 @@
 unit: 001-dummy-integrations
 intent: 001-assisted-weighing-station
 created: 2026-11-20T05:50:02Z
-last_updated: 2026-11-20T06:53:50Z
+last_updated: 2026-11-20T07:08:57Z
 ---
 
 # Construction Log: dummy-integrations
@@ -27,7 +27,7 @@ last_updated: 2026-11-20T06:53:50Z
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
 | 001-dummy-integrations | 001, 002, 003, 004 | ✅ completed | - |
-| 002-dummy-integrations | 005, 006, 007 | ⏳ in-progress | - |
+| 002-dummy-integrations | 005, 006, 007 | ✅ completed | - |
 
 ## Execution History
 
@@ -40,6 +40,7 @@ last_updated: 2026-11-20T06:53:50Z
 | 2026-11-20T06:39:40Z | 002-dummy-integrations | started | Stage 1: Plan |
 | 2026-11-20T06:48:11Z | 002-dummy-integrations | stage-complete | Plan → Implement (APPROVE PLAN; Decision 1 confirmed: scale-3kg in g, scale-32kg in kg) |
 | 2026-11-20T06:53:50Z | 002-dummy-integrations | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
+| 2026-11-20T07:08:57Z | 002-dummy-integrations | completed | All 3 stages done (APPROVE TESTS); 71/71 tests pass; unit complete |
 
 ## Execution Summary
 
@@ -47,11 +48,12 @@ last_updated: 2026-11-20T06:53:50Z
 |--------|-------|
 | Original bolts planned | 2 |
 | Current bolt count | 2 |
-| Bolts completed | 1 |
-| Bolts in progress | 1 |
-| Bolts remaining | 1 |
+| Bolts completed | 2 |
+| Bolts in progress | 0 |
+| Bolts remaining | 0 |
 | Replanning events | 0 |
 
 ## Notes
 
 - Dummy APIs are training contracts, not the real OrgaTEX / device interfaces.
+- 2026-11-20T07:08:57Z: construction complete for this unit (bolts 001 and 002). Training controls live under `/api/training/`; `scale-3kg` reports in g, `scale-32kg` in kg.
