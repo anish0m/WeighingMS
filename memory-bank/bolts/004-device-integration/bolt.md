@@ -3,7 +3,7 @@ id: 004-device-integration
 unit: 003-device-integration
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 001-read-live-scale-weight
   - 002-tare-command
@@ -11,9 +11,9 @@ stories:
   - 004-printer-adapter
   - 005-device-status-and-fail-safe
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-20T08:19:31Z
 completed: null
-current_stage: null
+current_stage: plan
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
