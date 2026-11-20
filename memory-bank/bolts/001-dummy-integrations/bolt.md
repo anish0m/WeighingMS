@@ -12,11 +12,14 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T05:50:02Z
 completed: null
-current_stage: implement
+current_stage: test
 stages_completed:
   - name: plan
     completed: 2026-11-20T06:02:26Z
     artifact: implementation-plan.md
+  - name: implement
+    completed: 2026-11-20T06:34:18Z
+    artifact: implementation-walkthrough.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: []
@@ -58,8 +61,8 @@ Create the project skeleton and the Dummy OrgaTEX training contract with the pro
 ## Stages
 
 - ✅ **1. Plan**: Approved → implementation-plan.md
-- ⏳ **2. Implement**: In progress → source code + implementation-walkthrough.md
-- [ ] **3. Test**: Pending → tests + test-walkthrough.md
+- ✅ **2. Implement**: Approved → source code + implementation-walkthrough.md
+- ⏳ **3. Test**: In progress → tests + test-walkthrough.md
 
 ## Expected Outcome
 
