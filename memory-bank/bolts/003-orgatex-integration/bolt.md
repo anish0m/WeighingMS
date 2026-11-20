@@ -3,14 +3,17 @@ id: 003-orgatex-integration
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 001-read-batches-and-recipe
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-20T07:43:38Z
 completed: null
-current_stage: null
-stages_completed: []
+current_stage: implement
+stages_completed:
+  - name: plan
+    completed: 2026-11-20T07:50:39Z
+    artifact: implementation-plan.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [001-dummy-integrations]
@@ -48,8 +51,8 @@ OrgaTEX read access: the browser-side OrgaTEX client and the server-side OrgaTEX
 
 ## Stages
 
-- [ ] **1. Plan**: Pending → implementation-plan.md
-- [ ] **2. Implement**: Pending → source code + implementation-walkthrough.md
+- ✅ **1. Plan**: Approved → implementation-plan.md
+- ⏳ **2. Implement**: In progress → source code + implementation-walkthrough.md
 - [ ] **3. Test**: Pending → tests + test-walkthrough.md
 
 ## Expected Outcome

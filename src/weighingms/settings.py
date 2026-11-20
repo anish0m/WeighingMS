@@ -1,5 +1,6 @@
 """Django settings for WeighingMS (local training build)."""
 
+import os
 from pathlib import Path
 
 SRC_DIR = Path(__file__).resolve().parent.parent
@@ -13,6 +14,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.staticfiles",
+    "orgatex",
     "dummy_orgatex",
     "dummy_scale",
     "dummy_scanner",
@@ -62,3 +64,8 @@ LOGGING = {
     "handlers": {"console": {"class": "logging.StreamHandler"}},
     "root": {"handlers": ["console"], "level": "INFO"},
 }
+
+# OrgaTEX integration (NFR-13: change without code). Points at the Dummy
+# OrgaTEX training contract served by this same dev server.
+ORGATEX_BASE_URL = os.environ.get("ORGATEX_BASE_URL", "http://localhost:8000/api")
+ORGATEX_TIMEOUT_SECONDS = float(os.environ.get("ORGATEX_TIMEOUT_SECONDS", "5"))
