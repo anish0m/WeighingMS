@@ -2,11 +2,11 @@
 id: 002-tare-command
 unit: 003-device-integration
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 004-device-integration
-implemented: false
+implemented: true
 ---
 
 # Story: 002-tare-command

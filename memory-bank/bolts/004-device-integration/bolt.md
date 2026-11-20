@@ -3,7 +3,7 @@ id: 004-device-integration
 unit: 003-device-integration
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 001-read-live-scale-weight
   - 002-tare-command
@@ -12,8 +12,8 @@ stories:
   - 005-device-status-and-fail-safe
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T08:19:31Z
-completed: null
-current_stage: test
+completed: 2026-11-20T08:33:08Z
+current_stage: null
 stages_completed:
   - name: plan
     completed: 2026-11-20T08:25:45Z
@@ -21,20 +21,25 @@ stages_completed:
   - name: implement
     completed: 2026-11-20T08:31:13Z
     artifact: implementation-walkthrough.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [002-dummy-integrations]
-enables_bolts: [005-batch-recipe-management, 007-assisted-weighing-station-ui, 010-weighing-station, 011-assisted-weighing-station-ui, 016-ticket-printing]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-20T08:33:08Z
+    artifact: test-walkthrough.md
+requires_bolts:
+  - 002-dummy-integrations
+enables_bolts:
+  - 005-batch-recipe-management
+  - 007-assisted-weighing-station-ui
+  - 010-weighing-station
+  - 011-assisted-weighing-station-ui
+  - 016-ticket-printing
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 19"
+workbook_step: STEP 19
 ---
 
 # Bolt: 004-device-integration
@@ -64,7 +69,7 @@ Device access: browser-side Scale/Scanner/Printer clients, server-side Scale ada
 
 - ✅ **1. Plan**: Approved → implementation-plan.md
 - ✅ **2. Implement**: Approved → source code + implementation-walkthrough.md
-- ⏳ **3. Test**: Awaiting approval → tests + test-walkthrough.md
+- ✅ **3. Test**: Approved → tests + test-walkthrough.md
 
 ## Expected Outcome
 

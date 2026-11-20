@@ -2,7 +2,7 @@
 unit: 003-device-integration
 intent: 001-assisted-weighing-station
 created: 2026-11-20T08:19:31Z
-last_updated: 2026-11-20T08:31:13Z
+last_updated: 2026-11-20T08:33:08Z
 ---
 
 # Construction Log: device-integration
@@ -25,7 +25,7 @@ last_updated: 2026-11-20T08:31:13Z
 
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
-| 004-device-integration | 001, 002, 003, 004, 005 | ⏳ in-progress | - |
+| 004-device-integration | 001, 002, 003, 004, 005 | ✅ completed | - |
 
 ## Execution History
 
@@ -34,6 +34,7 @@ last_updated: 2026-11-20T08:31:13Z
 | 2026-11-20T08:19:31Z | 004-device-integration | started | Stage 1: Plan |
 | 2026-11-20T08:25:45Z | 004-device-integration | stage-complete | Plan → Implement (APPROVE PLAN; no Python printer adapter; JS behaviour tested by Playwright in bolts 007/011) |
 | 2026-11-20T08:31:13Z | 004-device-integration | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
+| 2026-11-20T08:33:08Z | 004-device-integration | completed | All 3 stages done (APPROVE TESTS); 123/123 tests pass; unit complete |
 
 ## Execution Summary
 
@@ -41,11 +42,12 @@ last_updated: 2026-11-20T08:31:13Z
 |--------|-------|
 | Original bolts planned | 1 |
 | Current bolt count | 1 |
-| Bolts completed | 0 |
-| Bolts in progress | 1 |
+| Bolts completed | 1 |
+| Bolts in progress | 0 |
 | Bolts remaining | 0 |
 | Replanning events | 0 |
 
 ## Notes
 
 - Dummy APIs are training contracts, not the real scale, scanner or printer interfaces.
+- 2026-11-20T08:33:08Z: construction complete for this unit (bolt 004). No Python printer adapter (approved); JS client behaviour is tested by Playwright in bolts 007, 011 and 016.
