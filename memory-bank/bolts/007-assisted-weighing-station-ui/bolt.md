@@ -3,14 +3,14 @@ id: 007-assisted-weighing-station-ui
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 001-terminal-shell-and-status-bar
   - 002-select-batch-view
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-20T09:38:35Z
 completed: null
-current_stage: null
+current_stage: plan
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
@@ -50,7 +50,7 @@ Terminal shell (header, clock, status bar) and View 1 · Select batch, fed only 
 
 ## Stages
 
-- [ ] **1. Plan**: Pending → implementation-plan.md
+- [ ] **1. Plan**: ⏳ Awaiting approval → implementation-plan.md
 - [ ] **2. Implement**: Pending → source code + implementation-walkthrough.md
 - [ ] **3. Test**: Pending → tests + test-walkthrough.md
 
