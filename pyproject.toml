@@ -1,0 +1,11 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+src = ["src", "."]
+extend-exclude = ["src/*/migrations"]
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["weighingms", "dummy_orgatex", "dummy_scale", "tests"]

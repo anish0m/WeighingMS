@@ -1,0 +1,11 @@
+{
+  "name": "weighingms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WeighingMS: assisted dyestuff weighing station (training build with Dummy APIs)",
+  "scripts": {
+    "dev": ".venv/bin/python manage.py runserver 8000",
+    "test": ".venv/bin/python manage.py test tests",
+    "lint": ".venv/bin/ruff check . && .venv/bin/ruff format --check ."
+  }
+}
