@@ -21,7 +21,7 @@ status: in-progress
 | Requirements | ✅ Approved 2026-11-20T03:57:49Z | requirements.md |
 | System Context | ✅ Approved 2026-11-20T04:17:25Z | system-context.md |
 | Units | ✅ Approved 2026-11-20T04:26:59Z (7 units) | units.md |
-| Stories | [ ] | units/{unit-name}/stories/*.md |
+| Stories | ✅ Approved 2026-11-20T04:56:11Z (42 stories) | units/{unit-name}/stories/*.md |
 | Bolt Plan | [ ] | memory-bank/bolts/ |
 
 ## Summary
@@ -31,20 +31,20 @@ status: in-progress
 | Functional Requirements | 21 |
 | Non-Functional Requirements | 13 |
 | Units | 7 |
-| Stories | – |
+| Stories | 42 |
 | Bolts Planned | – |
 
 ## Units Breakdown
 
 | Unit | Stories | Bolts | Priority |
 |------|---------|-------|----------|
-| 001-dummy-integrations | – | – | Must |
-| 002-orgatex-integration | – | – | Must |
-| 003-device-integration | – | – | Must |
-| 004-batch-recipe-management | – | – | Must |
-| 005-weighing-station | – | – | Must |
-| 006-ticket-printing | – | – | Must |
-| 007-assisted-weighing-station-ui | – | – | Must |
+| 001-dummy-integrations | 7 | – | Must |
+| 002-orgatex-integration | 3 | – | Must |
+| 003-device-integration | 5 | – | Must |
+| 004-batch-recipe-management | 5 | – | Must |
+| 005-weighing-station | 11 | – | Must |
+| 006-ticket-printing | 2 | – | Must |
+| 007-assisted-weighing-station-ui | 9 | – | Must |
 
 ## Decision Log
 
@@ -59,6 +59,8 @@ status: in-progress
 | 2026-11-20T04:17:25Z | Brief IR-06 (OrgaTEX batch status write-back) not built | Not among approved FRs | Yes (APPROVE SYSTEM CONTEXT) |
 | 2026-11-20T04:26:59Z | 7 Units: 001-dummy-integrations, 002-orgatex-integration, 003-device-integration, 004-batch-recipe-management, 005-weighing-station, 006-ticket-printing, 007-assisted-weighing-station-ui; each FR owned by exactly one Unit | CHECKPOINT 3 (STEP 10) | Yes (APPROVE UNITS) |
 | 2026-11-20T04:26:59Z | Batch + Recipe & Material merged (004); Scale, Scanner, Printer adapters grouped in 003; scale selection rule in 005 | Same lifecycle / same fail-safe pattern | Yes (APPROVE UNITS) |
+| 2026-11-20T04:56:11Z | 42 Stories (all Must, 132 acceptance criteria); each adds Requirements, UI/UX Impact, API Dependencies, Test Expectations sections to the specs.md template | CHECKPOINT (STEP 11) | Yes (APPROVE STORIES) |
+| 2026-11-20T04:56:11Z | Training simulation panel (007/008), dyestuff scan step (004/004, OQ-8), Quit records nothing vs Re-tare zeroes (005/003); overshoot story 005/007 criterion 3 refined after STEP 24 | Prototype demo controls / approved OQs | Yes (APPROVE STORIES) |
 
 ## Scope Changes
 
@@ -71,7 +73,7 @@ status: in-progress
 - [x] All requirements documented
 - [x] System context defined
 - [x] Units decomposed
-- [ ] Stories created for all units
+- [x] Stories created for all units
 - [ ] Bolts planned
 - [ ] Human review complete
 
@@ -82,7 +84,8 @@ status: in-progress
 3. ~~STEP 8 UI analysis~~ (done; findings in step notes)
 4. System Context approved 2026-11-20T04:17:25Z (`APPROVE SYSTEM CONTEXT`)
 5. Units approved 2026-11-20T04:26:59Z (`APPROVE UNITS`)
-6. Next: workbook STEP 11, create Stories
+6. Stories approved 2026-11-20T04:56:11Z (`APPROVE STORIES`)
+7. Next: workbook STEP 12, Bolt Plan
 
 ## Dependencies
 

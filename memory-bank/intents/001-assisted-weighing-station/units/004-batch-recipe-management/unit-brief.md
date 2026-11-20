@@ -4,7 +4,7 @@ intent: 001-assisted-weighing-station
 phase: inception
 status: ready
 created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:26:59Z
+updated: 2026-11-20T04:51:01Z
 ---
 
 # Unit Brief: Batch & Recipe Management
@@ -65,7 +65,18 @@ Also supports: NFR-2 (recipe shown ≤ 3 s).
 
 ## Story Summary
 
-Stories are created at STEP 11 (estimate ~5).
+- **Total Stories**: 5
+- **Must Have**: 5
+- **Should Have**: 0
+- **Could Have**: 0
+
+### Stories
+
+- [ ] **001-view-batch-queue**: See the batch queue released for the station - Must - Planned
+- [ ] **002-select-batch**: Select a batch by scan or touch - Must - Planned
+- [ ] **003-load-read-only-recipe**: Load the batch's recipe read-only - Must - Planned
+- [ ] **004-verify-dyestuff-identity**: Verify the dyestuff by scanning it - Must - Planned
+- [ ] **005-show-lot-and-container**: Show lot, container and tare of the active component - Must - Planned
 
 ---
 

@@ -4,7 +4,7 @@ intent: 001-assisted-weighing-station
 phase: inception
 status: ready
 created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:26:59Z
+updated: 2026-11-20T04:51:01Z
 ---
 
 # Unit Brief: Device Integration (Scale, Scanner, Printer)
@@ -62,7 +62,18 @@ Also supports: NFR-1, NFR-7, NFR-13 (device config), FR-7 (tare command, owned b
 
 ## Story Summary
 
-Stories are created at STEP 11 (estimate ~4).
+- **Total Stories**: 5
+- **Must Have**: 5
+- **Should Have**: 0
+- **Could Have**: 0
+
+### Stories
+
+- [ ] **001-read-live-scale-weight**: Read live net weight from a named scale - Must - Planned
+- [ ] **002-tare-command**: Send the tare command to the selected scale - Must - Planned
+- [ ] **003-scanner-input**: Receive scanned codes from the scanner - Must - Planned
+- [ ] **004-printer-adapter**: Send tickets to the printer - Must - Planned
+- [ ] **005-device-status-and-fail-safe**: Device status and fail-safe on failure - Must - Planned
 
 ---
 

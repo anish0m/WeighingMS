@@ -4,7 +4,7 @@ intent: 001-assisted-weighing-station
 phase: inception
 status: ready
 created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:26:59Z
+updated: 2026-11-20T04:51:01Z
 ---
 
 # Unit Brief: OrgaTEX Integration
@@ -56,7 +56,16 @@ Also supports: FR-1c and FR-3d (unavailable reads, owned by 004), FR-21b (no Dum
 
 ## Story Summary
 
-Stories are created at STEP 11 (estimate ~3).
+- **Total Stories**: 3
+- **Must Have**: 3
+- **Should Have**: 0
+- **Could Have**: 0
+
+### Stories
+
+- [ ] **001-read-batches-and-recipe**: Read queue, batch and recipe through the OrgaTEX adapter - Must - Planned
+- [ ] **002-post-consumption-idempotently**: Post actual consumption idempotently - Must - Planned
+- [ ] **003-write-back-failure-and-retry**: Write-back failure is visible and retryable - Must - Planned
 
 ---
 

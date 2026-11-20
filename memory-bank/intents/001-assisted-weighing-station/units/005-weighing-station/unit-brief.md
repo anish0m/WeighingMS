@@ -4,7 +4,7 @@ intent: 001-assisted-weighing-station
 phase: inception
 status: ready
 created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:26:59Z
+updated: 2026-11-20T04:51:01Z
 ---
 
 # Unit Brief: Weighing Station (domain)
@@ -78,7 +78,24 @@ Also supports: NFR-4, NFR-5, NFR-6, NFR-12, NFR-13 (threshold).
 
 ## Story Summary
 
-Stories are created at STEP 11 (estimate ~9).
+- **Total Stories**: 11
+- **Must Have**: 11
+- **Should Have**: 0
+- **Could Have**: 0
+
+### Stories
+
+- [ ] **001-identify-operator**: Identify the operator at session start - Must - Planned
+- [ ] **002-select-scale-automatically**: Select the scale automatically from the target - Must - Planned
+- [ ] **003-tare-retare-and-quit**: Tare, re-tare and quit a component attempt - Must - Planned
+- [ ] **004-target-and-remaining**: Show target and remaining quantity - Must - Planned
+- [ ] **005-evaluate-inclusive-tolerance**: Evaluate the weight against the inclusive tolerance - Must - Planned
+- [ ] **006-confirm-weighing**: Confirm a weighing and record it - Must - Planned
+- [ ] **007-handle-overshoot**: Handle overshoot (rule decided at STEP 24) - Must - Planned
+- [ ] **008-progress-components**: Progress through components in recipe order - Must - Planned
+- [ ] **009-complete-batch**: Complete the batch and trigger write-back - Must - Planned
+- [ ] **010-resume-after-reload**: Resume an in-progress batch after reload - Must - Planned
+- [ ] **011-retrieve-batch-history**: Retrieve a batch's weighing records - Must - Planned
 
 ---
 

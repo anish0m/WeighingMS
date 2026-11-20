@@ -4,7 +4,7 @@ intent: 001-assisted-weighing-station
 phase: inception
 status: ready
 created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:26:59Z
+updated: 2026-11-20T04:51:01Z
 ---
 
 # Unit Brief: Ticket & Printing
@@ -53,7 +53,15 @@ Produce the printed evidence of a completed batch: build the weighing ticket fro
 
 ## Story Summary
 
-Stories are created at STEP 11 (estimate ~2).
+- **Total Stories**: 2
+- **Must Have**: 2
+- **Should Have**: 0
+- **Could Have**: 0
+
+### Stories
+
+- [ ] **001-print-weighing-ticket**: Print the weighing ticket for a completed batch - Must - Planned
+- [ ] **002-reprint-and-print-failure**: Reprint and handle printer failure - Must - Planned
 
 ---
 

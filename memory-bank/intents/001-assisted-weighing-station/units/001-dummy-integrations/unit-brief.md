@@ -4,7 +4,7 @@ intent: 001-assisted-weighing-station
 phase: inception
 status: ready
 created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:26:59Z
+updated: 2026-11-20T04:51:01Z
 ---
 
 # Unit Brief: Dummy Integrations (training substitutes)
@@ -76,7 +76,20 @@ No FR is owned here; this Unit implements the approved training-only Dummy behav
 
 ## Story Summary
 
-Stories are created at STEP 11 (estimate ~6).
+- **Total Stories**: 7
+- **Must Have**: 7
+- **Should Have**: 0
+- **Could Have**: 0
+
+### Stories
+
+- [ ] **001-seed-training-scenario**: Seed the prototype training scenario - Must - Planned
+- [ ] **002-dummy-orgatex-batch-endpoints**: Dummy OrgaTEX serves batch queue and batch details - Must - Planned
+- [ ] **003-dummy-orgatex-recipe-endpoint**: Dummy OrgaTEX serves a batch's recipe - Must - Planned
+- [ ] **004-dummy-orgatex-consumption-endpoint**: Dummy OrgaTEX accepts consumption write-back - Must - Planned
+- [ ] **005-dummy-scale-api**: Dummy Scale API with tare and simulate controls - Must - Planned
+- [ ] **006-dummy-scanner-and-printer**: Dummy Scanner and Dummy Printer - Must - Planned
+- [ ] **007-dummy-failure-toggles**: Training failure toggles for every Dummy - Must - Planned
 
 ---
 

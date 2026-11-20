@@ -6,7 +6,7 @@ status: ready
 unit_type: frontend
 default_bolt_type: simple-construction-bolt
 created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:26:59Z
+updated: 2026-11-20T04:51:01Z
 ---
 
 # Unit Brief: Operator Terminal UI
@@ -57,7 +57,22 @@ None (presentation only). View state: current view, active component, latest rea
 
 ## Story Summary
 
-Stories are created at STEP 11 (estimate ~5).
+- **Total Stories**: 9
+- **Must Have**: 9
+- **Should Have**: 0
+- **Could Have**: 0
+
+### Stories
+
+- [ ] **001-terminal-shell-and-status-bar**: Terminal shell: header, clock and device status bar - Must - Planned
+- [ ] **002-select-batch-view**: View 1: Select batch - Must - Planned
+- [ ] **003-weigh-view-recipe-rail-and-header**: View 2: recipe rail, component header and dyestuff scan step - Must - Planned
+- [ ] **004-weigh-view-live-readout-and-tolerance**: View 2: live readout, progress bar and tolerance band - Must - Planned
+- [ ] **005-weigh-view-actions-and-function-keys**: View 2: Confirm, Re-tare, Quit and function keys - Must - Planned
+- [ ] **006-weigh-view-surplus-panel-and-override**: View 2: surplus panel and supervisor override - Must - Planned
+- [ ] **007-confirm-and-print-view**: View 3: Confirm & print - Must - Planned
+- [ ] **008-training-simulation-panel**: Training panel: simulate scale and failures - Must - Planned
+- [ ] **009-no-hard-coded-scenario-data**: All UI data comes from the APIs - Must - Planned
 
 ---
 
