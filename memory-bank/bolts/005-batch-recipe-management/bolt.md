@@ -11,8 +11,11 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-20T08:37:50Z
 completed: null
-current_stage: model
-stages_completed: []
+current_stage: design
+stages_completed:
+  - name: model
+    completed: 2026-11-20T08:42:11Z
+    artifact: ddd-01-domain-model.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [003-orgatex-integration, 004-device-integration]
@@ -52,8 +55,8 @@ Batch queue, selection and read-only recipe snapshot as a domain model.
 
 ## Stages
 
-- [ ] **1. Domain Model**: ⏳ Awaiting approval → ddd-01-domain-model.md
-- [ ] **2. Technical Design**: Pending → ddd-02-technical-design.md
+- [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
+- [ ] **2. Technical Design**: ⏳ Awaiting approval → ddd-02-technical-design.md
 - [ ] **3. ADR Analysis (optional)**: Pending → adr-*.md
 - [ ] **4. Implement**: Pending → source code
 - [ ] **5. Test**: Pending → ddd-03-test-report.md
