@@ -2,7 +2,7 @@
 unit: 003-device-integration
 intent: 001-assisted-weighing-station
 created: 2026-11-20T08:19:31Z
-last_updated: 2026-11-20T08:25:45Z
+last_updated: 2026-11-20T08:31:13Z
 ---
 
 # Construction Log: device-integration
@@ -33,6 +33,7 @@ last_updated: 2026-11-20T08:25:45Z
 |------|------|-------|---------|
 | 2026-11-20T08:19:31Z | 004-device-integration | started | Stage 1: Plan |
 | 2026-11-20T08:25:45Z | 004-device-integration | stage-complete | Plan → Implement (APPROVE PLAN; no Python printer adapter; JS behaviour tested by Playwright in bolts 007/011) |
+| 2026-11-20T08:31:13Z | 004-device-integration | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
 
 ## Execution Summary
 

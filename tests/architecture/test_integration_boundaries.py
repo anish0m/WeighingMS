@@ -61,22 +61,47 @@ class NoDummyImportTests(SimpleTestCase):
         self.assertEqual({k: v for k, v in offenders.items() if v}, {})
 
 
-class SingleOrgatexAdapterTests(SimpleTestCase):
-    def test_only_the_python_adapter_knows_the_orgatex_paths(self):
-        knowers = [
-            str(path.relative_to(SRC))
-            for app in weighingms_apps()
-            for path in python_files(app)
-            if "/batches" in path.read_text()
-        ]
+# Each integration path is known by exactly one Python module (None: the
+# server has no adapter for it) and exactly one JS file.
+PATH_OWNERS = {
+    "/batches": ("orgatex/adapter.py", "orgatex/static/orgatex/orgatex-client.js"),
+    "/scales": ("devices/scale.py", "devices/static/devices/scale-client.js"),
+    "/scanner": ("devices/scanner.py", "devices/static/devices/scanner-client.js"),
+    "/printer": (None, "devices/static/devices/printer-client.js"),
+    "/tickets": (None, "devices/static/devices/printer-client.js"),
+}
 
-        self.assertEqual(knowers, ["orgatex/adapter.py"])
 
-    def test_only_the_js_client_knows_the_orgatex_paths(self):
-        knowers = [
-            str(path.relative_to(SRC))
-            for path in sorted(SRC.rglob("*.js"))
-            if "/batches" in path.read_text()
-        ]
+def python_knowers(path_fragment):
+    return [
+        str(path.relative_to(SRC))
+        for app in weighingms_apps()
+        for path in python_files(app)
+        if path_fragment in path.read_text()
+    ]
 
-        self.assertEqual(knowers, ["orgatex/static/orgatex/orgatex-client.js"])
+
+def js_knowers(path_fragment):
+    return [
+        str(path.relative_to(SRC))
+        for path in sorted(SRC.rglob("*.js"))
+        if path_fragment in path.read_text()
+    ]
+
+
+class SingleAdapterTests(SimpleTestCase):
+    def test_each_path_is_known_by_one_python_adapter_at_most(self):
+        for fragment, (python_owner, _) in PATH_OWNERS.items():
+            with self.subTest(path=fragment):
+                expected = [python_owner] if python_owner else []
+                self.assertEqual(python_knowers(fragment), expected)
+
+    def test_each_path_is_known_by_one_js_client(self):
+        for fragment, (_, js_owner) in PATH_OWNERS.items():
+            with self.subTest(path=fragment):
+                self.assertEqual(js_knowers(fragment), [js_owner])
+
+    def test_device_status_knows_no_device_paths(self):
+        source = (SRC / "devices/static/devices/device-status.js").read_text()
+
+        self.assertEqual([p for p in PATH_OWNERS if p in source], [])
