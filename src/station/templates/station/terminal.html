@@ -131,9 +131,6 @@
           </div>
 
           <div class="notice" role="alert" data-testid="weigh-message" x-show="weighMessage" x-text="weighMessage"></div>
-          <div class="notice" role="alert" data-testid="material-refusal"
-               x-show="!weighMessage && activeComponent() && activeComponent().materialRefusal && activeComponent().materialRefusal.code !== 'IDENTITY_NOT_VERIFIED'"
-               x-text="activeComponent() && activeComponent().materialRefusal && activeComponent().materialRefusal.message"></div>
 
           <template x-if="activeComponent()">
             <div class="weigh-panel">
@@ -164,8 +161,14 @@
                   <span data-testid="caption-band" x-text="activeComponent().tolerance.caption"></span>
                   <span data-testid="caption-max" x-text="activeComponent().displayMaxText"></span>
                 </div>
-                <div class="status-line" data-testid="status-line" :data-zone="scaleFault || !isTared() ? 'fault' : zone()"
+                {% comment %}
+                  Until the component is material-ready (scan, lot, container),
+                  the status line gives the server's reason, never "PRESS OK".
+                {% endcomment %}
+                <div class="status-line" data-testid="status-line"
+                     :data-zone="scaleFault || !isTared() ? 'fault' : !activeComponent().materialReady ? 'blocked' : zone()"
                      x-text="scaleFault ? scaleFault
+                           : !activeComponent().materialReady ? activeComponent().materialRefusal.message
                            : !isTared() ? 'TARE REQUIRED — PRESS RE-TARE (F2)'
                            : evaluation ? evaluation.statusLine : ''"></div>
               </div>

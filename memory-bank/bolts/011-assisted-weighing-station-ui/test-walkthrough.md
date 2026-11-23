@@ -162,3 +162,18 @@ created: 2026-11-23T06:38:23Z
 - **Total of the UI flow:** with Simulate dispense the five actuals are 1242.4 g, 386.8 g, 94.2 g, 24.048 kg and 9.619 kg. FR-16's total and View 3 belong to bolts 015 and 017.
 - **Overshoot:** at 96.4 g the status line shows "OVER TOLERANCE — SURPLUS +2.4 g" and OK stays disabled. The surplus panel and the override are STEP 24 (bolt 013).
 - **Log output:** "Conflict" / "Service Unavailable" and `[WebServer]` lines in the Playwright output are the live server's log of the deliberate refusal and failure cases.
+
+### Post-completion fix (2026-11-23T07:04:51Z, APPROVE FIX)
+
+- **Found:** found during the STEP 20 screenshot (T335). With Yellow RGB not yet verified and 94.2 g on the scale, the status line said "WITHIN TOLERANCE — PRESS OK TO CONFIRM" while OK was correctly disabled, and nothing on the screen said why.
+- **Fix:** while the active component is not material-ready, the status line shows the server's reason in the warning colour (`data-zone="blocked"`), never "PRESS OK":
+  - "Scan the dyestuff first";
+  - "Wrong dyestuff";
+  - a missing lot or container.
+
+  The separate material-refusal notice was removed because the status line now carries the reason. The "Scan dyestuff" box has an amber border.
+- **Test:** `scan dyestuff step: a mismatch …` in `playwright/weigh.spec.js` now checks the status line at 94.0 g:
+  - before the scan: "Scan the dyestuff first", amber;
+  - after a wrong scan: "Wrong dyestuff";
+  - after the right scan: "WITHIN TOLERANCE — PRESS OK TO CONFIRM".
+- **Results after the fix:** Django 449/449, Playwright 50/50 (two full runs), lint clean.

@@ -165,6 +165,10 @@ test.describe('recipe rail and header (story 003)', () => {
     await expect(page.getByTestId('scan-step')).toContainText('Scan dyestuff');
     await showWeight(page, request, '94.0');
     await expect(page.getByTestId('btn-ok')).toBeDisabled();
+    // Within tolerance but unverified: the reason, never "PRESS OK TO CONFIRM".
+    await expect(page.getByTestId('status-line')).toHaveText('Scan the dyestuff first');
+    await expect(page.getByTestId('status-line')).toHaveAttribute('data-zone', 'blocked');
+    await expect(page.getByTestId('status-line')).toHaveCSS('color', WARN);
 
     await page.getByTestId('sim-scan-code').fill('DYE-2204');
     await page.getByTestId('sim-scan').click();
@@ -172,6 +176,7 @@ test.describe('recipe rail and header (story 003)', () => {
     await expect(page.getByTestId('weigh-message')).toHaveText('Wrong dyestuff');
     await expect(page.getByTestId('scan-step')).toBeVisible();
     await expect(page.getByTestId('btn-ok')).toBeDisabled();
+    await expect(page.getByTestId('status-line')).toHaveText('Wrong dyestuff');
 
     await page.getByTestId('sim-scan-code').fill('DYE-4471');
     await page.getByTestId('sim-scan').click();
@@ -179,6 +184,9 @@ test.describe('recipe rail and header (story 003)', () => {
     await expect(page.getByTestId('scan-step')).toBeHidden();
     await expect(page.getByTestId('weigh-message')).toBeHidden();
     await expect(page.getByTestId('btn-ok')).toBeEnabled();
+    await expect(page.getByTestId('status-line')).toHaveText(
+      'WITHIN TOLERANCE — PRESS OK TO CONFIRM',
+    );
   });
 });
 
