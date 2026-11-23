@@ -79,6 +79,22 @@ class ComponentsApiTests(ErrorAssertions, TestCase):
                     "code": "IDENTITY_NOT_VERIFIED",
                     "message": "Scan the dyestuff first",
                 },
+                # Weighing rules, bolt 009 (tested in test_rules_api).
+                "target": "94.0000",
+                "targetText": "94.0 g",
+                "scale": {
+                    "scaleId": "scale-3kg",
+                    "label": "3 kg precision",
+                    "unit": "g",
+                    "mode": "automatic",
+                },
+                "tolerance": {
+                    "tolerance": "0.5000",
+                    "low": "93.5000",
+                    "high": "94.5000",
+                    "nearFrom": "84.6000",
+                    "caption": "TOLERANCE ±0.5 g (93.5 – 94.5)",
+                },
             },
         )
 

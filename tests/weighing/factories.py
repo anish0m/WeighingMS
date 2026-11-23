@@ -24,13 +24,69 @@ def selection(batch_id="B-24187"):
     )
 
 
-# (sequence, code, name, unit, lot, container, tare): the Teal 4C training seed.
+# (sequence, code, name, unit, lot, container, tare, target, tolerance, max):
+# the Teal 4C training seed (prototype components).
 TEAL_4C = (
-    (1, "DYE-1180", "Remazol Brill. Blue RSPL", "g", "2026-0341", "C-09", "214"),
-    (2, "DYE-2204", "Remazol Red RB", "g", "2026-0298", "C-11", "214"),
-    (3, "DYE-4471", "Remazol Yellow RGB", "g", "2026-0387", "C-12", "214"),
-    (4, "AUX-0101", "Sodium Sulphate", "kg", "2026-0112", "D-03", "1.850"),
-    (5, "AUX-0107", "Soda Ash", "kg", "2026-0155", "D-05", "1.850"),
+    (
+        1,
+        "DYE-1180",
+        "Remazol Brill. Blue RSPL",
+        "g",
+        "2026-0341",
+        "C-09",
+        "214",
+        "1240.0",
+        "6.0",
+        "1600",
+    ),
+    (
+        2,
+        "DYE-2204",
+        "Remazol Red RB",
+        "g",
+        "2026-0298",
+        "C-11",
+        "214",
+        "386.0",
+        "2.0",
+        "520",
+    ),
+    (
+        3,
+        "DYE-4471",
+        "Remazol Yellow RGB",
+        "g",
+        "2026-0387",
+        "C-12",
+        "214",
+        "94.0",
+        "0.5",
+        "125",
+    ),
+    (
+        4,
+        "AUX-0101",
+        "Sodium Sulphate",
+        "kg",
+        "2026-0112",
+        "D-03",
+        "1.850",
+        "24.000",
+        "0.120",
+        "32",
+    ),
+    (
+        5,
+        "AUX-0107",
+        "Soda Ash",
+        "kg",
+        "2026-0155",
+        "D-05",
+        "1.850",
+        "9.600",
+        "0.048",
+        "14",
+    ),
 )
 YELLOW_RGB = 3
 SODIUM_SULPHATE = 4
@@ -43,15 +99,26 @@ def teal_selection(overrides=None):
     """
     overrides = overrides or {}
     stored = selection()
-    for sequence, code, name, unit, lot, container, tare in TEAL_4C:
+    for (
+        sequence,
+        code,
+        name,
+        unit,
+        lot,
+        container,
+        tare,
+        target,
+        tolerance,
+        maximum,
+    ) in TEAL_4C:
         fields = {
             "code": code,
             "name": name,
             "colour": "#000000",
-            "target_qty": Decimal(1),
+            "target_qty": Decimal(target),
             "unit": unit,
-            "tolerance": Decimal(0),
-            "display_max": Decimal(2),
+            "tolerance": Decimal(tolerance),
+            "display_max": Decimal(maximum),
             "lot": lot,
             "container": container,
             "tare": Decimal(tare),

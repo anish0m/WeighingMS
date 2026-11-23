@@ -2,11 +2,11 @@
 id: 005-evaluate-inclusive-tolerance
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 009-weighing-station
-implemented: false
+implemented: true
 ---
 
 # Story: 005-evaluate-inclusive-tolerance

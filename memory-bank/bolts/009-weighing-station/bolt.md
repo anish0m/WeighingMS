@@ -3,15 +3,15 @@ id: 009-weighing-station
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 002-select-scale-automatically
   - 004-target-and-remaining
   - 005-evaluate-inclusive-tolerance
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T04:44:23Z
-completed: null
-current_stage: implement
+completed: 2026-11-23T05:03:33Z
+current_stage: null
 stages_completed:
   - name: model
     completed: 2026-11-23T04:45:57Z
@@ -22,20 +22,27 @@ stages_completed:
   - name: adr
     completed: 2026-11-23T04:53:56Z
     artifact: adr-008-server-evaluates-every-reading.md, adr-009-one-value-at-display-resolution.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [005-batch-recipe-management, 006-weighing-station]
-enables_bolts: [010-weighing-station, 011-assisted-weighing-station-ui, 012-weighing-station]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: implement
+    completed: 2026-11-23T04:59:35Z
+    artifact: source code
+  - name: test
+    completed: 2026-11-23T05:03:33Z
+    artifact: ddd-03-test-report.md
+requires_bolts:
+  - 005-batch-recipe-management
+  - 006-weighing-station
+enables_bolts:
+  - 010-weighing-station
+  - 011-assisted-weighing-station-ui
+  - 012-weighing-station
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 1
   testing_scope: 2
-workbook_step: "STEP 20"
+workbook_step: STEP 20
 ---
 
 # Bolt: 009-weighing-station
@@ -64,8 +71,8 @@ Weighing rules: automatic scale selection, target/remaining and inclusive tolera
 - [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
-- [ ] **4. Implement**: ⏳ Awaiting approval → source code
-- [ ] **5. Test**: Pending → ddd-03-test-report.md
+- [x] **4. Implement**: ✅ Complete → source code
+- [x] **5. Test**: ✅ Complete → ddd-03-test-report.md
 
 ## Expected Outcome
 
