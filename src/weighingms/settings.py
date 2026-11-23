@@ -1,7 +1,10 @@
 """Django settings for WeighingMS (local training build)."""
 
 import os
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 SRC_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = SRC_DIR.parent
@@ -86,3 +89,20 @@ DEVICE_TIMEOUT_SECONDS = float(os.environ.get("DEVICE_TIMEOUT_SECONDS", "2"))
 
 # Operator terminal (NFR-13): the station name shown in the header.
 STATION_NAME = os.environ.get("STATION_NAME", "STATION 01")
+
+
+def positive_decimal(name: str, default: str) -> Decimal:
+    """A positive, finite Decimal from the environment; fail at startup otherwise."""
+    text = os.environ.get(name, default)
+    try:
+        value = Decimal(text.strip())
+    except InvalidOperation:
+        value = None
+    if value is None or not value.is_finite() or value <= 0:
+        raise ImproperlyConfigured(f"{name} must be a positive number, got {text!r}")
+    return value
+
+
+# Weighing rules (FR-8, NFR-13): target ≤ threshold → 3 kg precision scale,
+# above → 32 kg floor scale. Set the environment variable to change it.
+WEIGHING_SCALE_THRESHOLD_KG = positive_decimal("WEIGHING_SCALE_THRESHOLD_KG", "3")

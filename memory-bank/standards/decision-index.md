@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-11-23T04:01:39Z
-total_decisions: 7
+last_updated: 2026-11-23T04:53:56Z
+total_decisions: 9
 ---
 
 # Decision Index
@@ -19,6 +19,22 @@ Use this to find relevant prior decisions when working on related features.
 ## Decisions
 
 <!-- Entries are appended below in reverse chronological order (newest first) -->
+
+### ADR-009: A reading is taken once at display resolution; that one value is shown, evaluated and recorded
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 009-weighing-station (weighing-station)
+- **Path**: `bolts/009-weighing-station/adr-009-one-value-at-display-resolution.md`
+- **Summary**: A scale reading is converted exactly to the component's unit, then rounded half up once to 0.1 g / 0.001 kg. That value is shown, judged against the inclusive tolerance and recorded as the actual weight, so screen, verdict and record never disagree (94.54 → 94.5 within, 94.55 → 94.6 over).
+- **Read when**: Showing, evaluating or recording a weight (bolt 010 confirm, bolt 011 readout), changing number formats, or adding a scale with another resolution.
+
+### ADR-008: The server is the single source of the weighing rules; the browser asks it to evaluate each changed reading
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 009-weighing-station (weighing-station)
+- **Path**: `bolts/009-weighing-station/adr-008-server-evaluates-every-reading.md`
+- **Summary**: Scale selection, band, zone, still-to-weigh and status line exist once as Decimal functions in `weighing`. `GET …/components` supplies scale, target, band and caption; the browser calls `GET …/components/<seq>/evaluation` for each changed reading and holds no zone logic; confirm (bolt 010) re-reads the scale and calls the same `evaluate_reading`.
+- **Read when**: Building the weigh view's readout, bar, status line or OK state (bolt 011), implementing confirm (bolt 010), or changing any weighing rule (including the STEP 24 overshoot rule).
 
 ### ADR-007: Identity checks are stored in the `weighing` app as part of the WeighingSession; snapshot-only material rules stay in `batches`
 - **Status**: accepted

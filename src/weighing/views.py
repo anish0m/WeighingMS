@@ -5,19 +5,23 @@ operator lives only in the server-side session; an operator in a request
 body is never used for a weighing action.
 """
 
+import re
 from decimal import Decimal
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 
-from weighing import identity, services
+from weighing import identity, rules, services
 from weighing.models import IdentityCheck, WeighingSession
 from weighing.services import OperatorRef, RefusalReason, WeighingRefused
+from weighing.tolerance import UNITS, WeightEvaluation, format_amount, format_weight
 from weighingms.api import InvalidJson, json_error, read_json_object
 
 SESSION_KEY = "weighing.operator_id"
 QUANTUM = Decimal("0.0001")
 MAX_OPERATOR_ID = 16
+# A plain decimal as the scale client sends it: no exponent, NaN or Infinity.
+NET_PATTERN = re.compile(r"-?\d{1,6}(\.\d{1,6})?")
 
 REFUSAL_STATUS = {
     RefusalReason.OPERATOR_REQUIRED: 403,
@@ -157,6 +161,30 @@ def component_identity(request, session_id, sequence):
     return JsonResponse(_check_json(check), status=201 if created else 200)
 
 
+@require_GET
+def component_evaluation(request, session_id, sequence):
+    """Judge a live net reading for a component (ADR-008); read-only."""
+    try:
+        net, unit = _parse_reading(request)
+    except InvalidRequest as exc:
+        return json_error(400, "INVALID_REQUEST", str(exc))
+    try:
+        _, evaluation = rules.evaluate_reading(session_id, sequence, net, unit)
+    except WeighingRefused as refused:
+        return _refusal(refused)
+    return JsonResponse(_evaluation_json(session_id, sequence, evaluation))
+
+
+def _parse_reading(request) -> tuple[Decimal, str]:
+    net = request.GET.get("net", "")
+    unit = request.GET.get("unit", "")
+    if not NET_PATTERN.fullmatch(net):
+        raise InvalidRequest("net must be a plain decimal, e.g. 93.4")
+    if unit not in UNITS:
+        raise InvalidRequest("unit must be g or kg")
+    return Decimal(net), unit
+
+
 def _parse_scan_id(request) -> int:
     scan_id = read_json_object(request).get("scanId")
     if not isinstance(scan_id, int) or isinstance(scan_id, bool) or scan_id < 1:
@@ -210,6 +238,48 @@ def _component_json(view: identity.ComponentView) -> dict:
         "materialReady": view.refusal is None,
         "materialRefusal": view.refusal
         and {"code": view.refusal.code, "message": view.refusal.value},
+        **_rules_json(rules.component_rules(component)),
+    }
+
+
+def _rules_json(component_rules: rules.ComponentRules) -> dict:
+    """Scale, target and band of a component (bolt 009). The band values are for
+    drawing the bar; the zone always comes from the evaluation endpoint."""
+    band, scale = component_rules.band, component_rules.assignment.scale
+    return {
+        "target": _quantity_text(band.target),
+        "targetText": component_rules.target_text,
+        "scale": {
+            "scaleId": scale.scale_id,
+            "label": scale.label,
+            "unit": scale.unit,
+            "mode": component_rules.assignment.mode,
+        },
+        "tolerance": {
+            "tolerance": _quantity_text(band.tolerance),
+            "low": _quantity_text(band.low),
+            "high": _quantity_text(band.high),
+            "nearFrom": _quantity_text(band.near_from),
+            "caption": band.caption,
+        },
+    }
+
+
+def _evaluation_json(session_id, sequence, evaluation: WeightEvaluation) -> dict:
+    unit, surplus = evaluation.unit, evaluation.surplus
+    return {
+        "sessionId": session_id,
+        "sequence": sequence,
+        "net": format_amount(evaluation.net, unit),
+        "unit": unit,
+        "netText": format_weight(evaluation.net, unit),
+        "zone": evaluation.zone.value,
+        "withinTolerance": evaluation.within_tolerance,
+        "stillToWeigh": format_amount(evaluation.still_to_weigh, unit),
+        "stillToWeighText": format_weight(evaluation.still_to_weigh, unit),
+        "surplus": surplus and format_amount(surplus, unit),
+        "surplusText": surplus and format_weight(surplus, unit),
+        "statusLine": evaluation.status_line,
     }
 
 

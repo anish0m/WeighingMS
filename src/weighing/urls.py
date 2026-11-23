@@ -1,4 +1,5 @@
-"""WeighingMS station API: identity, sessions, dyestuff checks (ADR-002, -005, -006)."""
+"""WeighingMS station API: identity, sessions, dyestuff checks, weighing rules
+(ADR-002, -005, -006, -008)."""
 
 from django.urls import path
 
@@ -20,5 +21,10 @@ urlpatterns = [
         "sessions/<int:session_id>/components/<int:sequence>/identity",
         views.component_identity,
         name="component-identity",
+    ),
+    path(
+        "sessions/<int:session_id>/components/<int:sequence>/evaluation",
+        views.component_evaluation,
+        name="component-evaluation",
     ),
 ]

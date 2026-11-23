@@ -3,16 +3,25 @@ id: 009-weighing-station
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 002-select-scale-automatically
   - 004-target-and-remaining
   - 005-evaluate-inclusive-tolerance
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-23T04:44:23Z
 completed: null
-current_stage: null
-stages_completed: []
+current_stage: implement
+stages_completed:
+  - name: model
+    completed: 2026-11-23T04:45:57Z
+    artifact: ddd-01-domain-model.md
+  - name: design
+    completed: 2026-11-23T04:49:12Z
+    artifact: ddd-02-technical-design.md
+  - name: adr
+    completed: 2026-11-23T04:53:56Z
+    artifact: adr-008-server-evaluates-every-reading.md, adr-009-one-value-at-display-resolution.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [005-batch-recipe-management, 006-weighing-station]
@@ -52,10 +61,10 @@ Weighing rules: automatic scale selection, target/remaining and inclusive tolera
 
 ## Stages
 
-- [ ] **1. Domain Model**: Pending → ddd-01-domain-model.md
-- [ ] **2. Technical Design**: Pending → ddd-02-technical-design.md
-- [ ] **3. ADR Analysis (optional)**: Pending → adr-*.md
-- [ ] **4. Implement**: Pending → source code
+- [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
+- [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
+- [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
+- [ ] **4. Implement**: ⏳ Awaiting approval → source code
 - [ ] **5. Test**: Pending → ddd-03-test-report.md
 
 ## Expected Outcome

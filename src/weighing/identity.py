@@ -54,7 +54,7 @@ def _refuse(reason: RefusalReason, session_id, sequence) -> WeighingRefused:
     return WeighingRefused(reason)
 
 
-def _session(session_id: int) -> WeighingSession:
+def load_session(session_id: int) -> WeighingSession:
     session = (
         WeighingSession.objects.select_related("selection")
         .filter(pk=session_id)
@@ -65,7 +65,7 @@ def _session(session_id: int) -> WeighingSession:
     return session
 
 
-def _component(session: WeighingSession, sequence: int) -> SnapshotComponent:
+def load_component(session: WeighingSession, sequence: int) -> SnapshotComponent:
     component = session.selection.components.filter(sequence=sequence).first()
     if component is None:
         raise _refuse(RefusalReason.COMPONENT_NOT_FOUND, session.pk, sequence)
@@ -81,8 +81,8 @@ def verify_identity(
     refusal raises ``WeighingRefused`` and stores nothing.
     """
     operator = require_operator(operator_id, "verify_identity")
-    session = _session(session_id)
-    component = _component(session, sequence)
+    session = load_session(session_id)
+    component = load_component(session, sequence)
     existing = session.identity_checks.filter(scan_id=scan_id).first()
     if existing is not None:
         return existing, False
@@ -178,7 +178,7 @@ def check_material_ready(session: WeighingSession, sequence: int) -> None:
     Refuses, in this order: LOT_MISSING, CONTAINER_MISSING,
     IDENTITY_NOT_VERIFIED, WRONG_DYESTUFF. Bolt 010's confirm calls it first.
     """
-    component = _component(session, sequence)
+    component = load_component(session, sequence)
     status, _ = identity_status(session, sequence)
     reason = _readiness(component, status)
     if reason is not None:
@@ -187,7 +187,7 @@ def check_material_ready(session: WeighingSession, sequence: int) -> None:
 
 def session_components(session_id: int) -> tuple[WeighingSession, list[ComponentView]]:
     """Every snapshot component in sequence with header, identity and readiness."""
-    session = _session(session_id)
+    session = load_session(session_id)
     views = []
     for component in session.selection.components.all():
         status, latest = identity_status(session, component.sequence)
