@@ -26,12 +26,14 @@
       watchedScaleId: null,
       evaluating: false,
       evaluateAgain: false,
+      heldScan: null, // a dyestuff scan that arrived while a request was running
 
       // ── Session ─────────────────────────────────────────────────────
       // Opens the session at its active component; with none active, the
       // first pending component is activated (and tared by the server).
       async openSession(sessionId) {
         this.weighMessage = '';
+        this.weighBusy = true;
         try {
           let progress = await api.station.progress(sessionId);
           if (!progress.active && progress.nextPending) {
@@ -40,12 +42,17 @@
           await this.applyProgress(progress);
         } catch (failure) {
           this.weighFailure(failure);
+        } finally {
+          this.endBusy();
         }
       },
 
+      // Components are read first, so the rail, header and training panel
+      // switch to the new state together.
       async applyProgress(progress) {
+        const components = await api.station.sessionComponents(progress.sessionId);
         this.session = progress;
-        this.components = await api.station.sessionComponents(progress.sessionId);
+        this.components = components;
         if (!this.activeSequence() || !this.evaluation ||
             this.evaluation.sequence !== this.activeSequence()) {
           this.evaluation = null;
@@ -63,6 +70,7 @@
 
       stopWeigh() {
         this.stopScaleWatch();
+        this.heldScan = null;
         this.session = null;
         this.components = [];
         this.evaluation = null;
@@ -206,9 +214,15 @@
       },
 
       // ── Scan dyestuff step (OQ-8) ───────────────────────────────────
+      // The scanner reports each scan once, so a scan that arrives while a
+      // request is running is held and checked when that request ends.
       async onDyestuffScan(scan) {
+        if (this.weighBusy) {
+          this.heldScan = scan;
+          return;
+        }
         const component = this.activeComponent();
-        if (!component || !this.needsScan() || this.weighBusy) {
+        if (!component || !this.needsScan()) {
           return;
         }
         this.weighBusy = true;
@@ -223,7 +237,16 @@
         } catch (failure) {
           this.weighFailure(failure);
         } finally {
-          this.weighBusy = false;
+          this.endBusy();
+        }
+      },
+
+      endBusy() {
+        this.weighBusy = false;
+        const held = this.heldScan;
+        this.heldScan = null;
+        if (held) {
+          this.onDyestuffScan(held);
         }
       },
 
@@ -266,7 +289,7 @@
         } catch (failure) {
           this.weighFailure(failure);
         } finally {
-          this.weighBusy = false;
+          this.endBusy();
         }
       },
 

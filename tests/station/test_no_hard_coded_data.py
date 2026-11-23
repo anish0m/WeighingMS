@@ -46,7 +46,17 @@ class NoHardCodedDataTests(SimpleTestCase):
     def test_scan_covers_templates_and_scripts(self):
         names = {path.name for path in ui_files()}
 
-        self.assertTrue({"terminal.html", "terminal.js", "station-client.js"} <= names)
+        self.assertTrue(
+            {
+                "terminal.html",
+                "terminal.js",
+                "station-client.js",
+                "weigh.js",
+                "training-panel.js",
+                "training-client.js",
+            }
+            <= names
+        )
 
     def test_no_seed_values_in_ui_files(self):
         for path in ui_files():

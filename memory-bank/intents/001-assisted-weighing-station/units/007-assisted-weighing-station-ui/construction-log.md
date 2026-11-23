@@ -2,7 +2,7 @@
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:38:35Z
-last_updated: 2026-11-23T05:58:40Z
+last_updated: 2026-11-23T06:10:39Z
 ---
 
 # Construction Log: assisted-weighing-station-ui
@@ -43,6 +43,7 @@ last_updated: 2026-11-23T05:58:40Z
 | 2026-11-20T09:57:01Z | 007-assisted-weighing-station-ui | completed | All 3 stages done (APPROVE TESTS); Playwright 19/19, Django 238/238; stories 001, 002 complete; unit stays open for bolts 011, 013, 017 |
 | 2026-11-23T05:53:53Z | 011-assisted-weighing-station-ui | started | Stage 1: Plan |
 | 2026-11-23T05:58:40Z | 011-assisted-weighing-station-ui | stage-complete | Plan → Implement (APPROVE PLAN; recommended decisions: server-side bar percentages, training "Simulate scan" field, Supervisor override shown disabled until bolt 013, E2E database reset to the seeded copy) |
+| 2026-11-23T06:10:39Z | 011-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; View 2 · Weigh with rail, header, scan step, readout, bar, F1/F2/F4, disabled Supervisor override; TRAINING ONLY panel; server bar percentages; E2E database reset; Django 430/430, Playwright 19/19) |
 
 ## Execution Summary
 

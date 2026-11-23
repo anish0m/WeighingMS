@@ -98,11 +98,9 @@
                   <span><span class="nm" x-text="c.name"></span><br><span class="sub" x-text="c.code + ' · ' + c.scale.classText"></span></span>
                   <span>
                     <span class="qty" x-text="c.targetText"></span><br>
-                    <span class="st">
-                      <span x-show="rowState(c.sequence) === 'done'" x-text="'✓ ' + (progressOf(c.sequence) && progressOf(c.sequence).actualWeight)"></span>
-                      <span x-show="rowState(c.sequence) === 'active'">WEIGHING</span>
-                      <span x-show="rowState(c.sequence) === 'pending'">PENDING</span>
-                    </span>
+                    <span class="st"
+                          x-text="rowState(c.sequence) === 'done' ? '✓ ' + progressOf(c.sequence).actualWeight
+                                : rowState(c.sequence) === 'active' ? 'WEIGHING' : 'PENDING'"></span>
                   </span>
                 </button>
               </li>
@@ -166,11 +164,10 @@
                   <span data-testid="caption-band" x-text="activeComponent().tolerance.caption"></span>
                   <span data-testid="caption-max" x-text="activeComponent().displayMaxText"></span>
                 </div>
-                <div class="status-line" data-testid="status-line" :data-zone="scaleFault || !isTared() ? 'fault' : zone()">
-                  <span x-show="scaleFault" x-text="scaleFault"></span>
-                  <span x-show="!scaleFault && !isTared()">TARE REQUIRED — PRESS RE-TARE (F2)</span>
-                  <span x-show="!scaleFault && isTared()" x-text="evaluation ? evaluation.statusLine : ''"></span>
-                </div>
+                <div class="status-line" data-testid="status-line" :data-zone="scaleFault || !isTared() ? 'fault' : zone()"
+                     x-text="scaleFault ? scaleFault
+                           : !isTared() ? 'TARE REQUIRED — PRESS RE-TARE (F2)'
+                           : evaluation ? evaluation.statusLine : ''"></div>
               </div>
             </div>
           </template>

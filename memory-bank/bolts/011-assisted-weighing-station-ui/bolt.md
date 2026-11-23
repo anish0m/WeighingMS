@@ -12,11 +12,14 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T05:53:53Z
 completed: null
-current_stage: implement
+current_stage: test
 stages_completed:
   - name: plan
     completed: 2026-11-23T05:58:40Z
     artifact: implementation-plan.md
+  - name: implement
+    completed: 2026-11-23T06:10:39Z
+    artifact: implementation-walkthrough.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [002-dummy-integrations, 004-device-integration, 008-batch-recipe-management, 009-weighing-station, 010-weighing-station]
@@ -58,8 +61,8 @@ View 2 · Weigh: rail, header, scan step, live readout, tolerance band, actions,
 ## Stages
 
 - [x] **1. Plan**: ✅ Complete → implementation-plan.md
-- [ ] **2. Implement**: ⏳ Awaiting approval → source code + implementation-walkthrough.md
-- [ ] **3. Test**: Pending → tests + test-walkthrough.md
+- [x] **2. Implement**: ✅ Complete → source code + implementation-walkthrough.md
+- [ ] **3. Test**: ⏳ Awaiting approval → tests + test-walkthrough.md
 
 ## Expected Outcome
 

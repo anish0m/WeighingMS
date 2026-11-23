@@ -40,11 +40,33 @@ class TerminalPageTests(TestCase):
             "devices/device-status.js",
             "devices/scanner-client.js",
             "station/station-client.js",
+            "station/training-client.js",
+            "station/weigh.js",
+            "station/training-panel.js",
             "station/terminal.js",
             "station/vendor/alpine.min.js",
         ]
         positions = [html.index(name) for name in order]
         self.assertEqual(positions, sorted(positions))
+
+    def test_training_panel_is_marked_and_outside_the_device(self):
+        """Story 007/008 AC 3: training-only and separate from operator controls."""
+        html = self.client.get(TERMINAL).content.decode()
+
+        panel = html.index('data-testid="training-panel"')
+        self.assertGreater(panel, html.index('data-testid="status-bar"'))
+        self.assertIn("TRAINING ONLY", html[panel:])
+        self.assertNotIn("TRAINING ONLY", html[:panel])
+        self.assertNotIn("{#", html)  # no template comment leaks into the page
+
+    def test_view_2_keys_and_supervisor_override(self):
+        html = self.client.get(TERMINAL).content.decode()
+
+        for label in ("OK · Confirm", "Re-tare", "Quit", "Supervisor override"):
+            with self.subTest(label=label):
+                self.assertIn(label, html)
+        override = html[html.index('data-testid="btn-override"') :]
+        self.assertIn("disabled", override[: override.index(">")])
 
     def test_rendered_page_contains_no_scenario_data(self):
         html = self.client.get(TERMINAL).content.decode()
