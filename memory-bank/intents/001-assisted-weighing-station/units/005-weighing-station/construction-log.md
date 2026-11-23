@@ -2,7 +2,7 @@
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:02:10Z
-last_updated: 2026-11-23T05:27:05Z
+last_updated: 2026-11-23T05:47:57Z
 ---
 
 # Construction Log: weighing-station
@@ -31,7 +31,7 @@ last_updated: 2026-11-23T05:27:05Z
 |---------|---------|--------|---------|
 | 006-weighing-station | 001 | ✅ completed | - |
 | 009-weighing-station | 002, 004, 005 | ✅ completed | - |
-| 010-weighing-station | 003, 006, 008, 010 | in-progress | - |
+| 010-weighing-station | 003, 006, 008, 010 | ✅ completed | - |
 | 012-weighing-station | 007 | planned | - |
 | 015-weighing-station | 009, 011 | planned | - |
 
@@ -55,6 +55,8 @@ last_updated: 2026-11-23T05:27:05Z
 | 2026-11-23T05:11:30Z | 010-weighing-station | stage-complete | Domain Model → Technical Design (APPROVE MODEL; recommended decisions: server tares via adapter, quit starts an untared attempt, record tare from snapshot, next component activated in the confirm transaction with tare after commit, resume the most recently active open session, record operator = current station operator) |
 | 2026-11-23T05:13:08Z | 010-weighing-station | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; `progression.py`, `confirmation.py`; models `ComponentAttempt`, `WeighingRecord` (migration 0004); 6 endpoints incl. `GET /current-session`; scale I/O outside the transaction, re-check under lock) |
 | 2026-11-23T05:27:05Z | 010-weighing-station | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-010 stored append-only attempts, derived component state; ADR-011 scale I/O outside the transaction, re-check under lock; both accepted) |
+| 2026-11-23T05:42:35Z | 010-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `progression.py`, `confirmation.py`, models `ComponentAttempt` / `WeighingRecord` + migration 0004, 6 endpoints) |
+| 2026-11-23T05:47:57Z | 010-weighing-station | completed | All 5 stages done (APPROVE TESTS); 430/430 Django tests, 19/19 Playwright; stories 003, 006, 008, 010 complete; unit stays open for bolts 012, 015 |
 
 ## Execution Summary
 
@@ -62,8 +64,8 @@ last_updated: 2026-11-23T05:27:05Z
 |--------|-------|
 | Original bolts planned | 5 |
 | Current bolt count | 5 |
-| Bolts completed | 2 |
-| Bolts in progress | 1 |
+| Bolts completed | 3 |
+| Bolts in progress | 0 |
 | Bolts remaining | 2 |
 | Replanning events | 0 |
 
@@ -73,3 +75,4 @@ last_updated: 2026-11-23T05:27:05Z
 - OQ-4 (overshoot rule) stays open until workbook STEP 24; bolt 012 must stop for that human decision before implementing.
 - 2026-11-20T09:30:26Z: bolt 006 complete. ADR-004 (seeded station identities) and ADR-005 (current operator in the server session) accepted and indexed. The sessions app and `SessionMiddleware` were enabled. Story 001's on-screen header is verified by Playwright in bolt 007.
 - 2026-11-23T05:03:33Z: bolt 009 complete. ADR-008 (server is the single source of the weighing rules) and ADR-009 (one value at display resolution) accepted and indexed. Setting `WEIGHING_SCALE_THRESHOLD_KG` (default 3, env override). Bolt 010's confirm must call `rules.evaluate_reading` on the server's own scale re-read, store the evaluated net as actualWeight, and call `check_material_ready` (ADR-007). Story 005's Playwright check (OK disabled at 93.4 / 94.6) is in bolt 011.
+- 2026-11-23T05:47:57Z: bolt 010 complete. ADR-010 (stored append-only attempts, derived component state) and ADR-011 (scale I/O outside the transaction, re-check under lock) accepted and indexed. Endpoints: `GET /current-session`, `GET …/progress`, `POST …/components/<seq>/activate|tare|quit|confirm`. After a confirm the first pending component in recipe order becomes active. Bolt 011 wires F1/F2/F4, the rail and resume; bolt 012 builds overshoot on `OUT_OF_TOLERANCE`.

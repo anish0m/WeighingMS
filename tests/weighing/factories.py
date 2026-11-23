@@ -92,13 +92,13 @@ YELLOW_RGB = 3
 SODIUM_SULPHATE = 4
 
 
-def teal_selection(overrides=None):
+def teal_selection(overrides=None, batch_id="B-24187"):
     """B-24187 with its five snapshot components.
 
     ``overrides`` maps a sequence to field changes, e.g. ``{3: {"lot": ""}}``.
     """
     overrides = overrides or {}
-    stored = selection()
+    stored = selection(batch_id)
     for (
         sequence,
         code,

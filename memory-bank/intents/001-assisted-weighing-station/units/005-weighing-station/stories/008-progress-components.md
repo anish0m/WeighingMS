@@ -2,11 +2,11 @@
 id: 008-progress-components
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 010-weighing-station
-implemented: false
+implemented: true
 ---
 
 # Story: 008-progress-components

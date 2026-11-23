@@ -3,7 +3,7 @@ id: 010-weighing-station
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 003-tare-retare-and-quit
   - 006-confirm-weighing
@@ -11,8 +11,8 @@ stories:
   - 010-resume-after-reload
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T05:09:30Z
-completed: null
-current_stage: implement
+completed: 2026-11-23T05:47:57Z
+current_stage: null
 stages_completed:
   - name: model
     completed: 2026-11-23T05:11:30Z
@@ -23,20 +23,28 @@ stages_completed:
   - name: adr
     completed: 2026-11-23T05:27:05Z
     artifact: adr-010-stored-attempts-derived-component-state.md, adr-011-scale-io-outside-transaction.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [004-device-integration, 006-weighing-station, 008-batch-recipe-management, 009-weighing-station]
-enables_bolts: [011-assisted-weighing-station-ui, 015-weighing-station]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: implement
+    completed: 2026-11-23T05:42:35Z
+    artifact: source code
+  - name: test
+    completed: 2026-11-23T05:47:57Z
+    artifact: ddd-03-test-report.md
+requires_bolts:
+  - 004-device-integration
+  - 006-weighing-station
+  - 008-batch-recipe-management
+  - 009-weighing-station
+enables_bolts:
+  - 011-assisted-weighing-station-ui
+  - 015-weighing-station
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 3
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 20"
+workbook_step: STEP 20
 ---
 
 # Bolt: 010-weighing-station
@@ -66,8 +74,8 @@ Confirmation and progression: tare/re-tare/quit, immutable weighing record, comp
 - [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
-- [ ] **4. Implement**: ⏳ Awaiting approval → source code
-- [ ] **5. Test**: Pending → ddd-03-test-report.md
+- [x] **4. Implement**: ✅ Complete → source code
+- [x] **5. Test**: ✅ Complete → ddd-03-test-report.md
 
 ## Expected Outcome
 
