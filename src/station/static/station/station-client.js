@@ -67,6 +67,26 @@
     return sessionPath(sessionId) + '/components/' + encodeURIComponent(sequence) + '/' + action;
   }
 
+  // OrgaTEX write-back (bolt 014, FR-17): the server supplies the body and the
+  // idempotency key, the OrgaTEX client posts it, and the server decides the
+  // status by reading OrgaTEX itself. Resolves to the server's writeBack.
+  async function writeBack(sessionId) {
+    const path = sessionPath(sessionId) + '/write-back';
+    const started = await request('POST', path, {});
+    if (started.writeBack.status === 'confirmed') {
+      return started.writeBack;
+    }
+    let report;
+    try {
+      await window.WeighingMS.orgatex.postConsumption(started.batchId, started.body);
+      report = { posted: true, reason: '' };
+    } catch (error) {
+      report = { posted: false, reason: error.message || 'OrgaTEX unavailable' };
+    }
+    const result = await request('POST', path + '/result', report);
+    return result.writeBack;
+  }
+
   window.WeighingMS = window.WeighingMS || {};
   window.WeighingMS.station = {
     StationError,
@@ -100,5 +120,9 @@
       request('POST', componentPath(sessionId, sequence, 'quit'), {}),
     confirm: (sessionId, sequence) =>
       request('POST', componentPath(sessionId, sequence, 'confirm'), {}),
+    // OrgaTEX write-back (bolt 014)
+    writeBackStatus: (sessionId) =>
+      request('GET', sessionPath(sessionId) + '/write-back').then((d) => d.writeBack),
+    writeBack,
   };
 })();

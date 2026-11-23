@@ -88,6 +88,22 @@ class Recipe:
     components: tuple[RecipeComponent, ...]
 
 
+@dataclass(frozen=True)
+class ConsumptionLine:
+    code: str
+    actual_qty: Decimal
+    unit: str
+
+
+@dataclass(frozen=True)
+class Consumption:
+    """One consumption posting that OrgaTEX has accepted and stored."""
+
+    idempotency_key: str
+    accepted_at: datetime
+    lines: tuple[ConsumptionLine, ...]
+
+
 def fetch_queue() -> Queue:
     """Return the batch queue released for this station."""
     return _read("/batches", None, _parse_queue)
@@ -103,6 +119,16 @@ def fetch_recipe(batch_id: str) -> Recipe:
     """Return the batch's recipe; ``OrgatexNotFound`` if batch or recipe is missing."""
     path = f"/batches/{quote(batch_id, safe='')}/recipe"
     return _read(path, batch_id, lambda data: _parse_recipe(data, batch_id))
+
+
+def fetch_consumptions(batch_id: str) -> tuple[Consumption, ...]:
+    """Return the consumptions OrgaTEX holds for the batch (write-back check).
+
+    WeighingMS never posts from the server; the browser posts and the server
+    reads back here before it shows CONFIRMED (bolt 014, NFR-7).
+    """
+    path = f"/batches/{quote(batch_id, safe='')}/consumption"
+    return _read(path, batch_id, lambda data: _parse_consumptions(data, batch_id))
 
 
 def _read(path, batch_id, parse):
@@ -165,11 +191,7 @@ def _load_json(raw):
 
 
 def _parse_queue(data):
-    received_at = _str(data, "receivedAt")
-    try:
-        received = datetime.fromisoformat(received_at)
-    except ValueError as exc:
-        raise _MalformedResponse(f"receivedAt {received_at!r} is not ISO") from exc
+    received = _datetime(data, "receivedAt")
     batches = _field(data, "batches", list)
     return Queue(received, tuple(_parse_batch(item) for item in batches))
 
@@ -216,6 +238,25 @@ def _parse_component(data):
     )
 
 
+def _parse_consumptions(data, expected_id):
+    _check_batch_id(_str(data, "batchId"), expected_id)
+    return tuple(
+        Consumption(
+            idempotency_key=_str(item, "idempotencyKey"),
+            accepted_at=_datetime(item, "acceptedAt"),
+            lines=tuple(
+                ConsumptionLine(
+                    code=_str(line, "code"),
+                    actual_qty=_decimal(line, "actualQty"),
+                    unit=_str(line, "unit"),
+                )
+                for line in _field(item, "components", list)
+            ),
+        )
+        for item in _field(data, "consumptions", list)
+    )
+
+
 def _check_batch_id(actual, expected):
     if expected is not None and actual != expected:
         raise _MalformedResponse(f"asked for {expected}, got {actual}")
@@ -236,6 +277,14 @@ def _str(data, key):
 
 def _int(data, key):
     return _field(data, key, int)
+
+
+def _datetime(data, key):
+    text = _str(data, key)
+    try:
+        return datetime.fromisoformat(text)
+    except ValueError as exc:
+        raise _MalformedResponse(f"{key} {text!r} is not ISO") from exc
 
 
 def _decimal(data, key):

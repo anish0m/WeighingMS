@@ -40,6 +40,8 @@ class RefusalReason(Enum):
     SCALE_UNAVAILABLE = "Scale unavailable"
     OUT_OF_TOLERANCE = "Weight is not within tolerance"
     SESSION_NOT_OPEN = "Weighing session is not in progress"
+    BATCH_NOT_COMPLETE = "Not every component is weighed yet"
+    WRITE_BACK_NOT_STARTED = "Write-back to OrgaTEX has not been started"
 
     @property
     def code(self) -> str:

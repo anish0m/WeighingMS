@@ -12,7 +12,16 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 
 from batches.material import format_quantity
-from weighing import confirmation, identity, overshoot, progression, rules, services
+from orgatex.models import WriteBack
+from weighing import (
+    confirmation,
+    consumption,
+    identity,
+    overshoot,
+    progression,
+    rules,
+    services,
+)
 from weighing.models import IdentityCheck, WeighingRecord, WeighingSession
 from weighing.services import OperatorRef, RefusalReason, WeighingRefused
 from weighing.tolerance import UNITS, WeightEvaluation, format_amount, format_weight
@@ -45,6 +54,8 @@ REFUSAL_STATUS = {
     RefusalReason.OUT_OF_TOLERANCE: 409,
     RefusalReason.SCALE_DISCONNECTED: 503,
     RefusalReason.SCALE_UNAVAILABLE: 503,
+    RefusalReason.BATCH_NOT_COMPLETE: 409,
+    RefusalReason.WRITE_BACK_NOT_STARTED: 409,
 }
 
 
@@ -254,6 +265,65 @@ def component_confirm(request, session_id, sequence):
         {"record": _record_json(record), "progress": _progress_json(state)},
         status=201,
     )
+
+
+@require_http_methods(["GET", "POST"])
+def session_write_back(request, session_id):
+    """GET: the write-back status. POST: start or retry (FR-17, bolt 014)."""
+    try:
+        if request.method == "GET":
+            record = consumption.status(session_id)
+            return JsonResponse({"writeBack": record and _write_back_json(record)})
+        record, body = consumption.start(session_id, _session_operator_id(request))
+    except WeighingRefused as refused:
+        return _refusal(refused)
+    return JsonResponse(
+        {
+            "writeBack": _write_back_json(record),
+            "batchId": record.batch_id,
+            "body": body,
+        }
+    )
+
+
+@require_http_methods(["POST"])
+def session_write_back_result(request, session_id):
+    """The browser's report of its post; the server checks OrgaTEX itself."""
+    try:
+        posted, reason = _parse_write_back_report(request)
+    except (InvalidJson, InvalidRequest) as exc:
+        return json_error(400, "VALIDATION_ERROR", str(exc))
+    try:
+        record = consumption.report(
+            session_id, _session_operator_id(request), posted, reason
+        )
+    except WeighingRefused as refused:
+        return _refusal(refused)
+    return JsonResponse({"writeBack": _write_back_json(record)})
+
+
+def _parse_write_back_report(request) -> tuple[bool, str]:
+    payload = read_json_object(request)
+    posted = payload.get("posted")
+    if not isinstance(posted, bool):
+        raise InvalidRequest("posted must be true or false")
+    reason = payload.get("reason", "")
+    if reason is None:
+        reason = ""
+    if not isinstance(reason, str):
+        raise InvalidRequest("reason must be a string")
+    return posted, reason
+
+
+def _write_back_json(record: WriteBack) -> dict:
+    return {
+        "status": record.status,
+        "idempotencyKey": record.idempotency_key,
+        "attempts": record.attempts,
+        "confirmedAt": record.confirmed_at and record.confirmed_at.isoformat(),
+        "reason": record.last_error or None,
+        "operatorId": record.operator_id,
+    }
 
 
 def _parse_reading(request) -> tuple[Decimal, str]:

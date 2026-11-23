@@ -2,7 +2,7 @@
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
 created: 2026-11-20T07:43:38Z
-last_updated: 2026-11-23T10:09:08Z
+last_updated: 2026-11-23T10:11:18Z
 ---
 
 # Construction Log: orgatex-integration
@@ -38,6 +38,7 @@ last_updated: 2026-11-23T10:09:08Z
 | 2026-11-20T08:15:03Z | 003-orgatex-integration | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
 | 2026-11-20T08:18:31Z | 003-orgatex-integration | completed | All 3 stages done (APPROVE TESTS); 96/96 tests pass |
 | 2026-11-23T10:09:08Z | 014-orgatex-integration | started | Stage 1: Plan |
+| 2026-11-23T10:11:18Z | 014-orgatex-integration | stage-complete | Plan → Implement (APPROVE PLAN; server verifies CONFIRMED, key WMS-<batchId>-S<sessionId>, WriteBack in `orgatex`) |
 
 ## Execution Summary
 

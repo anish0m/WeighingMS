@@ -8,7 +8,8 @@
   const BASE = '/api';
 
   class OrgatexError extends Error {
-    // kind: 'not-found' (batch or recipe missing) or 'unavailable'.
+    // kind: 'not-found' (batch or recipe missing), 'unavailable', or
+    // 'rejected' (OrgaTEX refused a consumption post, e.g. 400 / 409).
     constructor(kind, code, message) {
       super(message);
       this.name = 'OrgatexError';
@@ -51,6 +52,35 @@
     throw new OrgatexError('unavailable', code, 'OrgaTEX unavailable');
   }
 
+  // Consumption write-back (bolt 014): the body and its idempotency key come
+  // from the WeighingMS server unchanged. 201 = stored, 200 = duplicate of the
+  // same key; both mean OrgaTEX holds the consumption.
+  async function postConsumption(batchId, body) {
+    let response;
+    try {
+      response = await fetch(BASE + batchPath(batchId) + '/consumption', {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+    } catch (networkError) {
+      throw new OrgatexError('unavailable', 'ORGATEX_UNREACHABLE', 'OrgaTEX unavailable');
+    }
+    if (response.ok) {
+      try {
+        return await response.json();
+      } catch (parseError) {
+        throw new OrgatexError('unavailable', 'MALFORMED_RESPONSE', 'OrgaTEX unavailable');
+      }
+    }
+    const error = await errorBody(response);
+    if (response.status === 503 || !error) {
+      const code = error ? error.code : 'HTTP_' + response.status;
+      throw new OrgatexError('unavailable', code, 'OrgaTEX unavailable');
+    }
+    throw new OrgatexError('rejected', error.code, error.message);
+  }
+
   function batchPath(batchId) {
     return '/batches/' + encodeURIComponent(batchId);
   }
@@ -61,5 +91,6 @@
     fetchQueue: () => get('/batches'),
     fetchBatch: (batchId) => get(batchPath(batchId)),
     fetchRecipe: (batchId) => get(batchPath(batchId) + '/recipe'),
+    postConsumption,
   };
 })();
