@@ -21,6 +21,7 @@ from weighing.models import (
     WeighingRecord,
     WeighingResult,
 )
+from weighing.overshoot import surplus_of
 from weighing.progression import SessionProgress, refuse
 from weighing.rules import component_rules
 from weighing.services import RefusalReason, WeighingRefused, require_operator
@@ -65,16 +66,15 @@ def _confirm(session_id, sequence, operator_id):
     reading = _read(attempt, session_id, sequence)
     evaluation = evaluate(rules.band, reading.net_weight, reading.unit)
     if not evaluation.within_tolerance:
-        raise refuse(
-            RefusalReason.OUT_OF_TOLERANCE,
-            session_id,
-            sequence,
-            {
-                "net": format_amount(evaluation.net, evaluation.unit),
-                "unit": evaluation.unit,
-                "zone": evaluation.zone.value,
-            },
-        )
+        detail = {
+            "net": format_amount(evaluation.net, evaluation.unit),
+            "unit": evaluation.unit,
+            "zone": evaluation.zone.value,
+        }
+        surplus = surplus_of(evaluation, rules.band.target)
+        if surplus is not None:
+            detail.update(surplus.detail())
+        raise refuse(RefusalReason.OUT_OF_TOLERANCE, session_id, sequence, detail)
     with transaction.atomic():
         session = progression.locked(session)
         attempt = progression.same_attempt_still_open(session, sequence, attempt.pk)

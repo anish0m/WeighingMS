@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-11-23T05:27:05Z
-total_decisions: 11
+last_updated: 2026-11-23T08:57:03Z
+total_decisions: 12
 ---
 
 # Decision Index
@@ -19,6 +19,14 @@ Use this to find relevant prior decisions when working on related features.
 ## Decisions
 
 <!-- Entries are appended below in reverse chronological order (newest first) -->
+
+### ADR-012: The training overshoot rule is fixed in code: no recalculation, no override, and an overshoot discard is stored on the attempt as decided by the server's own re-read
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 012-weighing-station (weighing-station)
+- **Path**: `bolts/012-weighing-station/adr-012-training-overshoot-rule.md`
+- **Summary**: The brief's surplus compensation and override rest on the unconfirmed assumption A-08, and the human decided the training rule at workbook STEP 24 (OQ-4). The rule is one frozen code constant (`OVERSHOOT_RULE`): an overweight component stays unconfirmed, no target is ever recalculated, no override exists, and a Quit that the server's own re-read evaluates as over is stored as an `overshoot_discarded` attempt with its net and surplus.
+- **Read when**: Working on over-tolerance behaviour, the surplus panel or Supervisor override (bolt 013), records' `result` values, write-back or ticket content (bolts 015 / 016), or any change to recipe targets.
 
 ### ADR-011: Server-side scale I/O happens before the database transaction; the transaction re-checks the state under a lock before it writes
 - **Status**: accepted

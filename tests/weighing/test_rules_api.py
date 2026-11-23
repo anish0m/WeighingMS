@@ -141,6 +141,8 @@ class EvaluationApiTests(TestCase):
                 "surplusText": None,
                 "statusLine": "DISPENSE — 0.6 g REMAINING",
                 "barPercent": "74.7",
+                "surplusPercent": None,
+                "overshoot": None,
             },
         )
 

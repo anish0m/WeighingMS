@@ -184,7 +184,14 @@ class ConfirmApiTests(FlowApiTestCase):
             {
                 "code": "OUT_OF_TOLERANCE",
                 "message": "Weight is not within tolerance",
-                "detail": {"net": "94.6", "unit": "g", "zone": "over"},
+                "detail": {
+                    "net": "94.6",
+                    "unit": "g",
+                    "zone": "over",
+                    "surplus": "0.6",
+                    "surplusPercent": "0.6",
+                    "surplusText": "0.6 g",
+                },
             },
         )
         self.assertFalse(WeighingRecord.objects.exists())

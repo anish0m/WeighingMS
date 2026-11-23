@@ -176,6 +176,7 @@ class AttemptEnd(models.TextChoices):
     QUIT = "quit", "Quit"
     RETARED = "retared", "Re-tared"
     SWITCHED = "switched", "Switched"
+    OVERSHOOT_DISCARDED = "overshoot_discarded", "Overshoot discarded"
 
 
 class ComponentAttempt(models.Model):
@@ -184,6 +185,10 @@ class ComponentAttempt(models.Model):
     Append-only: ``tared_at`` and ``ended_at`` / ``end_reason`` are each set
     once; an ended attempt is never reopened. The open attempt (``ended_at``
     null) is the session's active component.
+
+    An attempt ended as ``overshoot_discarded`` (Quit while the server's
+    re-read was over tolerance) also stores the discarded net, its surplus
+    and the unit, once, together with the end (ADR-012).
     """
 
     session = models.ForeignKey(
@@ -194,7 +199,10 @@ class ComponentAttempt(models.Model):
     started_at = models.DateTimeField(default=timezone.now)
     tared_at = models.DateTimeField(null=True, blank=True)
     ended_at = models.DateTimeField(null=True, blank=True)
-    end_reason = models.CharField(max_length=16, choices=AttemptEnd.choices, blank=True)
+    end_reason = models.CharField(max_length=24, choices=AttemptEnd.choices, blank=True)
+    end_net = models.DecimalField(**QUANTITY, null=True, blank=True)
+    end_surplus = models.DecimalField(**QUANTITY, null=True, blank=True)
+    end_unit = models.CharField(max_length=2, blank=True, default="")
 
     class Meta:
         constraints = (
@@ -202,6 +210,23 @@ class ComponentAttempt(models.Model):
                 fields=("session",),
                 condition=models.Q(ended_at__isnull=True),
                 name="one_open_attempt_per_session",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(
+                        end_reason=AttemptEnd.OVERSHOOT_DISCARDED,
+                        end_net__isnull=False,
+                        end_surplus__isnull=False,
+                    )
+                    & ~models.Q(end_unit="")
+                )
+                | (
+                    ~models.Q(end_reason=AttemptEnd.OVERSHOOT_DISCARDED)
+                    & models.Q(
+                        end_net__isnull=True, end_surplus__isnull=True, end_unit=""
+                    )
+                ),
+                name="discard_snapshot_only_on_overshoot_discard",
             ),
         )
         indexes = (
@@ -229,7 +254,10 @@ class ComponentAttempt(models.Model):
         fixed = ("session_id", "component_sequence", "scale_id", "started_at")
         if any(getattr(stored, f) != getattr(self, f) for f in fixed):
             raise AttemptImmutable(f"Attempt {self.pk}: fixed fields cannot change")
-        once = (("tared_at",), ("ended_at", "end_reason"))
+        once = (
+            ("tared_at",),
+            ("ended_at", "end_reason", "end_net", "end_surplus", "end_unit"),
+        )
         for group in once:
             if any(getattr(stored, f) for f in group) and any(
                 getattr(stored, f) != getattr(self, f) for f in group

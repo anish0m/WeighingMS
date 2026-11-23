@@ -12,7 +12,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 
 from batches.material import format_quantity
-from weighing import confirmation, identity, progression, rules, services
+from weighing import confirmation, identity, overshoot, progression, rules, services
 from weighing.models import IdentityCheck, WeighingRecord, WeighingSession
 from weighing.services import OperatorRef, RefusalReason, WeighingRefused
 from weighing.tolerance import UNITS, WeightEvaluation, format_amount, format_weight
@@ -199,6 +199,9 @@ def component_evaluation(request, session_id, sequence):
         return _refusal(refused)
     body = _evaluation_json(session_id, sequence, evaluation)
     body["barPercent"] = str(component_rules.bar.percent(evaluation.net))
+    surplus = overshoot.surplus_of(evaluation, component_rules.band.target)
+    body["surplusPercent"] = surplus and f"{surplus.percent:f}"
+    body["overshoot"] = overshoot.overshoot_json(surplus)
     return JsonResponse(body)
 
 
@@ -407,6 +410,21 @@ def _progress_json(state: progression.SessionProgress) -> dict:
         },
         "nextPending": state.next_pending,
         "components": [_component_progress_json(c) for c in state.components],
+        **({"ended": _ended_json(state.ended)} if state.ended else {}),
+    }
+
+
+def _ended_json(ended: progression.EndedAttempt) -> dict:
+    """How Quit ended the old attempt (bolt 012); only in the quit response."""
+    discard = ended.discard
+    unit = discard and discard.surplus.unit
+    return {
+        "attemptId": ended.attempt_id,
+        "reason": ended.reason.value,
+        "net": discard and format_amount(discard.net, unit),
+        "surplus": discard and format_amount(discard.surplus.amount, unit),
+        "unit": unit,
+        "message": ended.message,
     }
 
 
