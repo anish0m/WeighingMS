@@ -2,7 +2,7 @@
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:38:35Z
-last_updated: 2026-11-20T09:57:01Z
+last_updated: 2026-11-23T05:53:53Z
 ---
 
 # Construction Log: assisted-weighing-station-ui
@@ -29,7 +29,7 @@ last_updated: 2026-11-20T09:57:01Z
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
 | 007-assisted-weighing-station-ui | 001, 002 | ✅ completed | - |
-| 011-assisted-weighing-station-ui | 003, 004, 005, 008 | planned | - |
+| 011-assisted-weighing-station-ui | 003, 004, 005, 008 | ⏳ in-progress | - |
 | 013-assisted-weighing-station-ui | 006 | planned | - |
 | 017-assisted-weighing-station-ui | 007, 009 | planned | - |
 
@@ -41,6 +41,7 @@ last_updated: 2026-11-20T09:57:01Z
 | 2026-11-20T09:42:31Z | 007-assisted-weighing-station-ui | stage-complete | Plan → Implement (APPROVE PLAN; recommended decisions: omit prototype meeting aids, view 2 skeleton, ORGATEX re-check every 10 s via queue, Playwright on its own server :8001 with a separate SQLite file, Claude installs npm packages + Chromium) |
 | 2026-11-20T09:47:48Z | 007-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; app `station`, terminal at `/`, local Alpine.js 3.17.5, Playwright 1.65.1 on its own server :8001) |
 | 2026-11-20T09:57:01Z | 007-assisted-weighing-station-ui | completed | All 3 stages done (APPROVE TESTS); Playwright 19/19, Django 238/238; stories 001, 002 complete; unit stays open for bolts 011, 013, 017 |
+| 2026-11-23T05:53:53Z | 011-assisted-weighing-station-ui | started | Stage 1: Plan |
 
 ## Execution Summary
 
@@ -49,8 +50,8 @@ last_updated: 2026-11-20T09:57:01Z
 | Original bolts planned | 4 |
 | Current bolt count | 4 |
 | Bolts completed | 1 |
-| Bolts in progress | 0 |
-| Bolts remaining | 3 |
+| Bolts in progress | 1 |
+| Bolts remaining | 2 |
 | Replanning events | 0 |
 
 ## Notes

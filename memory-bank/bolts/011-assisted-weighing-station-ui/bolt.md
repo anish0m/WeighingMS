@@ -3,16 +3,16 @@ id: 011-assisted-weighing-station-ui
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 003-weigh-view-recipe-rail-and-header
   - 004-weigh-view-live-readout-and-tolerance
   - 005-weigh-view-actions-and-function-keys
   - 008-training-simulation-panel
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-23T05:53:53Z
 completed: null
-current_stage: null
+current_stage: plan
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
@@ -54,7 +54,7 @@ View 2 · Weigh: rail, header, scan step, live readout, tolerance band, actions,
 
 ## Stages
 
-- [ ] **1. Plan**: Pending → implementation-plan.md
+- [ ] **1. Plan**: ⏳ Awaiting approval → implementation-plan.md
 - [ ] **2. Implement**: Pending → source code + implementation-walkthrough.md
 - [ ] **3. Test**: Pending → tests + test-walkthrough.md
 
