@@ -9,8 +9,8 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T08:52:26Z
 completed: null
-current_stage: model
-stages_completed: []
+current_stage: design
+stages_completed: [model]
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [006-weighing-station, 009-weighing-station]
@@ -48,7 +48,7 @@ Overshoot handling according to the human decision taken at workbook STEP 24 (OQ
 
 ## Stages
 
-- [ ] **1. Domain Model**: Pending → ddd-01-domain-model.md
+- [x] **1. Domain Model**: Complete → ddd-01-domain-model.md
 - [ ] **2. Technical Design**: Pending → ddd-02-technical-design.md
 - [ ] **3. ADR Analysis (optional)**: Pending → adr-*.md
 - [ ] **4. Implement**: Pending → source code
