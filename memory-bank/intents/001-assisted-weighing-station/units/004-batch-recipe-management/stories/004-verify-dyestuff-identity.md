@@ -2,11 +2,11 @@
 id: 004-verify-dyestuff-identity
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
 created: 2026-11-20T04:51:01Z
 assigned_bolt: 008-batch-recipe-management
-implemented: false
+implemented: true
 ---
 
 # Story: 004-verify-dyestuff-identity

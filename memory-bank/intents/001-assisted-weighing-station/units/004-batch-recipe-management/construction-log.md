@@ -2,7 +2,7 @@
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 created: 2026-11-20T08:37:50Z
-last_updated: 2026-11-23T04:09:57Z
+last_updated: 2026-11-23T04:37:26Z
 ---
 
 # Construction Log: batch-recipe-management
@@ -27,7 +27,7 @@ last_updated: 2026-11-23T04:09:57Z
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
 | 005-batch-recipe-management | 001, 002, 003 | ✅ completed | - |
-| 008-batch-recipe-management | 004, 005 | in-progress | - |
+| 008-batch-recipe-management | 004, 005 | ✅ completed | - |
 
 ## Execution History
 
@@ -44,6 +44,7 @@ last_updated: 2026-11-23T04:09:57Z
 | 2026-11-23T03:56:02Z | 008-batch-recipe-management | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; `batches/material.py` + `weighing/identity.py`, IdentityCheck model, `GET …/components` and `POST …/components/<seq>/identity`) |
 | 2026-11-23T04:01:39Z | 008-batch-recipe-management | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-006 server verifies the dyestuff scan by scanId, ADR-007 identity checks in the weighing session; both accepted) |
 | 2026-11-23T04:09:57Z | 008-batch-recipe-management | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
+| 2026-11-23T04:37:26Z | 008-batch-recipe-management | completed | All 5 stages done (APPROVE TESTS); 301/301 Django tests, Playwright 19/19; stories 004–005 complete; unit 004 complete |
 
 ## Execution Summary
 
@@ -51,12 +52,13 @@ last_updated: 2026-11-23T04:09:57Z
 |--------|-------|
 | Original bolts planned | 2 |
 | Current bolt count | 2 |
-| Bolts completed | 1 |
-| Bolts in progress | 1 |
-| Bolts remaining | 1 |
+| Bolts completed | 2 |
+| Bolts in progress | 0 |
+| Bolts remaining | 0 |
 | Replanning events | 0 |
 
 ## Notes
 
 - Dummy APIs are training contracts, not the real OrgaTEX interface.
 - 2026-11-20T08:57:58Z: bolt 005 complete. ADR-001 (server-authoritative selection), ADR-002 (`/station/api/`), ADR-003 (immutable recipe snapshot) accepted and indexed in `standards/decision-index.md`. Story 001's queue screen and story 003's scale class are verified in bolts 007 and 009 (approved model decisions).
+- 2026-11-23T04:37:26Z: bolt 008 complete. ADR-006 (server verifies the dyestuff scan by scanId) and ADR-007 (identity checks in the weighing session; `check_material_ready` is the material gate bolt 010's confirm must call) accepted. Unit 004 is complete; the "Scan dyestuff" step and its Playwright test are bolt 011.

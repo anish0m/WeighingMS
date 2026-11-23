@@ -3,14 +3,14 @@ id: 008-batch-recipe-management
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 004-verify-dyestuff-identity
   - 005-show-lot-and-container
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T03:52:11Z
-completed: null
-current_stage: test
+completed: 2026-11-23T04:37:26Z
+current_stage: null
 stages_completed:
   - name: model
     completed: 2026-11-23T03:54:07Z
@@ -24,20 +24,22 @@ stages_completed:
   - name: implement
     completed: 2026-11-23T04:09:57Z
     artifact: source code
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [005-batch-recipe-management]
-enables_bolts: [010-weighing-station, 011-assisted-weighing-station-ui]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-23T04:37:26Z
+    artifact: ddd-03-test-report.md
+requires_bolts:
+  - 005-batch-recipe-management
+enables_bolts:
+  - 010-weighing-station
+  - 011-assisted-weighing-station-ui
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 20"
+workbook_step: STEP 20
 ---
 
 # Bolt: 008-batch-recipe-management
@@ -66,7 +68,7 @@ Material identity: dyestuff scan verification, lot, container and tare per compo
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
 - [x] **4. Implement**: ✅ Complete → source code
-- [ ] **5. Test**: ⏳ Awaiting approval → ddd-03-test-report.md
+- [x] **5. Test**: ✅ Complete → ddd-03-test-report.md
 
 ## Expected Outcome
 
