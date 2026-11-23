@@ -2,7 +2,7 @@
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 created: 2026-11-20T08:37:50Z
-last_updated: 2026-11-23T04:01:39Z
+last_updated: 2026-11-23T04:09:57Z
 ---
 
 # Construction Log: batch-recipe-management
@@ -43,6 +43,7 @@ last_updated: 2026-11-23T04:01:39Z
 | 2026-11-23T03:54:07Z | 008-batch-recipe-management | stage-complete | Domain Model → Technical Design (APPROVE MODEL; recommended decisions: readiness policy called by bolt 010's confirm, server re-reads the scan by scanId, latest check counts, missing container refused too, every component scanned) |
 | 2026-11-23T03:56:02Z | 008-batch-recipe-management | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; `batches/material.py` + `weighing/identity.py`, IdentityCheck model, `GET …/components` and `POST …/components/<seq>/identity`) |
 | 2026-11-23T04:01:39Z | 008-batch-recipe-management | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-006 server verifies the dyestuff scan by scanId, ADR-007 identity checks in the weighing session; both accepted) |
+| 2026-11-23T04:09:57Z | 008-batch-recipe-management | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
 
 ## Execution Summary
 

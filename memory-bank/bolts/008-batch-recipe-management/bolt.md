@@ -10,7 +10,7 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T03:52:11Z
 completed: null
-current_stage: implement
+current_stage: test
 stages_completed:
   - name: model
     completed: 2026-11-23T03:54:07Z
@@ -21,6 +21,9 @@ stages_completed:
   - name: adr
     completed: 2026-11-23T04:01:39Z
     artifact: adr-006-server-verifies-dyestuff-scan.md, adr-007-identity-checks-in-weighing-session.md
+  - name: implement
+    completed: 2026-11-23T04:09:57Z
+    artifact: source code
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [005-batch-recipe-management]
@@ -62,8 +65,8 @@ Material identity: dyestuff scan verification, lot, container and tare per compo
 - [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
 - [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
-- [ ] **4. Implement**: ⏳ Awaiting approval → source code
-- [ ] **5. Test**: Pending → ddd-03-test-report.md
+- [x] **4. Implement**: ✅ Complete → source code
+- [ ] **5. Test**: ⏳ Awaiting approval → ddd-03-test-report.md
 
 ## Expected Outcome
 
