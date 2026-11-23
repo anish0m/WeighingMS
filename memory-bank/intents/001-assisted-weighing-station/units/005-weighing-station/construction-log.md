@@ -32,7 +32,7 @@ last_updated: 2026-11-23T05:47:57Z
 | 006-weighing-station | 001 | ✅ completed | - |
 | 009-weighing-station | 002, 004, 005 | ✅ completed | - |
 | 010-weighing-station | 003, 006, 008, 010 | ✅ completed | - |
-| 012-weighing-station | 007 | in-progress | design |
+| 012-weighing-station | 007 | in-progress | adr |
 | 015-weighing-station | 009, 011 | planned | - |
 
 ## Execution History
@@ -59,6 +59,7 @@ last_updated: 2026-11-23T05:47:57Z
 | 2026-11-23T05:47:57Z | 010-weighing-station | completed | All 5 stages done (APPROVE TESTS); 430/430 Django tests, 19/19 Playwright; stories 003, 006, 008, 010 complete; unit stays open for bolts 012, 015 |
 | 2026-11-23T08:52:26Z | 012-weighing-station | started | Stage 1: Domain Model (OQ-4 decided at STEP 24: overweight stays unconfirmed, defined recovery action, no recalculation, no override) |
 | 2026-11-23T08:54:03Z | 012-weighing-station | stage-complete | Domain Model → Technical Design (APPROVE MODEL; recommended decisions: surplus % of target, server re-reads scale at Quit, unreadable scale → plain quit, discard stored on ComponentAttempt (`overshoot_discarded` + end_net/end_surplus/end_unit), fixed OvershootRule in code, no new logging for recovery (a)) |
+| 2026-11-23T08:55:58Z | 012-weighing-station | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; new `overshoot.py` (OVERSHOOT_RULE, Surplus); quit re-reads the scale outside the transaction; evaluation `overshoot` / `surplusPercent`, quit `ended`, refusal detail surplus; migration 0005 with discard snapshot + check constraint; no new endpoint) |
 
 ## Execution Summary
 
