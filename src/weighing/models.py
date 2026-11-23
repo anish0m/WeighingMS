@@ -2,7 +2,8 @@
 
 Operators and supervisors are seeded training identities, not Django users
 (ADR-004). A ``WeighingSession`` is the weighing of one selected batch by one
-operator; later bolts add components, records and completion to it.
+operator. Its members are identity checks (bolt 008), component attempts and
+weighing records (bolt 010); completion comes later.
 """
 
 from django.contrib.auth.hashers import check_password, make_password
@@ -18,6 +19,14 @@ class SessionNotDeletable(Exception):
 
 class IdentityCheckImmutable(Exception):
     """Raised when code tries to change or delete a recorded identity check."""
+
+
+class AttemptImmutable(Exception):
+    """Raised when code tries to rewrite or delete a component attempt (ADR-010)."""
+
+
+class WeighingRecordImmutable(Exception):
+    """Raised when code tries to change or delete a weighing record (NFR-12)."""
 
 
 class OperatorManager(models.Manager):
@@ -157,3 +166,134 @@ class IdentityCheck(models.Model):
 
     def delete(self, *args, **kwargs):
         raise IdentityCheckImmutable(f"IdentityCheck {self.pk} cannot be deleted")
+
+
+QUANTITY = {"max_digits": 12, "decimal_places": 4}
+
+
+class AttemptEnd(models.TextChoices):
+    CONFIRMED = "confirmed", "Confirmed"
+    QUIT = "quit", "Quit"
+    RETARED = "retared", "Re-tared"
+    SWITCHED = "switched", "Switched"
+
+
+class ComponentAttempt(models.Model):
+    """One try at weighing one component, from its start to its end (ADR-010).
+
+    Append-only: ``tared_at`` and ``ended_at`` / ``end_reason`` are each set
+    once; an ended attempt is never reopened. The open attempt (``ended_at``
+    null) is the session's active component.
+    """
+
+    session = models.ForeignKey(
+        WeighingSession, on_delete=models.PROTECT, related_name="attempts"
+    )
+    component_sequence = models.PositiveSmallIntegerField()
+    scale_id = models.CharField(max_length=16)
+    started_at = models.DateTimeField(default=timezone.now)
+    tared_at = models.DateTimeField(null=True, blank=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
+    end_reason = models.CharField(max_length=16, choices=AttemptEnd.choices, blank=True)
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=("session",),
+                condition=models.Q(ended_at__isnull=True),
+                name="one_open_attempt_per_session",
+            ),
+        )
+        indexes = (
+            models.Index(fields=("session", "started_at"), name="attempt_latest_idx"),
+        )
+
+    def __str__(self):
+        return f"Attempt {self.pk} session {self.session_id} #{self.component_sequence}"
+
+    @property
+    def is_open(self) -> bool:
+        return self.ended_at is None
+
+    @property
+    def is_tared(self) -> bool:
+        return self.tared_at is not None
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            self._check_allowed_change()
+        super().save(*args, **kwargs)
+
+    def _check_allowed_change(self):
+        stored = ComponentAttempt.objects.get(pk=self.pk)
+        fixed = ("session_id", "component_sequence", "scale_id", "started_at")
+        if any(getattr(stored, f) != getattr(self, f) for f in fixed):
+            raise AttemptImmutable(f"Attempt {self.pk}: fixed fields cannot change")
+        once = (("tared_at",), ("ended_at", "end_reason"))
+        for group in once:
+            if any(getattr(stored, f) for f in group) and any(
+                getattr(stored, f) != getattr(self, f) for f in group
+            ):
+                raise AttemptImmutable(f"Attempt {self.pk}: {group[0]} is already set")
+
+    def delete(self, *args, **kwargs):
+        raise AttemptImmutable(f"Attempt {self.pk} cannot be deleted")
+
+
+class WeighingResult(models.TextChoices):
+    WITHIN = "within", "Within tolerance"
+
+
+class WeighingRecord(models.Model):
+    """The immutable result of one confirmation (FR-13c, NFR-12, ADR-010).
+
+    ``actual_weight`` is the server's evaluated net at display resolution
+    (ADR-009); lot, container, tare, target and band are copied from the
+    recipe snapshot at confirmation.
+    """
+
+    session = models.ForeignKey(
+        WeighingSession, on_delete=models.PROTECT, related_name="records"
+    )
+    attempt = models.OneToOneField(
+        ComponentAttempt, on_delete=models.PROTECT, related_name="record"
+    )
+    batch_id = models.CharField(max_length=32)
+    component_sequence = models.PositiveSmallIntegerField()
+    component_code = models.CharField(max_length=32)
+    component_name = models.CharField(max_length=100)
+    actual_weight = models.DecimalField(**QUANTITY)
+    unit = models.CharField(max_length=2)
+    lot = models.CharField(max_length=32)
+    container = models.CharField(max_length=32)
+    tare = models.DecimalField(**QUANTITY)
+    scale_id = models.CharField(max_length=16)
+    target = models.DecimalField(**QUANTITY)
+    tolerance_min = models.DecimalField(**QUANTITY)
+    tolerance_max = models.DecimalField(**QUANTITY)
+    result = models.CharField(max_length=16, choices=WeighingResult.choices)
+    operator = models.ForeignKey(Operator, on_delete=models.PROTECT)
+    recorded_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ("component_sequence",)
+        constraints = (
+            models.UniqueConstraint(
+                fields=("session", "component_sequence"),
+                name="one_record_per_component_per_session",
+            ),
+        )
+
+    def __str__(self):
+        return (
+            f"Record {self.pk} {self.batch_id} #{self.component_sequence}"
+            f" {self.actual_weight} {self.unit}"
+        )
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            raise WeighingRecordImmutable(f"WeighingRecord {self.pk} is immutable")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise WeighingRecordImmutable(f"WeighingRecord {self.pk} cannot be deleted")

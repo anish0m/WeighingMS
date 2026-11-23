@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-11-23T04:53:56Z
-total_decisions: 9
+last_updated: 2026-11-23T05:27:05Z
+total_decisions: 11
 ---
 
 # Decision Index
@@ -19,6 +19,22 @@ Use this to find relevant prior decisions when working on related features.
 ## Decisions
 
 <!-- Entries are appended below in reverse chronological order (newest first) -->
+
+### ADR-011: Server-side scale I/O happens before the database transaction; the transaction re-checks the state under a lock before it writes
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 010-weighing-station (weighing-station)
+- **Path**: `bolts/010-weighing-station/adr-011-scale-io-outside-transaction.md`
+- **Summary**: Confirm, tare and activate call the scale adapter first and refuse on a scale failure before writing; a short transaction then locks the session row, re-checks that the attempt is still open and the component not done, and writes. The next component's automatic tare runs after the commit and never undoes it. Unique constraints are the last guard against races.
+- **Read when**: Writing any weighing action that calls a device and changes state (override and compensation in bolt 012, completion and write-back in bolt 015), or handling double clicks and concurrent requests.
+
+### ADR-010: Weighing attempts are stored append-only; component state is derived from attempts and records
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 010-weighing-station (weighing-station)
+- **Path**: `bolts/010-weighing-station/adr-010-stored-attempts-derived-component-state.md`
+- **Summary**: Each try at a component is an append-only `ComponentAttempt` (scale fixed at start, tared_at, ended_at, end reason confirmed/quit/retared/switched); at most one open attempt per session. Pending/active/done is derived: done = a `WeighingRecord` exists, active = the open attempt. Resume is a pure read; quits and re-tares stay traceable.
+- **Read when**: Working on progression, resume, overshoot (bolt 012), completion or history (bolt 015), or adding any per-component state.
 
 ### ADR-009: A reading is taken once at display resolution; that one value is shown, evaluated and recorded
 - **Status**: accepted

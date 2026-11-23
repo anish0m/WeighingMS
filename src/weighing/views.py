@@ -11,8 +11,9 @@ from decimal import Decimal
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 
-from weighing import identity, rules, services
-from weighing.models import IdentityCheck, WeighingSession
+from batches.material import format_quantity
+from weighing import confirmation, identity, progression, rules, services
+from weighing.models import IdentityCheck, WeighingRecord, WeighingSession
 from weighing.services import OperatorRef, RefusalReason, WeighingRefused
 from weighing.tolerance import UNITS, WeightEvaluation, format_amount, format_weight
 from weighingms.api import InvalidJson, json_error, read_json_object
@@ -32,6 +33,18 @@ REFUSAL_STATUS = {
     RefusalReason.NOT_A_DYESTUFF_SCAN: 409,
     RefusalReason.SCAN_NOT_CURRENT: 409,
     RefusalReason.SCANNER_UNAVAILABLE: 503,
+    RefusalReason.LOT_MISSING: 409,
+    RefusalReason.CONTAINER_MISSING: 409,
+    RefusalReason.IDENTITY_NOT_VERIFIED: 409,
+    RefusalReason.WRONG_DYESTUFF: 409,
+    RefusalReason.SESSION_NOT_OPEN: 409,
+    RefusalReason.NO_ACTIVE_COMPONENT: 409,
+    RefusalReason.COMPONENT_NOT_ACTIVE: 409,
+    RefusalReason.COMPONENT_DONE: 409,
+    RefusalReason.TARE_REQUIRED: 409,
+    RefusalReason.OUT_OF_TOLERANCE: 409,
+    RefusalReason.SCALE_DISCONNECTED: 503,
+    RefusalReason.SCALE_UNAVAILABLE: 503,
 }
 
 
@@ -40,9 +53,19 @@ class InvalidRequest(ValueError):
 
 
 def _refusal(refused: WeighingRefused) -> JsonResponse:
-    return json_error(
+    response = json_error(
         REFUSAL_STATUS[refused.reason], refused.reason.code, refused.message
     )
+    if refused.detail is None:
+        return response
+    body = {
+        "error": {
+            "code": refused.reason.code,
+            "message": refused.message,
+            "detail": refused.detail,
+        }
+    }
+    return JsonResponse(body, status=response.status_code)
 
 
 def _session_operator_id(request) -> str | None:
@@ -175,6 +198,57 @@ def component_evaluation(request, session_id, sequence):
     return JsonResponse(_evaluation_json(session_id, sequence, evaluation))
 
 
+@require_GET
+def current_session(request):
+    """Resume (NFR-6): the most recently active open session, or null."""
+    state = progression.current_session()
+    return JsonResponse({"session": state and _progress_json(state)})
+
+
+@require_GET
+def session_progress(request, session_id):
+    try:
+        state = progression.progress(session_id)
+    except WeighingRefused as refused:
+        return _refusal(refused)
+    return JsonResponse(_progress_json(state))
+
+
+def _component_action(action):
+    """A POST on the active component: activate, tare or quit (bolt 010)."""
+
+    @require_http_methods(["POST"])
+    def view(request, session_id, sequence):
+        try:
+            state = action(session_id, sequence, _session_operator_id(request))
+        except WeighingRefused as refused:
+            return _refusal(refused)
+        return JsonResponse(_progress_json(state))
+
+    view.__name__ = f"component_{action.__name__}"
+    return view
+
+
+component_activate = _component_action(progression.activate)
+component_tare = _component_action(progression.tare)
+component_quit = _component_action(progression.quit_attempt)
+
+
+@require_http_methods(["POST"])
+def component_confirm(request, session_id, sequence):
+    """F1 · OK: the server reads the scale itself; the body carries no weight."""
+    try:
+        record, state = confirmation.confirm(
+            session_id, sequence, _session_operator_id(request)
+        )
+    except WeighingRefused as refused:
+        return _refusal(refused)
+    return JsonResponse(
+        {"record": _record_json(record), "progress": _progress_json(state)},
+        status=201,
+    )
+
+
 def _parse_reading(request) -> tuple[Decimal, str]:
     net = request.GET.get("net", "")
     unit = request.GET.get("unit", "")
@@ -295,4 +369,63 @@ def _check_json(check: IdentityCheck) -> dict:
         "message": identity.RESULT_MESSAGE[check.result],
         "operator": _operator_json(OperatorRef.of(check.operator)),
         "checkedAt": check.checked_at.isoformat(),
+    }
+
+
+def _progress_json(state: progression.SessionProgress) -> dict:
+    session, attempt = state.session, state.active_attempt
+    return {
+        "sessionId": session.pk,
+        "batchId": session.batch_id,
+        "state": session.state,
+        "weighed": state.weighed,
+        "total": state.total,
+        "progressText": state.text,
+        "active": attempt
+        and {
+            "sequence": attempt.component_sequence,
+            "attemptId": attempt.pk,
+            "scaleId": attempt.scale_id,
+            "tared": attempt.is_tared,
+            "startedAt": attempt.started_at.isoformat(),
+        },
+        "nextPending": state.next_pending,
+        "components": [_component_progress_json(c) for c in state.components],
+    }
+
+
+def _component_progress_json(component: progression.ComponentProgress) -> dict:
+    record = component.record
+    return {
+        "sequence": component.sequence,
+        "state": component.state,
+        "actualWeight": record and format_amount(record.actual_weight, record.unit),
+        "unit": component.unit,
+        "actualText": record and format_weight(record.actual_weight, record.unit),
+        "recordId": record and record.pk,
+    }
+
+
+def _record_json(record: WeighingRecord) -> dict:
+    return {
+        "recordId": record.pk,
+        "sessionId": record.session_id,
+        "batchId": record.batch_id,
+        "sequence": record.component_sequence,
+        "componentCode": record.component_code,
+        "componentName": record.component_name,
+        "actualWeight": format_amount(record.actual_weight, record.unit),
+        "unit": record.unit,
+        "actualText": format_weight(record.actual_weight, record.unit),
+        "lot": record.lot,
+        "container": record.container,
+        "tare": _quantity_text(record.tare),
+        "tareText": format_quantity(record.tare, record.unit),
+        "scaleId": record.scale_id,
+        "target": _quantity_text(record.target),
+        "toleranceMin": _quantity_text(record.tolerance_min),
+        "toleranceMax": _quantity_text(record.tolerance_max),
+        "result": record.result,
+        "operator": _operator_json(OperatorRef.of(record.operator)),
+        "recordedAt": record.recorded_at.isoformat(),
     }

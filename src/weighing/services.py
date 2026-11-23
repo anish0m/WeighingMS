@@ -32,6 +32,14 @@ class RefusalReason(Enum):
     CONTAINER_MISSING = "Container missing for this component"
     IDENTITY_NOT_VERIFIED = "Scan the dyestuff first"
     WRONG_DYESTUFF = "Wrong dyestuff"
+    NO_ACTIVE_COMPONENT = "Choose a component first"
+    COMPONENT_NOT_ACTIVE = "This component is not active"
+    COMPONENT_DONE = "Component already weighed"
+    TARE_REQUIRED = "Tare the container first (F2)"
+    SCALE_DISCONNECTED = "Scale disconnected"
+    SCALE_UNAVAILABLE = "Scale unavailable"
+    OUT_OF_TOLERANCE = "Weight is not within tolerance"
+    SESSION_NOT_OPEN = "Weighing session is not in progress"
 
     @property
     def code(self) -> str:
@@ -41,9 +49,10 @@ class RefusalReason(Enum):
 class WeighingRefused(Exception):
     """A weighing or identity action was refused; nothing was stored."""
 
-    def __init__(self, reason: RefusalReason):
+    def __init__(self, reason: RefusalReason, detail: dict | None = None):
         self.reason = reason
         self.message = reason.value
+        self.detail = detail
         super().__init__(f"{reason.code}: {self.message}")
 
 
