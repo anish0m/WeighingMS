@@ -30,7 +30,7 @@ last_updated: 2026-11-23T07:04:51Z
 |---------|---------|--------|---------|
 | 007-assisted-weighing-station-ui | 001, 002 | ✅ completed | - |
 | 011-assisted-weighing-station-ui | 003, 004, 005, 008 | ✅ completed | - |
-| 013-assisted-weighing-station-ui | 006 | in-progress | implement |
+| 013-assisted-weighing-station-ui | 006 | in-progress | test |
 | 017-assisted-weighing-station-ui | 007, 009 | planned | - |
 
 ## Execution History
@@ -48,6 +48,7 @@ last_updated: 2026-11-23T07:04:51Z
 | 2026-11-23T07:04:51Z | 011-assisted-weighing-station-ui | post-completion fix | APPROVE FIX: status line shows the server's material reason (e.g. "Scan the dyestuff first") instead of "PRESS OK TO CONFIRM" while OK is disabled; amber scan box; Django 449/449, Playwright 50/50 |
 | 2026-11-23T09:32:27Z | 013-assisted-weighing-station-ui | started | Stage 1: Plan (STEP 24 rule: surplus panel from the server, Supervisor override disabled; carried-over training-panel race fix) |
 | 2026-11-23T09:33:57Z | 013-assisted-weighing-station-ui | stage-complete | Plan → Implement (APPROVE PLAN; recommended decisions: override reason visible in the panel and as the button title, quit shows the server's `ended.message`, race fix takes the state from the checkbox) |
+| 2026-11-23T09:39:38Z | 013-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; surplus panel from `evaluation.overshoot`, override title from the server, quit `ended.message` in the notice, training-panel toggle takes the checkbox state; Django 475/475, Playwright 50/50) |
 
 ## Execution Summary
 

@@ -9,8 +9,8 @@ stories:
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T09:32:27Z
 completed: null
-current_stage: implement
-stages_completed: [plan]
+current_stage: test
+stages_completed: [plan, implement]
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [011-assisted-weighing-station-ui, 012-weighing-station]
@@ -49,7 +49,7 @@ Surplus panel, overshoot status line and supervisor override form on View 2.
 ## Stages
 
 - [x] **1. Plan**: Complete → implementation-plan.md
-- [ ] **2. Implement**: Pending → source code + implementation-walkthrough.md
+- [x] **2. Implement**: Complete → source code + implementation-walkthrough.md
 - [ ] **3. Test**: Pending → tests + test-walkthrough.md
 
 ## Expected Outcome

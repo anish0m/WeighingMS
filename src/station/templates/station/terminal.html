@@ -178,8 +178,10 @@
           {% comment %}
             Overshoot (STEP 24 rule, OQ-4, ADR-012): the server's surplus,
             recovery action and override reason. No recalculation proposal.
+            Hidden until the attempt is tared: after Quit the old reading is
+            still on the scale and the status line asks for Re-tare first.
           {% endcomment %}
-          <div class="surplus" data-testid="surplus-panel" x-show="activeComponent() && evaluation && evaluation.overshoot && !scaleFault">
+          <div class="surplus" data-testid="surplus-panel" x-show="activeComponent() && isTared() && evaluation && evaluation.overshoot && !scaleFault">
             <span class="h" data-testid="surplus-heading" x-text="evaluation && evaluation.overshoot ? evaluation.overshoot.heading : ''"></span>
             <span class="sm" data-testid="surplus-recovery" x-text="evaluation && evaluation.overshoot ? evaluation.overshoot.recovery : ''"></span>
             <span class="sm" data-testid="surplus-override" x-text="evaluation && evaluation.overshoot ? evaluation.overshoot.overrideReason : ''"></span>
