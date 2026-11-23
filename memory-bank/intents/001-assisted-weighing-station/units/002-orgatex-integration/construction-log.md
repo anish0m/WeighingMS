@@ -2,7 +2,7 @@
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
 created: 2026-11-20T07:43:38Z
-last_updated: 2026-11-20T08:18:31Z
+last_updated: 2026-11-23T10:09:08Z
 ---
 
 # Construction Log: orgatex-integration
@@ -27,7 +27,7 @@ last_updated: 2026-11-20T08:18:31Z
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
 | 003-orgatex-integration | 001 | ✅ completed | - |
-| 014-orgatex-integration | 002, 003 | [ ] planned | - |
+| 014-orgatex-integration | 002, 003 | ⏳ in-progress | - |
 
 ## Execution History
 
@@ -37,6 +37,7 @@ last_updated: 2026-11-20T08:18:31Z
 | 2026-11-20T07:50:39Z | 003-orgatex-integration | stage-complete | Plan → Implement (APPROVE PLAN; app `orgatex`, malformed response = Unavailable) |
 | 2026-11-20T08:15:03Z | 003-orgatex-integration | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
 | 2026-11-20T08:18:31Z | 003-orgatex-integration | completed | All 3 stages done (APPROVE TESTS); 96/96 tests pass |
+| 2026-11-23T10:09:08Z | 014-orgatex-integration | started | Stage 1: Plan |
 
 ## Execution Summary
 
@@ -45,7 +46,7 @@ last_updated: 2026-11-20T08:18:31Z
 | Original bolts planned | 2 |
 | Current bolt count | 2 |
 | Bolts completed | 1 |
-| Bolts in progress | 0 |
+| Bolts in progress | 1 |
 | Bolts remaining | 1 |
 | Replanning events | 0 |
 

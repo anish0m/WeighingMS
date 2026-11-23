@@ -3,14 +3,14 @@ id: 014-orgatex-integration
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 002-post-consumption-idempotently
   - 003-write-back-failure-and-retry
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-23T10:09:08Z
 completed: null
-current_stage: null
+current_stage: plan
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
