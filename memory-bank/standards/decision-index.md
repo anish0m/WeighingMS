@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-11-23T08:57:03Z
-total_decisions: 12
+last_updated: 2026-11-23T10:35:24Z
+total_decisions: 14
 ---
 
 # Decision Index
@@ -19,6 +19,22 @@ Use this to find relevant prior decisions when working on related features.
 ## Decisions
 
 <!-- Entries are appended below in reverse chronological order (newest first) -->
+
+### ADR-014: Batch history is a read-only API over the stored records: every record of the batch from all its sessions, at `/station/api/batch-history/<batch_id>`, with no reporting
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 015-weighing-station (weighing-station)
+- **Path**: `bolts/015-weighing-station/adr-014-batch-history-read.md`
+- **Summary**: Story 011 requires that all weighing records of a batch can be retrieved with target, actual, operator, scale, lot, container, tare and timestamp, while OQ-2 excludes reporting. `GET /station/api/batch-history/<batch_id>` returns every record of the batch from all its sessions in sequence order (empty list for an unknown batch), read-only, with no filters and no UI page.
+- **Read when**: Reading a batch's weighing records (ticket lines in bolt 016, Lab/QA traceability), adding any history or reporting feature, or naming a WeighingMS path that might contain a Dummy segment.
+
+### ADR-013: Batch completion happens in the transaction that saves the last record, together with the pending OrgaTEX write-back; the summary is derived, never stored
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 015-weighing-station (weighing-station)
+- **Path**: `bolts/015-weighing-station/adr-013-completion-in-last-confirmation.md`
+- **Summary**: Story 009 requires that the batch completes when the last confirmation is saved and triggers the write-back, and a completed batch must never be silently missing from OrgaTEX. The N-th confirm's transaction marks the session complete (completed_at = last record time) and creates the pending WriteBack (0 attempts) through `orgatex.write_back.open_write_back`; the BatchSummary (n of N, all within, total kg, elapsed, operator) is derived on every read.
+- **Read when**: Working on batch completion, View 3 (bolt 017), the ticket (bolt 016), write-back triggering, resume after completion, or any action on a complete session.
 
 ### ADR-012: The training overshoot rule is fixed in code: no recalculation, no override, and an overshoot discard is stored on the attempt as decided by the server's own re-read
 - **Status**: accepted
