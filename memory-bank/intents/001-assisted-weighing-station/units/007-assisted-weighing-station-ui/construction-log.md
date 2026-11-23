@@ -2,7 +2,7 @@
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:38:35Z
-last_updated: 2026-11-23T05:53:53Z
+last_updated: 2026-11-23T05:58:40Z
 ---
 
 # Construction Log: assisted-weighing-station-ui
@@ -42,6 +42,7 @@ last_updated: 2026-11-23T05:53:53Z
 | 2026-11-20T09:47:48Z | 007-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; app `station`, terminal at `/`, local Alpine.js 3.17.5, Playwright 1.65.1 on its own server :8001) |
 | 2026-11-20T09:57:01Z | 007-assisted-weighing-station-ui | completed | All 3 stages done (APPROVE TESTS); Playwright 19/19, Django 238/238; stories 001, 002 complete; unit stays open for bolts 011, 013, 017 |
 | 2026-11-23T05:53:53Z | 011-assisted-weighing-station-ui | started | Stage 1: Plan |
+| 2026-11-23T05:58:40Z | 011-assisted-weighing-station-ui | stage-complete | Plan → Implement (APPROVE PLAN; recommended decisions: server-side bar percentages, training "Simulate scan" field, Supervisor override shown disabled until bolt 013, E2E database reset to the seeded copy) |
 
 ## Execution Summary
 

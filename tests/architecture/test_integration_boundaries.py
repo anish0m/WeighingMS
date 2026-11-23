@@ -69,6 +69,8 @@ PATH_OWNERS = {
     "/scanner": ("devices/scanner.py", "devices/static/devices/scanner-client.js"),
     "/printer": (None, "devices/static/devices/printer-client.js"),
     "/tickets": (None, "devices/static/devices/printer-client.js"),
+    # Training failure switches (story 008); the Dummies are reached only here.
+    "/training/modes": (None, "station/static/station/training-client.js"),
 }
 
 

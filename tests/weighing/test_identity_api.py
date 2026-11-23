@@ -66,9 +66,13 @@ class ComponentsApiTests(ErrorAssertions, TestCase):
                 "container": "C-12",
                 "tare": "214.0000",
                 "unit": "g",
+                "colour": "#000000",
+                "displayMax": "125.0000",
+                "displayMaxText": "125.0 g",
                 "tareText": "214 g",
                 "header": "Remazol Yellow RGB · DYE-4471 · LOT 2026-0387"
                 " · CONTAINER C-12 · TARE 214 g",
+                "headerMeta": "DYE-4471 · LOT 2026-0387 · CONTAINER C-12 · TARE 214 g",
                 "identity": {
                     "status": "unverified",
                     "scannedCode": None,
@@ -81,10 +85,12 @@ class ComponentsApiTests(ErrorAssertions, TestCase):
                 },
                 # Weighing rules, bolt 009 (tested in test_rules_api).
                 "target": "94.0000",
+                "targetAmount": "94.0",
                 "targetText": "94.0 g",
                 "scale": {
                     "scaleId": "scale-3kg",
                     "label": "3 kg precision",
+                    "classText": "3 kg",
                     "unit": "g",
                     "mode": "automatic",
                 },
@@ -94,6 +100,12 @@ class ComponentsApiTests(ErrorAssertions, TestCase):
                     "high": "94.5000",
                     "nearFrom": "84.6000",
                     "caption": "TOLERANCE ±0.5 g (93.5 – 94.5)",
+                },
+                # Bar geometry, bolt 011 (tested in test_bar_geometry).
+                "bar": {
+                    "lowPercent": "74.8",
+                    "widthPercent": "0.8",
+                    "targetPercent": "75.2",
                 },
             },
         )

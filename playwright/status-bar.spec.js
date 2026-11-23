@@ -1,8 +1,10 @@
 // Story 007/001 AC 3 / FR-20: a failing device shows within 2 s, never READY.
 const { test, expect } = require('@playwright/test');
-const { resetModes, setMode, openAsOperator, statusOf } = require('./helpers');
+const { resetDatabase, resetModes, setMode, openAsOperator, statusOf } = require('./helpers');
 
+// An open B-24187 session would resume View 2 on load: start from the seed.
 test.beforeEach(async ({ request }) => {
+  resetDatabase();
   await resetModes(request);
 });
 

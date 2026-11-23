@@ -4,7 +4,7 @@
   the APIs at runtime; this template contains no scenario data (FR-21).
 {% endcomment %}
 {% block screen %}
-<div class="screen" x-data="terminal()" x-cloak>
+<div class="screen" x-data="terminal()" x-cloak @keydown.window="onKey($event)">
 
   <div class="topbar">
     <span class="brandmark"><span class="n">WeighingMS</span><span class="s">{{ station_name }}</span></span>
@@ -78,15 +78,112 @@
       </div>
     </div>
 
-    <!-- View 2: weighing (skeleton; the weigh view is built in bolt 011) -->
+    <!-- View 2: weighing (bolt 011). Every value comes from the station API;
+         zone, still to weigh and "OK allowed" are the server's (ADR-008). -->
     <div class="view" id="v-weigh" :class="{ active: view === 'weigh' }">
-      <div class="weigh">
-        <div class="weigh-head">
-          <div class="who" x-show="recipe">
-            <span class="nm" data-testid="recipe-name" x-text="recipe && recipe.recipeName"></span>
-            <span class="meta" x-show="batch" x-text="batch && (batch.componentCount + ' components')"></span>
+      <div class="stage">
+
+        <aside class="rail" data-testid="rail">
+          <div class="rail-head">
+            <span class="t">Recipe<span x-show="recipe"> · <span data-testid="recipe-name" x-text="recipe && recipe.recipeName"></span></span></span>
+            <span class="v" data-testid="rail-batch" x-text="session && session.batchId"></span>
+            <span class="m" data-testid="rail-progress" x-text="session && session.progressText"></span>
           </div>
-        </div>
+          <ul class="comps">
+            <template x-for="c in components" :key="c.sequence">
+              <li>
+                <button type="button" class="comp" :data-sequence="c.sequence" :data-state="rowState(c.sequence)"
+                        @click="touchRow(c.sequence)">
+                  <span class="swatch" :style="{ background: c.colour }"></span>
+                  <span><span class="nm" x-text="c.name"></span><br><span class="sub" x-text="c.code + ' · ' + c.scale.classText"></span></span>
+                  <span>
+                    <span class="qty" x-text="c.targetText"></span><br>
+                    <span class="st">
+                      <span x-show="rowState(c.sequence) === 'done'" x-text="'✓ ' + (progressOf(c.sequence) && progressOf(c.sequence).actualWeight)"></span>
+                      <span x-show="rowState(c.sequence) === 'active'">WEIGHING</span>
+                      <span x-show="rowState(c.sequence) === 'pending'">PENDING</span>
+                    </span>
+                  </span>
+                </button>
+              </li>
+            </template>
+          </ul>
+        </aside>
+
+        <section class="weigh">
+          <div class="weigh-head">
+            <div class="who">
+              <span class="nm" data-testid="component-name" x-text="activeComponent() ? activeComponent().name : (recipe ? recipe.recipeName : '')"></span>
+              <span class="meta" data-testid="component-meta" x-text="activeComponent() && activeComponent().headerMeta"></span>
+            </div>
+            <div class="scale-badge" data-testid="scale-selected" x-show="activeComponent()">
+              <span class="k">Scale selected</span>
+              <span class="v" x-text="activeComponent() && activeComponent().scale.label"></span>
+              <span class="auto" x-text="activeComponent() && activeComponent().scale.mode"></span>
+            </div>
+          </div>
+
+          <!-- Scan dyestuff step (OQ-8): until the scanner confirms the code -->
+          <div class="scan-prompt" data-testid="scan-step" x-show="needsScan()">
+            <div class="beam" aria-hidden="true"></div>
+            <div>
+              <div class="big">Scan dyestuff</div>
+              <div class="sm">Scan the code on the container before dispensing.</div>
+            </div>
+          </div>
+
+          <div class="notice" role="alert" data-testid="weigh-message" x-show="weighMessage" x-text="weighMessage"></div>
+          <div class="notice" role="alert" data-testid="material-refusal"
+               x-show="!weighMessage && activeComponent() && activeComponent().materialRefusal && activeComponent().materialRefusal.code !== 'IDENTITY_NOT_VERIFIED'"
+               x-text="activeComponent() && activeComponent().materialRefusal && activeComponent().materialRefusal.message"></div>
+
+          <template x-if="activeComponent()">
+            <div class="weigh-panel">
+              <div class="readout">
+                <div class="cell live" :data-zone="zone()">
+                  <span class="k">Weighed now</span>
+                  <span class="v"><span data-testid="weighed-now" x-text="evaluation ? evaluation.net : '—'"></span> <span class="u" x-text="activeComponent().unit"></span></span>
+                </div>
+                <div class="cell">
+                  <span class="k">Still to weigh</span>
+                  <span class="v"><span data-testid="still-to-weigh" x-text="evaluation ? evaluation.stillToWeigh : '—'"></span> <span class="u" x-text="activeComponent().unit"></span></span>
+                </div>
+                <div class="cell">
+                  <span class="k">Target</span>
+                  <span class="v"><span data-testid="target" x-text="activeComponent().targetAmount"></span> <span class="u" x-text="activeComponent().unit"></span></span>
+                </div>
+              </div>
+
+              <div class="bar-block">
+                <div class="bar" data-testid="bar" :data-zone="zone()" role="progressbar" aria-label="Weighing progress"
+                     aria-valuemin="0" aria-valuemax="100" :aria-valuenow="evaluation ? evaluation.barPercent : 0">
+                  <div class="fill" data-testid="fill" :style="{ width: (evaluation ? evaluation.barPercent : 0) + '%' }"></div>
+                  <div class="band" data-testid="band" :style="{ left: activeComponent().bar.lowPercent + '%', width: activeComponent().bar.widthPercent + '%' }"></div>
+                  <div class="target-line" data-testid="target-line" :style="{ left: activeComponent().bar.targetPercent + '%' }"></div>
+                </div>
+                <div class="bar-caption">
+                  <span>0</span>
+                  <span data-testid="caption-band" x-text="activeComponent().tolerance.caption"></span>
+                  <span data-testid="caption-max" x-text="activeComponent().displayMaxText"></span>
+                </div>
+                <div class="status-line" data-testid="status-line" :data-zone="scaleFault || !isTared() ? 'fault' : zone()">
+                  <span x-show="scaleFault" x-text="scaleFault"></span>
+                  <span x-show="!scaleFault && !isTared()">TARE REQUIRED — PRESS RE-TARE (F2)</span>
+                  <span x-show="!scaleFault && isTared()" x-text="evaluation ? evaluation.statusLine : ''"></span>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <div class="actions">
+            <button type="button" class="key ok" data-testid="btn-ok" :disabled="!canConfirm()" @click="confirmWeighing()">OK · Confirm<span class="fn">F1</span></button>
+            <button type="button" class="key" data-testid="btn-retare" :disabled="!activeComponent() || weighBusy" @click="retare()">Re-tare<span class="fn">F2</span></button>
+            <button type="button" class="key ghost" data-testid="btn-quit" :disabled="!activeComponent() || weighBusy" @click="quitComponent()">Quit<span class="fn">F4</span></button>
+            {# Behaviour decided in STEP 24 (bolt 013); shown disabled until then. #}
+            <button type="button" class="key ghost" data-testid="btn-override" style="margin-left:auto" disabled
+                    title="Supervisor override is decided in STEP 24">Supervisor override</button>
+          </div>
+        </section>
       </div>
     </div>
 
@@ -107,4 +204,46 @@
   </div>
 
 </div>
+{% endblock %}
+
+{% block training %}
+{% comment %}
+  TRAINING ONLY (story 008): drives the Dummy APIs like the prototype's demo
+  buttons. Not part of the operator terminal; removed with the Dummies.
+{% endcomment %}
+<aside class="training" data-testid="training-panel" x-data="trainingPanel()" x-cloak
+       @weigh-active.window="onActive($event.detail)" aria-label="Training controls">
+  <div class="training-head">
+    <span class="badge">TRAINING ONLY</span>
+    <span>Dummy devices · not part of the operator terminal</span>
+  </div>
+  <div class="training-row">
+    <span class="ctl-label">Scale</span>
+    <button type="button" class="btn primary" data-testid="sim-dispense" :disabled="!active" @click="dispense()">▶ Simulate dispense</button>
+    <button type="button" class="btn" data-testid="sim-overshoot" :disabled="!active" @click="overshoot()">▶ Simulate overshoot</button>
+    <button type="button" class="btn" data-testid="sim-reset" :disabled="!active" @click="reset()">Reset</button>
+    <label class="field">Set weight
+      <input type="text" inputmode="decimal" data-testid="sim-weight" x-model="weight" @keydown.enter="setWeight()">
+      <span x-text="active ? active.unit : ''"></span>
+    </label>
+    <button type="button" class="btn" data-testid="sim-set" :disabled="!active || !weight" @click="setWeight()">Set</button>
+  </div>
+  <div class="training-row">
+    <span class="ctl-label">Scanner</span>
+    <label class="field">Dyestuff code
+      <input type="text" data-testid="sim-scan-code" x-model="scanCode" @keydown.enter="scan()">
+    </label>
+    <button type="button" class="btn" data-testid="sim-scan" :disabled="!scanCode" @click="scan()">Simulate scan</button>
+  </div>
+  <div class="training-row">
+    <span class="ctl-label">Failures</span>
+    <template x-for="target in targets()" :key="target">
+      <label class="toggle" :data-target="target">
+        <input type="checkbox" :checked="isFailing(target)" @change="toggle(target)">
+        <span x-text="switchText(target)"></span>
+      </label>
+    </template>
+  </div>
+  <div class="training-message" role="alert" data-testid="training-message" x-show="message" x-text="message"></div>
+</aside>
 {% endblock %}

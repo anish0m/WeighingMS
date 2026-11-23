@@ -21,12 +21,14 @@ SODIUM = factories.SODIUM_SULPHATE
 PRECISION = {
     "scaleId": "scale-3kg",
     "label": "3 kg precision",
+    "classText": "3 kg",
     "unit": "g",
     "mode": "automatic",
 }
 FLOOR = {
     "scaleId": "scale-32kg",
     "label": "32 kg floor",
+    "classText": "32 kg",
     "unit": "kg",
     "mode": "automatic",
 }
@@ -138,6 +140,7 @@ class EvaluationApiTests(TestCase):
                 "surplus": None,
                 "surplusText": None,
                 "statusLine": "DISPENSE — 0.6 g REMAINING",
+                "barPercent": "74.7",
             },
         )
 

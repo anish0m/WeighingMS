@@ -1,7 +1,8 @@
 // WeighingMS station API client: the only JS file that knows the
 // /station/api/ paths (ADR-002). The server is the authority for selection
-// (ADR-001) and for the current operator (ADR-005); this client only sends
-// requests and reports the server's answer.
+// (ADR-001), the current operator (ADR-005) and every weighing decision
+// (ADR-008, ADR-010); this client only sends requests and reports the
+// server's answer.
 (function () {
   'use strict';
 
@@ -58,6 +59,14 @@
     );
   }
 
+  function sessionPath(sessionId) {
+    return '/sessions/' + encodeURIComponent(sessionId);
+  }
+
+  function componentPath(sessionId, sequence, action) {
+    return sessionPath(sessionId) + '/components/' + encodeURIComponent(sequence) + '/' + action;
+  }
+
   window.WeighingMS = window.WeighingMS || {};
   window.WeighingMS.station = {
     StationError,
@@ -67,5 +76,29 @@
       request('PUT', '/operator', { operatorId }).then((d) => d.operator),
     selectBatch: (batchId, method) => request('POST', '/selections', { batchId, method }),
     startSession: (selectionId) => request('POST', '/sessions', { selectionId }),
+    // View 2 · Weigh (bolt 011)
+    currentSession: () => request('GET', '/current-session').then((d) => d.session),
+    progress: (sessionId) => request('GET', sessionPath(sessionId) + '/progress'),
+    sessionComponents: (sessionId) =>
+      request('GET', sessionPath(sessionId) + '/components').then((d) => d.components),
+    // net and unit are the scale's decimal strings, passed on unchanged.
+    evaluate: (sessionId, sequence, net, unit) =>
+      request(
+        'GET',
+        componentPath(sessionId, sequence, 'evaluation') +
+          '?net=' + encodeURIComponent(net) + '&unit=' + encodeURIComponent(unit),
+      ),
+    verifyIdentity: (sessionId, sequence, scanId) =>
+      request('POST', componentPath(sessionId, sequence, 'identity'), { scanId }),
+    // activate, tare, quit resolve to the session progress; confirm resolves
+    // to {record, progress}.
+    activate: (sessionId, sequence) =>
+      request('POST', componentPath(sessionId, sequence, 'activate'), {}),
+    tare: (sessionId, sequence) =>
+      request('POST', componentPath(sessionId, sequence, 'tare'), {}),
+    quit: (sessionId, sequence) =>
+      request('POST', componentPath(sessionId, sequence, 'quit'), {}),
+    confirm: (sessionId, sequence) =>
+      request('POST', componentPath(sessionId, sequence, 'confirm'), {}),
   };
 })();

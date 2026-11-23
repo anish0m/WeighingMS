@@ -1,10 +1,12 @@
 // Story 007/002: View 1 · Select batch, fed only by the APIs (FR-21).
 const { test, expect } = require('@playwright/test');
-const { resetModes, setMode, scan, openAsOperator } = require('./helpers');
+const { resetDatabase, resetModes, setMode, scan, openAsOperator } = require('./helpers');
 
 const COLUMNS = ['Batch', 'Order', 'Machine', 'Fabric / lot', 'Shade', 'Comp.', 'Status'];
 
+// An open B-24187 session would resume View 2 on load: start from the seed.
 test.beforeEach(async ({ request }) => {
+  resetDatabase();
   await resetModes(request);
 });
 
@@ -88,7 +90,9 @@ test('touching B-24187 opens view 2 after the server selected it', async ({ page
   await expect(page.locator('#v-weigh')).toBeVisible();
   await expect(page.locator('#v-queue')).toBeHidden();
   await expect(page.getByTestId('recipe-name')).toHaveText('Teal 4C');
-  expect(calls).toEqual([
+  // Server first (ADR-001), then OrgaTEX for display; View 2's own session
+  // calls (progress, activate, components) follow.
+  expect(calls.slice(0, 4)).toEqual([
     'POST /station/api/selections',
     'POST /station/api/sessions',
     'GET /api/batches/B-24187',

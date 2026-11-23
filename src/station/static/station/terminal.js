@@ -1,8 +1,9 @@
-// Operator terminal: Alpine.js view state for the header, status bar and
-// View 1 · Select batch (unit 007). It holds no scenario data and applies no
-// business rule (FR-21): operators, batches, recipes and device states come
-// from the APIs through the per-integration clients; the server decides
-// whether a batch opens (ADR-001) and who the operator is (ADR-005).
+// Operator terminal: Alpine.js view state for the header, status bar,
+// View 1 · Select batch and View 2 · Weigh (weigh.js, merged in below). It
+// holds no scenario data and applies no business rule (FR-21): operators,
+// batches, recipes and device states come from the APIs through the
+// per-integration clients; the server decides whether a batch opens
+// (ADR-001), who the operator is (ADR-005) and every weighing step (ADR-008).
 (function () {
   'use strict';
 
@@ -30,7 +31,7 @@
   function terminal() {
     const api = window.WeighingMS;
 
-    return {
+    return Object.assign(api.weighView(), {
       view: 'loading', // 'loading' | 'operator' | 'queue' | 'weigh'
       clock: hhmmss(new Date()),
       operator: null,
@@ -64,14 +65,39 @@
           this.operator = null;
         }
         if (this.operator) {
-          this.showQueue();
+          await this.resumeOrQueue();
         } else {
           await this.askOperator();
         }
       },
 
+      // Resume (NFR-6): an open session reopens View 2 at its active
+      // component; otherwise View 1 is shown.
+      async resumeOrQueue() {
+        let session = null;
+        try {
+          session = await api.station.currentSession();
+        } catch (failure) {
+          session = null;
+        }
+        if (!session) {
+          this.showQueue();
+          return;
+        }
+        let batch = { batchId: session.batchId };
+        let recipe = null;
+        try {
+          batch = await api.orgatex.fetchBatch(session.batchId);
+          recipe = await api.orgatex.fetchRecipe(session.batchId);
+        } catch (failure) {
+          this.queueError = failure.message || 'OrgaTEX unavailable';
+        }
+        await this.openWeigh(batch, recipe, session.sessionId);
+      },
+
       async askOperator() {
         this.stopScanWatch();
+        this.stopWeigh();
         this.operator = null;
         this.view = 'operator';
         try {
@@ -87,7 +113,7 @@
         try {
           this.operator = await api.station.chooseOperator(operatorId);
           this.message = '';
-          this.showQueue();
+          await this.resumeOrQueue();
         } catch (failure) {
           this.message = failure.message;
         }
@@ -95,6 +121,7 @@
 
       // ── View 1 · Select batch ───────────────────────────────────────
       showQueue() {
+        this.stopWeigh();
         this.view = 'queue';
         this.batch = null;
         this.recipe = null;
@@ -124,6 +151,8 @@
           (scan) => {
             if (scan.kind === 'batch' && this.view === 'queue') {
               this.select(scan.code, 'scan');
+            } else if (scan.kind === 'dyestuff' && this.view === 'weigh') {
+              this.onDyestuffScan(scan);
             }
           },
           () => {
@@ -149,10 +178,10 @@
         this.message = '';
         try {
           const selection = await api.station.selectBatch(batchId, method);
-          await api.station.startSession(selection.selectionId);
+          const session = await api.station.startSession(selection.selectionId);
           const batch = await api.orgatex.fetchBatch(selection.batch.batchId);
           const recipe = await api.orgatex.fetchRecipe(selection.batch.batchId);
-          this.openWeigh(batch, recipe);
+          await this.openWeigh(batch, recipe, session.sessionId);
         } catch (failure) {
           if (failure.code === 'OPERATOR_REQUIRED') {
             await this.askOperator();
@@ -163,12 +192,14 @@
         }
       },
 
-      // ── View 2 (skeleton; the weigh view is bolt 011) ───────────────
-      openWeigh(batch, recipe) {
-        this.stopScanWatch();
+      // ── View 2 · Weigh (weigh.js) ───────────────────────────────────
+      // The scanner keeps being watched: View 2 takes dyestuff scans.
+      async openWeigh(batch, recipe, sessionId) {
         this.batch = batch;
         this.recipe = recipe;
         this.view = 'weigh';
+        this.startScanWatch();
+        await this.openSession(sessionId);
       },
 
       // ── Status bar ──────────────────────────────────────────────────
@@ -201,7 +232,7 @@
         }
         return 'ORGATEX · UNAVAILABLE';
       },
-    };
+    });
   }
 
   window.terminal = terminal;

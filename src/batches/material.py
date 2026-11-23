@@ -52,8 +52,14 @@ class ComponentHeader:
     def text(self) -> str:
         """e.g. "Remazol Yellow RGB · DYE-4471 · LOT 2026-0387 · CONTAINER C-12 ·
         TARE 214 g"."""
+        return f"{self.name} · {self.meta}"
+
+    @property
+    def meta(self) -> str:
+        """The header line under the name (View 2), e.g. "DYE-4471 · LOT
+        2026-0387 · CONTAINER C-12 · TARE 214 g"."""
         return (
-            f"{self.name} · {self.code} · LOT {self.lot or MISSING}"
+            f"{self.code} · LOT {self.lot or MISSING}"
             f" · CONTAINER {self.container or MISSING} · TARE {self.tare_text}"
         )
 

@@ -19,13 +19,15 @@ AUTOMATIC = "automatic"
 
 
 class ScaleClass(Enum):
-    PRECISION = ("scale-3kg", "3 kg precision", GRAM)
-    FLOOR = ("scale-32kg", "32 kg floor", KILOGRAM)
+    PRECISION = ("scale-3kg", "3 kg precision", GRAM, "3 kg")
+    FLOOR = ("scale-32kg", "32 kg floor", KILOGRAM, "32 kg")
 
-    def __init__(self, scale_id: str, label: str, unit: str) -> None:
+    def __init__(self, scale_id: str, label: str, unit: str, class_text: str) -> None:
         self.scale_id = scale_id
         self.label = label
         self.unit = unit
+        # Short form for the recipe rail ("DYE-4471 · 3 kg"), as in the prototype.
+        self.class_text = class_text
 
 
 @dataclass(frozen=True)

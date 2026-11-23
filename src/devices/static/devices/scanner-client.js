@@ -57,5 +57,11 @@
     };
   }
 
-  window.WeighingMS.scanner = { readStatus, readLatestScan, watchScans };
+  // Training only (story 008, DB-8): the Dummy Scanner records a scan as if
+  // the code had been read. Resolves to {scanId, kind, code, scannedAt}.
+  function simulateScan(kind, code) {
+    return requestJson('POST', BASE + '/training/scanner/scans', { kind, code });
+  }
+
+  window.WeighingMS.scanner = { readStatus, readLatestScan, watchScans, simulateScan };
 })();

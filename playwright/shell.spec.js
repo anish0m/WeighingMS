@@ -1,8 +1,10 @@
 // Story 007/001 (header, clock) and the UI part of story 005/001 (operator).
 const { test, expect } = require('@playwright/test');
-const { resetModes, openAsOperator } = require('./helpers');
+const { resetDatabase, resetModes, openAsOperator } = require('./helpers');
 
+// An open B-24187 session would resume View 2 on load: start from the seed.
 test.beforeEach(async ({ request }) => {
+  resetDatabase();
   await resetModes(request);
 });
 

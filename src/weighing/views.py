@@ -192,10 +192,14 @@ def component_evaluation(request, session_id, sequence):
     except InvalidRequest as exc:
         return json_error(400, "INVALID_REQUEST", str(exc))
     try:
-        _, evaluation = rules.evaluate_reading(session_id, sequence, net, unit)
+        component_rules, evaluation = rules.evaluate_reading(
+            session_id, sequence, net, unit
+        )
     except WeighingRefused as refused:
         return _refusal(refused)
-    return JsonResponse(_evaluation_json(session_id, sequence, evaluation))
+    body = _evaluation_json(session_id, sequence, evaluation)
+    body["barPercent"] = str(component_rules.bar.percent(evaluation.net))
+    return JsonResponse(body)
 
 
 @require_GET
@@ -302,8 +306,12 @@ def _component_json(view: identity.ComponentView) -> dict:
         "container": component.container,
         "tare": _quantity_text(component.tare),
         "unit": component.unit,
+        "colour": component.colour,
+        "displayMax": _quantity_text(component.display_max),
+        "displayMaxText": format_weight(component.display_max, component.unit),
         "tareText": view.header.tare_text,
         "header": view.header.text,
+        "headerMeta": view.header.meta,
         "identity": {
             "status": view.status.value,
             "scannedCode": check and check.scanned_code,
@@ -320,12 +328,15 @@ def _rules_json(component_rules: rules.ComponentRules) -> dict:
     """Scale, target and band of a component (bolt 009). The band values are for
     drawing the bar; the zone always comes from the evaluation endpoint."""
     band, scale = component_rules.band, component_rules.assignment.scale
+    bar = component_rules.bar
     return {
         "target": _quantity_text(band.target),
+        "targetAmount": format_amount(band.target, band.unit),
         "targetText": component_rules.target_text,
         "scale": {
             "scaleId": scale.scale_id,
             "label": scale.label,
+            "classText": scale.class_text,
             "unit": scale.unit,
             "mode": component_rules.assignment.mode,
         },
@@ -335,6 +346,11 @@ def _rules_json(component_rules: rules.ComponentRules) -> dict:
             "high": _quantity_text(band.high),
             "nearFrom": _quantity_text(band.near_from),
             "caption": band.caption,
+        },
+        "bar": {
+            "lowPercent": str(bar.percent(band.low)),
+            "widthPercent": str(bar.band_width(band)),
+            "targetPercent": str(bar.percent(band.target)),
         },
     }
 

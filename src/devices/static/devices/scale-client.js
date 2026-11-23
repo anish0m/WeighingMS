@@ -5,6 +5,7 @@
   'use strict';
 
   const BASE = '/api';
+  const TRAINING = '/api/training';
   const WEIGHT_POLL_MS = 200; // 5 Hz live weight (NFR-1)
   const { requestJson } = window.WeighingMS.devices;
 
@@ -50,10 +51,23 @@
     };
   }
 
+  // Training only (story 008, DB-6): drive the Dummy Scale like the
+  // prototype's buttons. body: {action: 'dispense' | 'overshoot', target,
+  // tolerance, unit} | {action: 'set', weight, unit} | {action: 'reset'}.
+  // The Dummy calculates the landing weight; the browser does not.
+  function simulate(scaleId, body) {
+    return requestJson(
+      'POST',
+      TRAINING + '/scales/' + encodeURIComponent(scaleId) + '/simulate',
+      body,
+    );
+  }
+
   window.WeighingMS.scale = {
     readWeight: (scaleId) => requestJson('GET', scalePath(scaleId, 'weight')),
     readStatus,
     tare: (scaleId) => requestJson('POST', scalePath(scaleId, 'tare')),
     watchWeight,
+    simulate,
   };
 })();
