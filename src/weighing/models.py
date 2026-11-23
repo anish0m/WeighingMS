@@ -16,6 +16,10 @@ class SessionNotDeletable(Exception):
     """Raised when code tries to delete a weighing session (NFR-12)."""
 
 
+class IdentityCheckImmutable(Exception):
+    """Raised when code tries to change or delete a recorded identity check."""
+
+
 class OperatorManager(models.Manager):
     def active(self):
         return self.filter(active=True)
@@ -101,3 +105,55 @@ class WeighingSession(models.Model):
 
     def delete(self, *args, **kwargs):
         raise SessionNotDeletable(f"WeighingSession {self.pk} cannot be deleted")
+
+
+class IdentityResult(models.TextChoices):
+    VERIFIED = "verified", "Verified"
+    WRONG_DYESTUFF = "wrong_dyestuff", "Wrong dyestuff"
+
+
+class IdentityCheck(models.Model):
+    """One dyestuff scan checked against a session component (ADR-006, ADR-007).
+
+    ``expected_code`` comes from the recipe snapshot and ``scanned_code`` from
+    the scanner, never from the browser. Every check is kept, wrong ones too
+    (BR-10); rows are append-only.
+    """
+
+    session = models.ForeignKey(
+        WeighingSession, on_delete=models.PROTECT, related_name="identity_checks"
+    )
+    component_sequence = models.PositiveSmallIntegerField()
+    expected_code = models.CharField(max_length=32)
+    scan_id = models.PositiveIntegerField()
+    scanned_code = models.CharField(max_length=64)
+    result = models.CharField(max_length=16, choices=IdentityResult.choices)
+    operator = models.ForeignKey(Operator, on_delete=models.PROTECT)
+    checked_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=("session", "scan_id"), name="one_check_per_scan_per_session"
+            ),
+        )
+        indexes = (
+            models.Index(
+                fields=("session", "component_sequence", "checked_at"),
+                name="identity_latest_idx",
+            ),
+        )
+
+    def __str__(self):
+        return (
+            f"Check {self.pk} session {self.session_id} #{self.component_sequence}"
+            f" {self.scanned_code} ({self.result})"
+        )
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            raise IdentityCheckImmutable(f"IdentityCheck {self.pk} is append-only")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise IdentityCheckImmutable(f"IdentityCheck {self.pk} cannot be deleted")

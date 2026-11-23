@@ -23,6 +23,15 @@ class RefusalReason(Enum):
     OPERATOR_NOT_FOUND = "Operator not found"
     SELECTION_NOT_FOUND = "Batch selection not found"
     SUPERVISOR_NOT_VERIFIED = "Supervisor ID or PIN incorrect"
+    SESSION_NOT_FOUND = "Weighing session not found"
+    COMPONENT_NOT_FOUND = "Component not found"
+    NOT_A_DYESTUFF_SCAN = "Scan a dyestuff code"
+    SCAN_NOT_CURRENT = "Scan again"
+    SCANNER_UNAVAILABLE = "Scanner unavailable"
+    LOT_MISSING = "Lot missing for this component"
+    CONTAINER_MISSING = "Container missing for this component"
+    IDENTITY_NOT_VERIFIED = "Scan the dyestuff first"
+    WRONG_DYESTUFF = "Wrong dyestuff"
 
     @property
     def code(self) -> str:

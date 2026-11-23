@@ -3,15 +3,24 @@ id: 008-batch-recipe-management
 unit: 004-batch-recipe-management
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 004-verify-dyestuff-identity
   - 005-show-lot-and-container
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-23T03:52:11Z
 completed: null
-current_stage: null
-stages_completed: []
+current_stage: implement
+stages_completed:
+  - name: model
+    completed: 2026-11-23T03:54:07Z
+    artifact: ddd-01-domain-model.md
+  - name: design
+    completed: 2026-11-23T03:56:02Z
+    artifact: ddd-02-technical-design.md
+  - name: adr
+    completed: 2026-11-23T04:01:39Z
+    artifact: adr-006-server-verifies-dyestuff-scan.md, adr-007-identity-checks-in-weighing-session.md
 
 # Bolt Dependencies (for execution ordering)
 requires_bolts: [005-batch-recipe-management]
@@ -50,10 +59,10 @@ Material identity: dyestuff scan verification, lot, container and tare per compo
 
 ## Stages
 
-- [ ] **1. Domain Model**: Pending → ddd-01-domain-model.md
-- [ ] **2. Technical Design**: Pending → ddd-02-technical-design.md
-- [ ] **3. ADR Analysis (optional)**: Pending → adr-*.md
-- [ ] **4. Implement**: Pending → source code
+- [x] **1. Domain Model**: ✅ Complete → ddd-01-domain-model.md
+- [x] **2. Technical Design**: ✅ Complete → ddd-02-technical-design.md
+- [x] **3. ADR Analysis (optional)**: ✅ Complete → adr-*.md
+- [ ] **4. Implement**: ⏳ Awaiting approval → source code
 - [ ] **5. Test**: Pending → ddd-03-test-report.md
 
 ## Expected Outcome

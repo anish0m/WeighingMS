@@ -5,21 +5,29 @@ operator lives only in the server-side session; an operator in a request
 body is never used for a weighing action.
 """
 
+from decimal import Decimal
+
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 
-from weighing import services
-from weighing.models import WeighingSession
+from weighing import identity, services
+from weighing.models import IdentityCheck, WeighingSession
 from weighing.services import OperatorRef, RefusalReason, WeighingRefused
 from weighingms.api import InvalidJson, json_error, read_json_object
 
 SESSION_KEY = "weighing.operator_id"
+QUANTUM = Decimal("0.0001")
 MAX_OPERATOR_ID = 16
 
 REFUSAL_STATUS = {
     RefusalReason.OPERATOR_REQUIRED: 403,
     RefusalReason.OPERATOR_NOT_FOUND: 404,
     RefusalReason.SELECTION_NOT_FOUND: 404,
+    RefusalReason.SESSION_NOT_FOUND: 404,
+    RefusalReason.COMPONENT_NOT_FOUND: 404,
+    RefusalReason.NOT_A_DYESTUFF_SCAN: 409,
+    RefusalReason.SCAN_NOT_CURRENT: 409,
+    RefusalReason.SCANNER_UNAVAILABLE: 503,
 }
 
 
@@ -117,6 +125,45 @@ def session_detail(request, session_id):
     return JsonResponse(_session_json(session))
 
 
+@require_GET
+def session_components(request, session_id):
+    """Component headers, identity status and material readiness (bolt 008)."""
+    try:
+        session, views = identity.session_components(session_id)
+    except WeighingRefused as refused:
+        return _refusal(refused)
+    return JsonResponse(
+        {
+            "sessionId": session.pk,
+            "batchId": session.batch_id,
+            "components": [_component_json(v) for v in views],
+        }
+    )
+
+
+@require_http_methods(["POST"])
+def component_identity(request, session_id, sequence):
+    """Verify a dyestuff scan by its scanId; the code comes from the scanner."""
+    try:
+        scan_id = _parse_scan_id(request)
+    except (InvalidJson, InvalidRequest) as exc:
+        return json_error(400, "INVALID_REQUEST", str(exc))
+    try:
+        check, created = identity.verify_identity(
+            session_id, sequence, scan_id, _session_operator_id(request)
+        )
+    except WeighingRefused as refused:
+        return _refusal(refused)
+    return JsonResponse(_check_json(check), status=201 if created else 200)
+
+
+def _parse_scan_id(request) -> int:
+    scan_id = read_json_object(request).get("scanId")
+    if not isinstance(scan_id, int) or isinstance(scan_id, bool) or scan_id < 1:
+        raise InvalidRequest("scanId must be a positive integer")
+    return scan_id
+
+
 def _operator_json(operator: OperatorRef) -> dict:
     return {
         "operatorId": operator.operator_id,
@@ -135,4 +182,47 @@ def _session_json(session: WeighingSession) -> dict:
         "operator": _operator_json(OperatorRef.of(session.operator)),
         "startedAt": session.started_at.isoformat(),
         "completedAt": session.completed_at and session.completed_at.isoformat(),
+    }
+
+
+def _quantity_text(value) -> str:
+    """Quantities go out as fixed 4-place decimal strings, as in bolt 005."""
+    return f"{value.quantize(QUANTUM):f}"
+
+
+def _component_json(view: identity.ComponentView) -> dict:
+    component, check = view.component, view.latest_check
+    return {
+        "sequence": component.sequence,
+        "code": component.code,
+        "name": component.name,
+        "lot": component.lot,
+        "container": component.container,
+        "tare": _quantity_text(component.tare),
+        "unit": component.unit,
+        "tareText": view.header.tare_text,
+        "header": view.header.text,
+        "identity": {
+            "status": view.status.value,
+            "scannedCode": check and check.scanned_code,
+            "checkedAt": check and check.checked_at.isoformat(),
+        },
+        "materialReady": view.refusal is None,
+        "materialRefusal": view.refusal
+        and {"code": view.refusal.code, "message": view.refusal.value},
+    }
+
+
+def _check_json(check: IdentityCheck) -> dict:
+    return {
+        "checkId": check.pk,
+        "sessionId": check.session_id,
+        "sequence": check.component_sequence,
+        "scanId": check.scan_id,
+        "expectedCode": check.expected_code,
+        "scannedCode": check.scanned_code,
+        "result": check.result,
+        "message": identity.RESULT_MESSAGE[check.result],
+        "operator": _operator_json(OperatorRef.of(check.operator)),
+        "checkedAt": check.checked_at.isoformat(),
     }

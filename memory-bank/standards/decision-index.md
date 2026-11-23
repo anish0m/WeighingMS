@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-11-20T09:23:09Z
-total_decisions: 5
+last_updated: 2026-11-23T04:01:39Z
+total_decisions: 7
 ---
 
 # Decision Index
@@ -19,6 +19,22 @@ Use this to find relevant prior decisions when working on related features.
 ## Decisions
 
 <!-- Entries are appended below in reverse chronological order (newest first) -->
+
+### ADR-007: Identity checks are stored in the `weighing` app as part of the WeighingSession; snapshot-only material rules stay in `batches`
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 008-batch-recipe-management (batch-recipe-management)
+- **Path**: `bolts/008-batch-recipe-management/adr-007-identity-checks-in-weighing-session.md`
+- **Summary**: Stories 004 and 005 belong to unit 004 (`batches`), but an identity check only has meaning for one weighing run, which lives in `weighing`. `batches/material.py` keeps the stateless snapshot rules (tare format, header, lot/container faults), `weighing` stores `IdentityCheck` and provides `check_material_ready`, and the dependency stays one-way (`weighing` → `batches`).
+- **Read when**: Implementing confirmation (bolt 010 must call `check_material_ready`), building the weigh view's component header or scan step, adding state that belongs to a weighing run, or deciding which app a new model goes in.
+
+### ADR-006: The server verifies the dyestuff scan by re-reading it by `scanId`; a code sent by the browser is never trusted
+- **Status**: accepted
+- **Date**: 2026-11-23
+- **Bolt**: 008-batch-recipe-management (batch-recipe-management)
+- **Path**: `bolts/008-batch-recipe-management/adr-006-server-verifies-dyestuff-scan.md`
+- **Summary**: Before a component can be confirmed, the dyestuff must be verified by scanning its barcode against the component's code (FR-4, OQ-8, brief FR-09 / BR-10). The browser sends only the `scanId`; the server reads the scanner's latest scan through its adapter, uses it only if the IDs match, and records the comparison with the snapshot code as an append-only `IdentityCheck`.
+- **Read when**: Working on the dyestuff scan step, any scanner-driven action, confirmation preconditions, or any endpoint where the browser could supply a value that proves something (codes, weights).
 
 ### ADR-005: The current operator is held in the server-side Django session; weighing actions read it only from there
 - **Status**: accepted
