@@ -25,6 +25,8 @@ implemented: false
 
 ## Acceptance Criteria
 
+> **STEP 24 decision (2026-11-23T08:50:18Z, OQ-4):** the panel shows the surplus amount, the percentage and the recovery instruction (remove the excess, or Quit F4 to discard and re-weigh), with no recalculation proposal. Supervisor override stays disabled with its reason, so AC 3 is not applicable to the training build. See `requirements.md` FR-14.
+
 - [ ] **Given** Yellow RGB at 96.4 g, **When** view 2 renders, **Then** the status line reads "OVER TOLERANCE — SURPLUS +2.4 g", the surplus panel shows "Surplus +2.4 g (+2.6%) — over tolerance" and Confirm is disabled
 - [ ] **Given** the overshoot rule is decided at STEP 24, **When** the panel renders, **Then** it shows only what that rule defines (no hard-coded proposal)
 - [ ] **Given** Supervisor override is pressed, **When** the rule allows it, **Then** a form asks for supervisor ID, PIN and reason

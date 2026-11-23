@@ -8,12 +8,12 @@ updated: 2026-11-20T03:57:49Z
 
 # Requirements: Assisted Dyestuff Weighing Station (WeighingMS)
 
-> **Status: Intent approved (2026-11-20T03:33:25Z, `APPROVE INTENT`); Requirements approved 2026-11-20T03:57:49Z (CHECKPOINT 2, `APPROVE REQUIREMENTS`), accepted as written including the proposed training defaults for OQ-1–OQ-3 and OQ-5–OQ-9; OQ-4 stays open until STEP 24.**
+> **Status: Intent approved (2026-11-20T03:33:25Z, `APPROVE INTENT`); Requirements approved 2026-11-20T03:57:49Z (CHECKPOINT 2, `APPROVE REQUIREMENTS`), accepted as written including the proposed training defaults for OQ-1–OQ-3 and OQ-5–OQ-9; OQ-4 decided at workbook STEP 24 (2026-11-23T08:50:18Z, user DECISION: overweight stays unconfirmed, defined recovery action, no recalculation).**
 >
 > **How to read this file.** Nothing in `docs/brief.md` is confirmed by FCI. In this file:
 > - **Confirmed requirements** (FR/NFR) = behaviour stated by the brief and/or shown in the prototype, adopted for this training build once approved here. Each cites its source.
 > - **Assumptions** = brief §12 positions the build relies on but nobody has confirmed.
-> - **Unresolved questions** = open items. FCI-level questions stay unresolved; training-build questions carry the training decision accepted at CHECKPOINT 2 (OQ-4 still open).
+> - **Unresolved questions** = open items. FCI-level questions stay unresolved; training-build questions carry the training decision accepted at CHECKPOINT 2; OQ-4 was decided at STEP 24.
 > - **Training-only Dummy behaviour** = how the Dummy OrgaTEX/Scale/Scanner/Printer behave. These are training contracts, not real interfaces.
 
 ## Intent Overview
@@ -57,7 +57,7 @@ WeighingMS is a guided weighing station that sits between OrgaTEX MES and the we
 - Container tare handling and dyestuff identity verification (scan)
 - Real-time guided weighing with live target-vs-actual feedback from the (Dummy) scale
 - Inclusive tolerance enforcement at confirmation, using `Decimal` quantities
-- Over-dose (surplus) handling and supervisor override with logging (behaviour to be decided by a human, A-08)
+- Over-dose (surplus) handling: blocked, signalled, defined recovery action; no recalculation and no supervisor override in the training build (OQ-4, decided at STEP 24; A-08 unresolved)
 - Dyestuff lot capture and component-level weighing records
 - Actual-consumption write-back to (Dummy) OrgaTEX
 - Weighing ticket/label printing via the (Dummy) printer
@@ -160,8 +160,8 @@ Sources: brief §7 (BR), §8 (FR-xx), §9 (data), §10 (IR), §15 (AC); prototyp
 - **Source**: brief FR-18, FR-19, FR-25, BR-07, BR-11, DR-02, NFR-05, AC-04; prototype "OK · Confirm F1", "Quit F4"; workbook STEP 25
 
 ### FR-14: Overshoot
-- **Description**: When the weight exceeds the upper tolerance, the system shows "OVER TOLERANCE — SURPLUS +x", shows the surplus panel with surplus amount and percentage, and keeps confirmation blocked. The operator's recovery actions and any surplus compensation follow the training rule decided by a human at workbook STEP 24 (OQ-4). Until then, no recipe recalculation is implemented and nothing over tolerance can be confirmed. "Supervisor override" (prototype) requests an override; its authorisation is OQ-3/OQ-4.
-- **Acceptance Criteria**: (a) Yellow RGB at 96.4 g shows "Surplus +2.4 g (+2.6%)" and confirm is disabled. (b) No remaining-component target changes automatically. (c) Every override or compensation applied (once decided) is recorded with who authorised it and why.
+- **Description**: When the weight exceeds the upper tolerance, the system shows "OVER TOLERANCE — SURPLUS +x", shows the surplus panel with surplus amount and percentage, and keeps confirmation blocked. **Training rule (OQ-4, decided 2026-11-23 at STEP 24):** an overweight component remains unconfirmed and the operator must use the defined recovery action: either remove material until the weight is back inside the band and confirm normally, or Quit F4 (discard and re-weigh), which starts a fresh attempt. An attempt abandoned while over tolerance is stored as an overshoot discard with its surplus, and no weighing record is created. No recipe recalculation is performed, and the prototype's recalculation proposal is not shown. "Supervisor override" stays visible but disabled under this rule. Full record: `docs/evidence/STEP-24-overshoot-decision.md`.
+- **Acceptance Criteria**: (a) Yellow RGB at 96.4 g shows "Surplus +2.4 g (+2.6%)" and confirm is disabled. (b) No remaining-component target changes automatically. (c) Every override or compensation applied is recorded with who authorised it and why. Under the STEP 24 rule none can be applied, so (c) is not applicable to the training build. (d) Quit F4 while over tolerance records an overshoot discard and no weighing record; reducing the weight into the band allows confirmation.
 - **Priority**: Must
 - **Source**: brief FR-20–FR-24, BR-08, BR-13, AC-05, AC-06, A-08, Q25/Q26/Q33; prototype surplus panel ("Proposal: … deliberately a guess"); workbook STEP 24
 
@@ -305,7 +305,7 @@ All brief §12 assumptions are **unconfirmed by FCI**. The training build procee
 | A-05 Scales stream weight continuously (≥10 Hz) with a stability flag | Severe: live guidance redesigned | Dummy scale simulates continuous readings |
 | A-06 Scale selection is rule-based with a threshold; calibration status known | Moderate | Configurable 3 kg threshold |
 | A-07 Tolerances are per-component, from OrgaTEX | Moderate | Tolerance supplied by Dummy OrgaTEX per component |
-| A-08 Surplus compensation = proportional recalculation; non-compensable → supervisor override | High: most likely misunderstanding | Human decision before implementation (workbook STEP 24); do not copy the prototype's recalculation |
+| A-08 Surplus compensation = proportional recalculation; non-compensable → supervisor override | High: most likely misunderstanding | Decided for training at STEP 24 (OQ-4): no recalculation, no override; A-08 itself stays unresolved |
 | A-09 Per-operator traceability; lots captured at weighing | Moderate | Record operator and lot on every confirmation |
 | A-10 Dyestuffs carry barcodes; English UI; 21-key terminal duplicates touch | Moderate | Dummy scanner; English UI |
 | A-11 One station, one site in V1 | Low | Single-station design |
@@ -323,13 +323,13 @@ All brief §12 assumptions are **unconfirmed by FCI**. The training build procee
 |----------|-------|----------|------------|
 | Prototype pins / brief §9: Q6–Q13 OrgaTEX interface (A-01, A-02, A-03); Q15–Q16 scale protocol, threshold, continuous weight (A-05, A-06); Q18 printer and label (A-04); Q24 tolerance definition (A-07); Q25–Q26 surplus compensation (A-08); Q28–Q29 lots and containers (A-09); Q33 override authority (A-08); Q35 language (A-10); Q37 operator login (A-09) | FCI (real product) | Before PRD (brief D-01…D-05) | Pending. Dummy APIs used in training; none of these is answered by this build |
 
-### Training build — decisions (defaults accepted by the user at CHECKPOINT 2, 2026-11-20T03:57:49Z; OQ-4 open)
+### Training build — decisions (defaults accepted by the user at CHECKPOINT 2, 2026-11-20T03:57:49Z; OQ-4 decided at STEP 24, 2026-11-23T08:50:18Z)
 | ID | Question | Training decision | Owner | Status |
 |----|----------|-------------------|-------|--------|
 | OQ-1 | Is offline operation with deferred sync (brief FR-30–33, A-03) in scope? | **Out of scope.** Only write-back failure + retry (FR-17) is built. | User | Accepted (CHECKPOINT 2) |
 | OQ-2 | Is operational reporting / supervisor remote view (BR-22, BR-23) in scope? | **Out of scope** beyond retrieving a batch's weighing records (FR-19c). | User | Accepted (CHECKPOINT 2) |
 | OQ-3 | How is the operator identified, and how is the supervisor authenticated for override? | Operator chosen from a seeded operator list at session start (no password; seed "R. Karim · Shift A"). Supervisor override needs a seeded supervisor's ID + PIN and a reason, recorded. | User | Accepted (CHECKPOINT 2) |
-| OQ-4 | Overshoot rule: recalculate remaining components, display excess only, or escalate? | **No default.** Decided at workbook STEP 24. Until then: over tolerance cannot be confirmed; no recalculation. | User | Open — decide at STEP 24 |
+| OQ-4 | Overshoot rule: recalculate remaining components, display excess only, or escalate? | Overweight stays unconfirmed; recovery = remove excess back into the band, or Quit F4 (discard and re-weigh, logged as overshoot discard). No recalculation, no supervisor override. | User | Decided 2026-11-23T08:50:18Z (STEP 24 DECISION) |
 | OQ-5 | The prototype has a recipe only for B-24187. What happens when B-24188/B-24190/B-24191 are selected? | They are listed (QUEUED) but not selectable: "Recipe not available in training data". | User | Accepted (CHECKPOINT 2) |
 | OQ-6 | Does the seeded B-24187 start with all 5 components pending, or mid-batch as in the prototype (2 of 5 done)? | **All 5 pending**, so the full five-component flow can be demonstrated (workbook STEP 23). The prototype's actuals (1241.5 g, 385.4 g …) are not pre-seeded. | User | Accepted (CHECKPOINT 2) |
 | OQ-7 | Where do lot and container come from (Q28, Q29)? | Supplied per component by Dummy OrgaTEX seed (prototype values); not entered by the operator. | User | Accepted (CHECKPOINT 2) |

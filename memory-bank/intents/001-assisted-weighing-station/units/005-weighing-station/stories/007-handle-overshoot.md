@@ -26,6 +26,8 @@ implemented: false
 
 ## Acceptance Criteria
 
+> **STEP 24 decision (2026-11-23T08:50:18Z, OQ-4):** an overweight component remains unconfirmed; recovery = remove excess back into the band, or Quit F4 (discard and re-weigh, stored as an overshoot discard with the surplus, no weighing record). No recalculation, no override, so AC 3 is not applicable to the training build. See `requirements.md` FR-14.
+
 - [ ] **Given** Yellow RGB at 96.4 g, **When** it is evaluated, **Then** "OVER TOLERANCE — SURPLUS +2.4 g" and "Surplus +2.4 g (+2.6%)" are produced and confirm is blocked
 - [ ] **Given** an overshoot, **When** nothing else is done, **Then** no remaining component target changes
 - [ ] **Given** the rule decided at STEP 24 allows an override/compensation, **When** a supervisor applies it with ID + PIN + reason, **Then** it is recorded with who authorised it and why
