@@ -2,7 +2,7 @@
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
 created: 2026-11-20T07:43:38Z
-last_updated: 2026-11-23T10:14:25Z
+last_updated: 2026-11-23T10:20:57Z
 ---
 
 # Construction Log: orgatex-integration
@@ -27,7 +27,7 @@ last_updated: 2026-11-23T10:14:25Z
 | Bolt ID | Stories | Status | Changed |
 |---------|---------|--------|---------|
 | 003-orgatex-integration | 001 | ✅ completed | - |
-| 014-orgatex-integration | 002, 003 | ⏳ in-progress | - |
+| 014-orgatex-integration | 002, 003 | ✅ completed | - |
 
 ## Execution History
 
@@ -40,6 +40,7 @@ last_updated: 2026-11-23T10:14:25Z
 | 2026-11-23T10:09:08Z | 014-orgatex-integration | started | Stage 1: Plan |
 | 2026-11-23T10:11:18Z | 014-orgatex-integration | stage-complete | Plan → Implement (APPROVE PLAN; server verifies CONFIRMED, key WMS-<batchId>-S<sessionId>, WriteBack in `orgatex`) |
 | 2026-11-23T10:14:25Z | 014-orgatex-integration | stage-complete | Implement → Test (APPROVE IMPLEMENTATION) |
+| 2026-11-23T10:20:57Z | 014-orgatex-integration | completed | All 3 stages done (APPROVE TESTS); Django 516/516, Playwright 58/58 |
 
 ## Execution Summary
 
@@ -47,9 +48,9 @@ last_updated: 2026-11-23T10:14:25Z
 |--------|-------|
 | Original bolts planned | 2 |
 | Current bolt count | 2 |
-| Bolts completed | 1 |
-| Bolts in progress | 1 |
-| Bolts remaining | 1 |
+| Bolts completed | 2 |
+| Bolts in progress | 0 |
+| Bolts remaining | 0 |
 | Replanning events | 0 |
 
 ## Notes

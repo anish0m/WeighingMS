@@ -2,11 +2,11 @@
 id: 003-write-back-failure-and-retry
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
-created: 2026-11-20T04:51:01Z
+created: 2026-11-20T04:51:01.000Z
 assigned_bolt: 014-orgatex-integration
-implemented: false
+implemented: true
 ---
 
 # Story: 003-write-back-failure-and-retry

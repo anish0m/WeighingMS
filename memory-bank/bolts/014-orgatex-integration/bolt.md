@@ -3,35 +3,39 @@ id: 014-orgatex-integration
 unit: 002-orgatex-integration
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 002-post-consumption-idempotently
   - 003-write-back-failure-and-retry
-created: 2026-11-20T05:15:14Z
-started: 2026-11-23T10:09:08Z
-completed: null
-current_stage: test
+created: 2026-11-20T05:15:14.000Z
+started: 2026-11-23T10:09:08.000Z
+completed: "2026-11-23T10:20:57Z"
+current_stage: null
 stages_completed:
   - name: plan
-    completed: 2026-11-23T10:11:18Z
+    completed: 2026-11-23T10:11:18.000Z
     artifact: implementation-plan.md
   - name: implement
-    completed: 2026-11-23T10:14:25Z
+    completed: 2026-11-23T10:14:25.000Z
     artifact: implementation-walkthrough.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [001-dummy-integrations, 002-dummy-integrations, 003-orgatex-integration]
-enables_bolts: [015-weighing-station, 017-assisted-weighing-station-ui]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-23T10:20:57.000Z
+    artifact: test-walkthrough.md
+requires_bolts:
+  - 001-dummy-integrations
+  - 002-dummy-integrations
+  - 003-orgatex-integration
+enables_bolts:
+  - 015-weighing-station
+  - 017-assisted-weighing-station-ui
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 26"
+workbook_step: STEP 26
 ---
 
 # Bolt: 014-orgatex-integration
@@ -58,7 +62,7 @@ OrgaTEX write-back: idempotent consumption post with visible status and retry.
 
 - [x] **1. Plan**: Complete → implementation-plan.md
 - [x] **2. Implement**: Complete → source code + implementation-walkthrough.md
-- [ ] **3. Test**: Pending → tests + test-walkthrough.md
+- [x] **3. Test**: Complete → tests + test-walkthrough.md
 
 ## Expected Outcome
 
