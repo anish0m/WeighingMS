@@ -87,3 +87,8 @@ Surplus panel, overshoot status line and supervisor override form on View 2.
 
 - Dummy APIs are training contracts, not the real OrgaTEX / device interfaces.
 - Architecture (STEP 12 decision): the browser calls the Dummy APIs directly through one JS client per integration; the WeighingMS server stays the authority (re-reads the scale for confirmation, stores records, supplies write-back payload/key and ticket content).
+
+## Carried over from bolt 012 (APPROVE TESTS, 2026-11-23)
+
+- Fix the existing training-panel race (bolt 011): `toggle(target)` in `src/station/static/station/training-panel.js` derives the next mode from `this.modes` (last server answer) instead of the checkbox's `checked` state, so a quick uncheck can re-send the failure mode. Symptom: `training-panel.spec.js` › "the OrgaTEX failure switch sets and clears unavailable" fails in the full Playwright run.
+- Use bolt 012's server fields only: evaluation `overshoot` (heading, recovery, overrideAvailable, overrideReason), quit `ended.message`. No browser arithmetic, no recalculation table.

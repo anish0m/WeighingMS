@@ -3,28 +3,31 @@ id: 012-weighing-station
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 007-handle-overshoot
-created: 2026-11-20T05:15:14Z
-started: 2026-11-23T08:52:26Z
-completed: null
-current_stage: test
-stages_completed: [model, design, adr, implement]
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [006-weighing-station, 009-weighing-station]
-enables_bolts: [013-assisted-weighing-station-ui]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+created: 2026-11-20T05:15:14.000Z
+started: 2026-11-23T08:52:26.000Z
+completed: "2026-11-23T09:29:26Z"
+current_stage: null
+stages_completed:
+  - model
+  - design
+  - adr
+  - implement
+requires_bolts:
+  - 006-weighing-station
+  - 009-weighing-station
+enables_bolts:
+  - 013-assisted-weighing-station-ui
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 3
   max_dependencies: 1
   testing_scope: 2
-workbook_step: "STEP 24"
+workbook_step: STEP 24
 ---
 
 # Bolt: 012-weighing-station
@@ -52,7 +55,7 @@ Overshoot handling according to the human decision taken at workbook STEP 24 (OQ
 - [x] **2. Technical Design**: Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: Complete (ADR-012) → adr-*.md
 - [x] **4. Implement**: Complete → source code
-- [ ] **5. Test**: Pending → ddd-03-test-report.md
+- [x] **5. Test**: Complete → ddd-03-test-report.md
 
 ## Expected Outcome
 

@@ -32,7 +32,7 @@ last_updated: 2026-11-23T05:47:57Z
 | 006-weighing-station | 001 | ✅ completed | - |
 | 009-weighing-station | 002, 004, 005 | ✅ completed | - |
 | 010-weighing-station | 003, 006, 008, 010 | ✅ completed | - |
-| 012-weighing-station | 007 | in-progress | test |
+| 012-weighing-station | 007 | ✅ completed | - |
 | 015-weighing-station | 009, 011 | planned | - |
 
 ## Execution History
@@ -62,6 +62,7 @@ last_updated: 2026-11-23T05:47:57Z
 | 2026-11-23T08:55:58Z | 012-weighing-station | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; new `overshoot.py` (OVERSHOOT_RULE, Surplus); quit re-reads the scale outside the transaction; evaluation `overshoot` / `surplusPercent`, quit `ended`, refusal detail surplus; migration 0005 with discard snapshot + check constraint; no new endpoint) |
 | 2026-11-23T08:57:03Z | 012-weighing-station | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-012 training overshoot rule fixed in code, no recalculation / override, discard on the attempt; accepted and indexed) |
 | 2026-11-23T09:01:19Z | 012-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `overshoot.py`, discard on ComponentAttempt + migration 0005, quit re-read, evaluation `overshoot` / `surplusPercent`, quit `ended`, refusal detail surplus; surplus % computed in `overshoot.surplus_of` to avoid a circular import) |
+| 2026-11-23T09:29:26Z | 012-weighing-station | completed | All 5 stages done (APPROVE TESTS); 475/475 Django tests (26 new), Playwright 49/50 (existing training-panel toggle race from bolt 011, fix assigned to bolt 013); story 007 complete; unit stays open for bolt 015 |
 
 ## Execution Summary
 
@@ -69,15 +70,16 @@ last_updated: 2026-11-23T05:47:57Z
 |--------|-------|
 | Original bolts planned | 5 |
 | Current bolt count | 5 |
-| Bolts completed | 3 |
-| Bolts in progress | 1 |
-| Bolts remaining | 2 |
+| Bolts completed | 4 |
+| Bolts in progress | 0 |
+| Bolts remaining | 1 |
 | Replanning events | 0 |
 
 ## Notes
 
 - Dummy APIs are training contracts, not the real OrgaTEX / device interfaces.
-- OQ-4 (overshoot rule) stays open until workbook STEP 24; bolt 012 must stop for that human decision before implementing.
+- OQ-4 (overshoot rule) was decided at workbook STEP 24 (2026-11-23T08:50:18Z) before bolt 012 started.
 - 2026-11-20T09:30:26Z: bolt 006 complete. ADR-004 (seeded station identities) and ADR-005 (current operator in the server session) accepted and indexed. The sessions app and `SessionMiddleware` were enabled. Story 001's on-screen header is verified by Playwright in bolt 007.
 - 2026-11-23T05:03:33Z: bolt 009 complete. ADR-008 (server is the single source of the weighing rules) and ADR-009 (one value at display resolution) accepted and indexed. Setting `WEIGHING_SCALE_THRESHOLD_KG` (default 3, env override). Bolt 010's confirm must call `rules.evaluate_reading` on the server's own scale re-read, store the evaluated net as actualWeight, and call `check_material_ready` (ADR-007). Story 005's Playwright check (OK disabled at 93.4 / 94.6) is in bolt 011.
 - 2026-11-23T05:47:57Z: bolt 010 complete. ADR-010 (stored append-only attempts, derived component state) and ADR-011 (scale I/O outside the transaction, re-check under lock) accepted and indexed. Endpoints: `GET /current-session`, `GET …/progress`, `POST …/components/<seq>/activate|tare|quit|confirm`. After a confirm the first pending component in recipe order becomes active. Bolt 011 wires F1/F2/F4, the rail and resume; bolt 012 builds overshoot on `OUT_OF_TOLERANCE`.
+- 2026-11-23T09:29:26Z: bolt 012 complete. ADR-012 (training overshoot rule fixed in code: no recalculation, no override, overshoot discard on the attempt) accepted and indexed. Migration 0005. Evaluation JSON gains `surplusPercent` / `overshoot`; quit JSON gains `ended`; the 409 `OUT_OF_TOLERANCE` detail gains the surplus. Bolt 013 shows these server texts and also fixes the training-panel failure-switch race found in the Playwright regression run (APPROVE TESTS, option 1).
