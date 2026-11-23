@@ -3,7 +3,7 @@ id: 011-assisted-weighing-station-ui
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 003-weigh-view-recipe-rail-and-header
   - 004-weigh-view-live-readout-and-tolerance
@@ -11,8 +11,8 @@ stories:
   - 008-training-simulation-panel
 created: 2026-11-20T05:15:14Z
 started: 2026-11-23T05:53:53Z
-completed: null
-current_stage: test
+completed: 2026-11-23T06:40:48Z
+current_stage: null
 stages_completed:
   - name: plan
     completed: 2026-11-23T05:58:40Z
@@ -20,20 +20,26 @@ stages_completed:
   - name: implement
     completed: 2026-11-23T06:10:39Z
     artifact: implementation-walkthrough.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [002-dummy-integrations, 004-device-integration, 008-batch-recipe-management, 009-weighing-station, 010-weighing-station]
-enables_bolts: [013-assisted-weighing-station-ui, 017-assisted-weighing-station-ui]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-23T06:40:48Z
+    artifact: test-walkthrough.md
+requires_bolts:
+  - 002-dummy-integrations
+  - 004-device-integration
+  - 008-batch-recipe-management
+  - 009-weighing-station
+  - 010-weighing-station
+enables_bolts:
+  - 013-assisted-weighing-station-ui
+  - 017-assisted-weighing-station-ui
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 3
-workbook_step: "STEP 20"
+workbook_step: STEP 20
 ---
 
 # Bolt: 011-assisted-weighing-station-ui
@@ -62,7 +68,7 @@ View 2 · Weigh: rail, header, scan step, live readout, tolerance band, actions,
 
 - [x] **1. Plan**: ✅ Complete → implementation-plan.md
 - [x] **2. Implement**: ✅ Complete → source code + implementation-walkthrough.md
-- [ ] **3. Test**: ⏳ Awaiting approval → tests + test-walkthrough.md
+- [x] **3. Test**: ✅ Complete → tests + test-walkthrough.md
 
 ## Expected Outcome
 
