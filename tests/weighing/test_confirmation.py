@@ -176,7 +176,7 @@ class ConfirmRefusalTests(ConfirmTestCase):
     """Story 006 AC 2: any precondition not met → refused, nothing saved."""
 
     def test_93_4_and_94_6_are_refused_out_of_tolerance(self):
-        """Story 005 AC 1 / FR-13b on the server."""
+        """Story 005 AC 1 / FR-13b: the server refuses 93.4 g and 94.6 g at confirm."""
         self.ready(YELLOW, "93.4")
         with self.assertLogs(LOGGER, "INFO") as logs:
             refused = self.assert_refused(RefusalReason.OUT_OF_TOLERANCE)

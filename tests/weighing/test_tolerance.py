@@ -32,7 +32,7 @@ def judge(net, band=YELLOW, unit=None):
 
 class InclusiveToleranceTests(SimpleTestCase):
     def test_the_five_boundary_weights(self):
-        """Story 005 AC 1 (workbook STEP 22): only 93.5 / 94.0 / 94.5 confirm."""
+        """Story 005 AC 1: 93.4 / 94.6 g cannot confirm; 93.5 / 94.0 / 94.5 g can."""
         expected = {
             "93.4": (Zone.NEAR, False),
             "93.5": (Zone.WITHIN, True),
