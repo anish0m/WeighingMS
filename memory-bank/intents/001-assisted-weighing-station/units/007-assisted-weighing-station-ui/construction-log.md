@@ -30,7 +30,7 @@ last_updated: 2026-11-23T07:04:51Z
 |---------|---------|--------|---------|
 | 007-assisted-weighing-station-ui | 001, 002 | ✅ completed | - |
 | 011-assisted-weighing-station-ui | 003, 004, 005, 008 | ✅ completed | - |
-| 013-assisted-weighing-station-ui | 006 | planned | - |
+| 013-assisted-weighing-station-ui | 006 | in-progress | plan |
 | 017-assisted-weighing-station-ui | 007, 009 | planned | - |
 
 ## Execution History
@@ -46,6 +46,7 @@ last_updated: 2026-11-23T07:04:51Z
 | 2026-11-23T06:10:39Z | 011-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; View 2 · Weigh with rail, header, scan step, readout, bar, F1/F2/F4, disabled Supervisor override; TRAINING ONLY panel; server bar percentages; E2E database reset; Django 430/430, Playwright 19/19) |
 | 2026-11-23T06:40:48Z | 011-assisted-weighing-station-ui | completed | All 3 stages done (APPROVE TESTS); Django 449/449, Playwright 50/50; stories 003, 004, 005, 008 complete; Test stage fixed 3 UI bugs (hidden rail/status text, scans lost while busy, stale screen after confirm); unit stays open for bolts 013, 017 |
 | 2026-11-23T07:04:51Z | 011-assisted-weighing-station-ui | post-completion fix | APPROVE FIX: status line shows the server's material reason (e.g. "Scan the dyestuff first") instead of "PRESS OK TO CONFIRM" while OK is disabled; amber scan box; Django 449/449, Playwright 50/50 |
+| 2026-11-23T09:32:27Z | 013-assisted-weighing-station-ui | started | Stage 1: Plan (STEP 24 rule: surplus panel from the server, Supervisor override disabled; carried-over training-panel race fix) |
 
 ## Execution Summary
 
@@ -54,7 +55,7 @@ last_updated: 2026-11-23T07:04:51Z
 | Original bolts planned | 4 |
 | Current bolt count | 4 |
 | Bolts completed | 2 |
-| Bolts in progress | 0 |
+| Bolts in progress | 1 |
 | Bolts remaining | 2 |
 | Replanning events | 0 |
 
