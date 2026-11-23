@@ -2,7 +2,7 @@
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:02:10Z
-last_updated: 2026-11-23T05:47:57Z
+last_updated: 2026-11-23T10:22:15Z
 ---
 
 # Construction Log: weighing-station
@@ -33,7 +33,7 @@ last_updated: 2026-11-23T05:47:57Z
 | 009-weighing-station | 002, 004, 005 | ✅ completed | - |
 | 010-weighing-station | 003, 006, 008, 010 | ✅ completed | - |
 | 012-weighing-station | 007 | ✅ completed | - |
-| 015-weighing-station | 009, 011 | planned | - |
+| 015-weighing-station | 009, 011 | ⏳ in-progress | - |
 
 ## Execution History
 
@@ -63,6 +63,7 @@ last_updated: 2026-11-23T05:47:57Z
 | 2026-11-23T08:57:03Z | 012-weighing-station | stage-complete | ADR Analysis → Implement (APPROVE ADR; ADR-012 training overshoot rule fixed in code, no recalculation / override, discard on the attempt; accepted and indexed) |
 | 2026-11-23T09:01:19Z | 012-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `overshoot.py`, discard on ComponentAttempt + migration 0005, quit re-read, evaluation `overshoot` / `surplusPercent`, quit `ended`, refusal detail surplus; surplus % computed in `overshoot.surplus_of` to avoid a circular import) |
 | 2026-11-23T09:29:26Z | 012-weighing-station | completed | All 5 stages done (APPROVE TESTS); 475/475 Django tests (26 new), Playwright 49/50 (existing training-panel toggle race from bolt 011, fix assigned to bolt 013); story 007 complete; unit stays open for bolt 015 |
+| 2026-11-23T10:22:15Z | 015-weighing-station | started | Stage 1: Domain Model |
 
 ## Execution Summary
 
@@ -71,7 +72,7 @@ last_updated: 2026-11-23T05:47:57Z
 | Original bolts planned | 5 |
 | Current bolt count | 5 |
 | Bolts completed | 4 |
-| Bolts in progress | 0 |
+| Bolts in progress | 1 |
 | Bolts remaining | 1 |
 | Replanning events | 0 |
 
