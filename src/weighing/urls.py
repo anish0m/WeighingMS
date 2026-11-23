@@ -1,6 +1,6 @@
 """WeighingMS station API: identity, sessions, dyestuff checks, weighing rules,
-confirmation, progression and OrgaTEX write-back (ADR-002, -005, -006, -008,
--010, -011)."""
+confirmation, progression, completion, batch history and OrgaTEX write-back
+(ADR-002, -005, -006, -008, -010, -011, -013, -014)."""
 
 from django.urls import path
 
@@ -63,5 +63,15 @@ urlpatterns = [
         "sessions/<int:session_id>/write-back/result",
         views.session_write_back_result,
         name="session-write-back-result",
+    ),
+    path(
+        "sessions/<int:session_id>/summary",
+        views.session_summary,
+        name="session-summary",
+    ),
+    path(
+        "batch-history/<str:batch_id>",
+        views.batch_history,
+        name="batch-history",
     ),
 ]

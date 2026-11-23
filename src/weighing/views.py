@@ -14,15 +14,22 @@ from django.views.decorators.http import require_GET, require_http_methods
 from batches.material import format_quantity
 from orgatex.models import WriteBack
 from weighing import (
+    completion,
     confirmation,
     consumption,
+    history,
     identity,
     overshoot,
     progression,
     rules,
     services,
 )
-from weighing.models import IdentityCheck, WeighingRecord, WeighingSession
+from weighing.models import (
+    IdentityCheck,
+    SessionState,
+    WeighingRecord,
+    WeighingSession,
+)
 from weighing.services import OperatorRef, RefusalReason, WeighingRefused
 from weighing.tolerance import UNITS, WeightEvaluation, format_amount, format_weight
 from weighingms.api import InvalidJson, json_error, read_json_object
@@ -261,10 +268,59 @@ def component_confirm(request, session_id, sequence):
         )
     except WeighingRefused as refused:
         return _refusal(refused)
+    body = {"record": _record_json(record), "progress": _progress_json(state)}
+    if state.session.state == SessionState.COMPLETE:
+        # The last component completed the batch (bolt 015, ADR-013).
+        body["completion"] = _completion_json(state.session.pk)
+    return JsonResponse(body, status=201)
+
+
+@require_GET
+def session_summary(request, session_id):
+    """The completed batch's summary and write-back status (story 009)."""
+    try:
+        return JsonResponse(_completion_json(session_id))
+    except WeighingRefused as refused:
+        return _refusal(refused)
+
+
+@require_GET
+def batch_history(request, batch_id):
+    """Every weighing record of the batch, from all its sessions (ADR-014)."""
     return JsonResponse(
-        {"record": _record_json(record), "progress": _progress_json(state)},
-        status=201,
+        {
+            "batchId": batch_id,
+            "records": [_record_json(r) for r in history.records(batch_id)],
+        }
     )
+
+
+def _completion_json(session_id) -> dict:
+    result = completion.summary(session_id)
+    record = consumption.status(session_id)
+    return {
+        "summary": _summary_json(result),
+        "writeBack": record and _write_back_json(record),
+    }
+
+
+def _summary_json(result: completion.BatchSummary) -> dict:
+    return {
+        "sessionId": result.session.pk,
+        "batchId": result.session.batch_id,
+        "weighed": result.weighed,
+        "total": result.total,
+        "componentsText": result.components_text,
+        "allWithin": result.all_within,
+        "allWithinText": result.all_within_text,
+        "totalDispensedKg": f"{result.total_dispensed_kg:f}",
+        "totalDispensedText": result.total_text,
+        "elapsedSeconds": result.elapsed_seconds,
+        "elapsedText": result.elapsed_text,
+        "operator": _operator_json(result.operator),
+        "startedAt": result.started_at.isoformat(),
+        "completedAt": result.completed_at.isoformat(),
+    }
 
 
 @require_http_methods(["GET", "POST"])

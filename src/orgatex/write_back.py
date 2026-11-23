@@ -55,6 +55,24 @@ def status_of(session_id: int) -> WriteBack | None:
     return WriteBack.objects.filter(session_id=session_id).first()
 
 
+def open_write_back(batch_id: str, session_id: int, operator_id: str) -> WriteBack:
+    """Batch completion (ADR-013): the write-back is due, nothing posted yet.
+
+    Runs inside the caller's transaction and does no OrgaTEX I/O. Creates the
+    row as ``pending`` with 0 attempts; an existing row is returned unchanged.
+    The browser's first post (``start``) then counts as attempt 1.
+    """
+    write_back, _ = WriteBack.objects.get_or_create(
+        session_id=session_id,
+        defaults={
+            "batch_id": batch_id,
+            "idempotency_key": idempotency_key(batch_id, session_id),
+            "operator_id": operator_id,
+        },
+    )
+    return write_back
+
+
 def start(batch_id: str, session_id: int, operator_id: str) -> WriteBack:
     """Start or retry: same row, same key; a CONFIRMED write-back stays confirmed."""
     key = idempotency_key(batch_id, session_id)

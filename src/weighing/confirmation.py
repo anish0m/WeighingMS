@@ -5,6 +5,7 @@ scale and evaluates it with bolt 009's rules (ADR-008); the evaluated net is
 the recorded actual weight (ADR-009). The material gate is bolt 008's
 ``check_material_ready`` (ADR-007). Scale I/O happens before the
 transaction; the transaction re-checks the state under a lock (ADR-011).
+Saving the last record also completes the batch (bolt 015, ADR-013).
 """
 
 import logging
@@ -12,7 +13,7 @@ import logging
 from django.db import transaction
 
 from devices import scale
-from weighing import progression
+from weighing import completion, progression
 from weighing.identity import check_material_ready, load_component, load_session
 from weighing.models import (
     AttemptEnd,
@@ -99,6 +100,10 @@ def _confirm(session_id, sequence, operator_id):
         )
         progression.end_attempt(attempt, AttemptEnd.CONFIRMED, operator_id)
         next_attempt = progression.start_next(session, operator_id)
+        if next_attempt is None:
+            # The last component: the batch completes in this transaction and
+            # its OrgaTEX write-back becomes due (ADR-013).
+            completion.complete(session, record.recorded_at, operator_id)
     logger.info(
         "WeighingConfirmed record=%s session=%s batch=%s sequence=%s actual=%s %s"
         " scale=%s operator=%s",
