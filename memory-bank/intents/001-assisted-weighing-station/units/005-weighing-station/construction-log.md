@@ -2,7 +2,7 @@
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:02:10Z
-last_updated: 2026-11-23T10:22:15Z
+last_updated: 2026-11-23T10:24:09Z
 ---
 
 # Construction Log: weighing-station
@@ -64,6 +64,7 @@ last_updated: 2026-11-23T10:22:15Z
 | 2026-11-23T09:01:19Z | 012-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `overshoot.py`, discard on ComponentAttempt + migration 0005, quit re-read, evaluation `overshoot` / `surplusPercent`, quit `ended`, refusal detail surplus; surplus % computed in `overshoot.surplus_of` to avoid a circular import) |
 | 2026-11-23T09:29:26Z | 012-weighing-station | completed | All 5 stages done (APPROVE TESTS); 475/475 Django tests (26 new), Playwright 49/50 (existing training-panel toggle race from bolt 011, fix assigned to bolt 013); story 007 complete; unit stays open for bolt 015 |
 | 2026-11-23T10:22:15Z | 015-weighing-station | started | Stage 1: Domain Model |
+| 2026-11-23T10:24:09Z | 015-weighing-station | stage-complete | Domain Model → Technical Design (APPROVE MODEL; completion in the last confirm's transaction, pending WriteBack created with it, elapsed session start → completion "M min S s", history = all records of the batch, API only) |
 
 ## Execution Summary
 
