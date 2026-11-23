@@ -3,28 +3,28 @@ id: 013-assisted-weighing-station-ui
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 006-weigh-view-surplus-panel-and-override
-created: 2026-11-20T05:15:14Z
-started: 2026-11-23T09:32:27Z
-completed: null
-current_stage: test
-stages_completed: [plan, implement]
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [011-assisted-weighing-station-ui, 012-weighing-station]
+created: 2026-11-20T05:15:14.000Z
+started: 2026-11-23T09:32:27.000Z
+completed: "2026-11-23T09:45:13Z"
+current_stage: null
+stages_completed:
+  - plan
+  - implement
+requires_bolts:
+  - 011-assisted-weighing-station-ui
+  - 012-weighing-station
 enables_bolts: []
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 1
   avg_uncertainty: 2
   max_dependencies: 1
   testing_scope: 3
-workbook_step: "STEP 24"
+workbook_step: STEP 24
 ---
 
 # Bolt: 013-assisted-weighing-station-ui
@@ -50,7 +50,7 @@ Surplus panel, overshoot status line and supervisor override form on View 2.
 
 - [x] **1. Plan**: Complete → implementation-plan.md
 - [x] **2. Implement**: Complete → source code + implementation-walkthrough.md
-- [ ] **3. Test**: Pending → tests + test-walkthrough.md
+- [x] **3. Test**: Complete → tests + test-walkthrough.md
 
 ## Expected Outcome
 

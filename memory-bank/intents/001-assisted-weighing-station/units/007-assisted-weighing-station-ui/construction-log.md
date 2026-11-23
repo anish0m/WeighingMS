@@ -30,7 +30,7 @@ last_updated: 2026-11-23T07:04:51Z
 |---------|---------|--------|---------|
 | 007-assisted-weighing-station-ui | 001, 002 | ✅ completed | - |
 | 011-assisted-weighing-station-ui | 003, 004, 005, 008 | ✅ completed | - |
-| 013-assisted-weighing-station-ui | 006 | in-progress | test |
+| 013-assisted-weighing-station-ui | 006 | ✅ completed | - |
 | 017-assisted-weighing-station-ui | 007, 009 | planned | - |
 
 ## Execution History
@@ -49,6 +49,7 @@ last_updated: 2026-11-23T07:04:51Z
 | 2026-11-23T09:32:27Z | 013-assisted-weighing-station-ui | started | Stage 1: Plan (STEP 24 rule: surplus panel from the server, Supervisor override disabled; carried-over training-panel race fix) |
 | 2026-11-23T09:33:57Z | 013-assisted-weighing-station-ui | stage-complete | Plan → Implement (APPROVE PLAN; recommended decisions: override reason visible in the panel and as the button title, quit shows the server's `ended.message`, race fix takes the state from the checkbox) |
 | 2026-11-23T09:39:38Z | 013-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; surplus panel from `evaluation.overshoot`, override title from the server, quit `ended.message` in the notice, training-panel toggle takes the checkbox state; Django 475/475, Playwright 50/50) |
+| 2026-11-23T09:45:13Z | 013-assisted-weighing-station-ui | completed | All 3 stages done (APPROVE TESTS); Django 475/475, Playwright 56/56 (6 new in `overshoot.spec.js`); story 006 complete (AC 3 not applicable under the STEP 24 rule); Test stage fix: surplus panel only on a tared attempt; unit stays open for bolt 017 |
 
 ## Execution Summary
 
@@ -56,9 +57,9 @@ last_updated: 2026-11-23T07:04:51Z
 |--------|-------|
 | Original bolts planned | 4 |
 | Current bolt count | 4 |
-| Bolts completed | 2 |
-| Bolts in progress | 1 |
-| Bolts remaining | 2 |
+| Bolts completed | 3 |
+| Bolts in progress | 0 |
+| Bolts remaining | 1 |
 | Replanning events | 0 |
 
 ## Notes
@@ -67,3 +68,4 @@ last_updated: 2026-11-23T07:04:51Z
 - The UI holds no business rules and no scenario data (FR-21): everything is fetched from the APIs.
 - 2026-11-20T09:57:01Z: bolt 007 complete. Terminal at `/` (app `station`), Alpine.js 3.17.5 vendored, Playwright set up on an isolated server (port 8001, `playwright/.cache/e2e.sqlite3`). Later UI bolts reuse `playwright/helpers.js`.
 - 2026-11-23T06:40:48Z: bolt 011 complete. View 2 · Weigh reproduces the prototype from the station API (server bar percentages, zone and OK from the evaluation endpoint); a TRAINING ONLY panel outside the device drives the Dummies. Playwright tests reset the E2E database to its seeded copy (`helpers.resetDatabase`) because an open session resumes View 2. Supervisor override is shown disabled until bolt 013 (STEP 24).
+- 2026-11-23T09:45:13Z: bolt 013 complete. View 2 shows the STEP 24 rule from bolt 012's server fields: surplus panel (heading, recovery, override reason; no proposal), Supervisor override disabled with the server's reason as title, quit `ended.message` in the notice. The training-panel failure switch takes the checkbox state (race found in bolt 012's regression run).
