@@ -175,13 +175,23 @@
             </div>
           </template>
 
+          {% comment %}
+            Overshoot (STEP 24 rule, OQ-4, ADR-012): the server's surplus,
+            recovery action and override reason. No recalculation proposal.
+          {% endcomment %}
+          <div class="surplus" data-testid="surplus-panel" x-show="activeComponent() && evaluation && evaluation.overshoot && !scaleFault">
+            <span class="h" data-testid="surplus-heading" x-text="evaluation && evaluation.overshoot ? evaluation.overshoot.heading : ''"></span>
+            <span class="sm" data-testid="surplus-recovery" x-text="evaluation && evaluation.overshoot ? evaluation.overshoot.recovery : ''"></span>
+            <span class="sm" data-testid="surplus-override" x-text="evaluation && evaluation.overshoot ? evaluation.overshoot.overrideReason : ''"></span>
+          </div>
+
           <div class="actions">
             <button type="button" class="key ok" data-testid="btn-ok" :disabled="!canConfirm()" @click="confirmWeighing()">OK · Confirm<span class="fn">F1</span></button>
             <button type="button" class="key" data-testid="btn-retare" :disabled="!activeComponent() || weighBusy" @click="retare()">Re-tare<span class="fn">F2</span></button>
             <button type="button" class="key ghost" data-testid="btn-quit" :disabled="!activeComponent() || weighBusy" @click="quitComponent()">Quit<span class="fn">F4</span></button>
-            {# Behaviour decided in STEP 24 (bolt 013); shown disabled until then. #}
+            {# Not available under the STEP 24 training rule (ADR-012); the server gives the reason. #}
             <button type="button" class="key ghost" data-testid="btn-override" style="margin-left:auto" disabled
-                    title="Supervisor override is decided in STEP 24">Supervisor override</button>
+                    :title="evaluation && evaluation.overshoot ? evaluation.overshoot.overrideReason : null">Supervisor override</button>
           </div>
         </section>
       </div>
@@ -239,7 +249,7 @@
     <span class="ctl-label">Failures</span>
     <template x-for="target in targets()" :key="target">
       <label class="toggle" :data-target="target">
-        <input type="checkbox" :checked="isFailing(target)" @change="toggle(target)">
+        <input type="checkbox" :checked="isFailing(target)" @change="toggle(target, $event.target.checked)">
         <span x-text="switchText(target)"></span>
       </label>
     </template>

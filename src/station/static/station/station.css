@@ -273,6 +273,14 @@ table.q tr.sel td { background: var(--hmi-panel-2); }
 .status-line[data-zone="near"]   { color: var(--warn); border-color: rgba(240,167,38,.45); }
 .status-line[data-zone="fault"]  { color: var(--over); border-color: rgba(232,80,58,.45); }
 .status-line[data-zone="blocked"] { color: var(--warn); border-color: rgba(240,167,38,.45); }
+/* Surplus panel (prototype .surplus): shown only while the server says over. */
+.surplus {
+  display: flex; flex-direction: column; gap: 9px;
+  border: 1px solid rgba(232,80,58,.45); border-radius: 3px;
+  background: rgba(232,80,58,.07); padding: 13px 15px;
+}
+.surplus .h { font-size: 13px; font-weight: 650; color: var(--over); letter-spacing: .02em; }
+.surplus .sm { font-size: 12px; color: var(--hmi-muted); }
 /* Scan dyestuff step on View 2: the open precondition stands out (OQ-8). */
 .weigh .scan-prompt { border: 1px solid var(--warn); }
 @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }

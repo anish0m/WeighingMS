@@ -286,6 +286,10 @@
           const progress = await call();
           this.evaluation = null;
           await this.applyProgress(progress);
+          // Quit says how the attempt ended, e.g. "Overshoot discarded (96.4 g). …"
+          if (progress.ended) {
+            this.weighMessage = progress.ended.message;
+          }
         } catch (failure) {
           this.weighFailure(failure);
         } finally {

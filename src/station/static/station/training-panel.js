@@ -89,8 +89,10 @@
         return target.toUpperCase() + ' · ' + this.failureMode(target).toUpperCase();
       },
 
-      async toggle(target) {
-        const mode = this.isFailing(target) ? 'ok' : this.failureMode(target);
+      // The checkbox says what the trainer wants; this.modes may still hold
+      // the previous answer while a request is in flight.
+      async toggle(target, checked) {
+        const mode = checked ? this.failureMode(target) : 'ok';
         await this.attempt(async () => {
           this.modes = await api.training.setMode(target, mode);
         });
