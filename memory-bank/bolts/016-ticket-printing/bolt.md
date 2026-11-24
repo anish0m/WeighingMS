@@ -3,35 +3,38 @@ id: 016-ticket-printing
 unit: 006-ticket-printing
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 001-print-weighing-ticket
   - 002-reprint-and-print-failure
-created: 2026-11-20T05:15:14Z
-started: 2026-11-24T03:42:20Z
-completed: null
-current_stage: test
+created: 2026-11-20T05:15:14.000Z
+started: 2026-11-24T03:42:20.000Z
+completed: "2026-11-24T04:07:55Z"
+current_stage: null
 stages_completed:
   - name: plan
-    completed: 2026-11-24T03:43:59Z
+    completed: 2026-11-24T03:43:59.000Z
     artifact: implementation-plan.md
   - name: implement
-    completed: 2026-11-24T03:48:13Z
+    completed: 2026-11-24T03:48:13.000Z
     artifact: implementation-walkthrough.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [002-dummy-integrations, 004-device-integration, 015-weighing-station]
-enables_bolts: [017-assisted-weighing-station-ui]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-24T04:07:55Z
+    artifact: test-walkthrough.md
+requires_bolts:
+  - 002-dummy-integrations
+  - 004-device-integration
+  - 015-weighing-station
+enables_bolts:
+  - 017-assisted-weighing-station-ui
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 1
   avg_uncertainty: 2
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 26"
+workbook_step: STEP 26
 ---
 
 # Bolt: 016-ticket-printing
@@ -58,7 +61,7 @@ Weighing ticket content, print, preview, reprint and printer failure.
 
 - [x] **1. Plan**: Complete → implementation-plan.md
 - [x] **2. Implement**: Complete → source code + implementation-walkthrough.md
-- [ ] **3. Test**: Pending → tests + test-walkthrough.md
+- [x] **3. Test**: Complete → tests + test-walkthrough.md
 
 ## Expected Outcome
 

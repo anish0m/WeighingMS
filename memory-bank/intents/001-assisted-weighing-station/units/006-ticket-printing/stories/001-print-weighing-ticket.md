@@ -2,11 +2,11 @@
 id: 001-print-weighing-ticket
 unit: 006-ticket-printing
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
-created: 2026-11-20T04:51:01Z
+created: 2026-11-20T04:51:01.000Z
 assigned_bolt: 016-ticket-printing
-implemented: false
+implemented: true
 ---
 
 # Story: 001-print-weighing-ticket
