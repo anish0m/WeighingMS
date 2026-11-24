@@ -2,7 +2,7 @@
 unit: 006-ticket-printing
 intent: 001-assisted-weighing-station
 created: 2026-11-24T03:42:20Z
-last_updated: 2026-11-24T03:43:59Z
+last_updated: 2026-11-24T03:48:13Z
 ---
 
 # Construction Log: ticket-printing
@@ -33,6 +33,7 @@ last_updated: 2026-11-24T03:43:59Z
 |------|------|-------|---------|
 | 2026-11-24T03:42:20Z | 016-ticket-printing | started | Stage 1: Plan |
 | 2026-11-24T03:43:59Z | 016-ticket-printing | stage-complete | Plan → Implement (APPROVE PLAN; server verifies printed via read-only `devices/printer.py`, stored component names, Code 39 text barcode, completion time as ticket date) |
+| 2026-11-24T03:48:13Z | 016-ticket-printing | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `tickets` app, `PrintJob`, read-only `devices/printer.py`, `PRINTER_BASE_URL`) |
 
 ## Execution Summary
 

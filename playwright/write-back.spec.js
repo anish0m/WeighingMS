@@ -6,7 +6,7 @@
 // confirmation completes the batch and opens the write-back (pending, 0
 // attempts), so the first writeBack is attempt 1.
 const { test, expect } = require('@playwright/test');
-const { resetDatabase, resetModes, setMode, openB24187 } = require('./helpers');
+const { resetDatabase, resetModes, setMode, weighAllB24187 } = require('./helpers');
 
 test.beforeEach(async ({ request }) => {
   resetDatabase();
@@ -16,33 +16,6 @@ test.beforeEach(async ({ request }) => {
 test.afterEach(async ({ request }) => {
   await resetModes(request);
 });
-
-async function scanExpected(page) {
-  const code = (await page.getByTestId('component-meta').innerText()).split(' · ')[0];
-  await expect(page.getByTestId('sim-scan-code')).toHaveValue(code);
-  await page.getByTestId('sim-scan').click();
-  await expect(page.getByTestId('scan-step')).toBeHidden();
-}
-
-// Weighs all five components: scan, Simulate dispense, F1. Returns the
-// session id, read while the session is still current (bolt 015: a complete
-// session is no longer the current session).
-async function weighAll(page) {
-  await openB24187(page);
-  const sessionId = await page.evaluate(
-    async () => (await window.WeighingMS.station.currentSession()).sessionId,
-  );
-  for (let weighed = 1; weighed <= 5; weighed += 1) {
-    await scanExpected(page);
-    await page.getByTestId('sim-dispense').click();
-    await expect(page.getByTestId('btn-ok')).toBeEnabled();
-    await page.keyboard.press('F1');
-    await expect(page.getByTestId('rail-progress')).toHaveText(
-      `${weighed} of 5 components weighed`,
-    );
-  }
-  return sessionId;
-}
 
 function runWriteBack(page, sessionId) {
   return page.evaluate((id) => window.WeighingMS.station.writeBack(id), sessionId);
@@ -54,7 +27,7 @@ async function consumptions(request) {
 }
 
 test('writeBack posts the consumption once and is CONFIRMED', async ({ page, request }) => {
-  const sessionId = await weighAll(page);
+  const sessionId = await weighAllB24187(page);
 
   const posted = page.waitForRequest(
     (r) => r.method() === 'POST' && r.url().endsWith('/api/batches/B-24187/consumption'),
@@ -88,7 +61,7 @@ test('OrgaTEX unavailable: not written, then retry with the same key confirms', 
   page,
   request,
 }) => {
-  const sessionId = await weighAll(page);
+  const sessionId = await weighAllB24187(page);
   await setMode(request, 'orgatex', 'unavailable');
 
   const failed = await runWriteBack(page, sessionId);

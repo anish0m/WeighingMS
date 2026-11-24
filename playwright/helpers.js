@@ -58,6 +58,36 @@ async function openB24187(page) {
   await expect(page.locator('.comp[data-state="active"]')).toHaveCount(1);
 }
 
+// Simulate scan of the prefilled (expected) code, once the training panel has
+// followed the active component.
+async function scanExpected(page) {
+  const code = (await page.getByTestId('component-meta').innerText()).split(' · ')[0];
+  await expect(page.getByTestId('sim-scan-code')).toHaveValue(code);
+  await page.getByTestId('sim-scan').click();
+  await expect(page.getByTestId('scan-step')).toBeHidden();
+}
+
+// From a clean database: opens B-24187 and weighs all five components through
+// the terminal UI (scan, Simulate dispense, F1). Returns the session id, read
+// while the session is still current: since bolt 015 the 5th confirmation
+// completes the batch, and a complete session is no longer current.
+async function weighAllB24187(page) {
+  await openB24187(page);
+  const sessionId = await page.evaluate(
+    async () => (await window.WeighingMS.station.currentSession()).sessionId,
+  );
+  for (let weighed = 1; weighed <= 5; weighed += 1) {
+    await scanExpected(page);
+    await page.getByTestId('sim-dispense').click();
+    await expect(page.getByTestId('btn-ok')).toBeEnabled();
+    await page.keyboard.press('F1');
+    await expect(page.getByTestId('rail-progress')).toHaveText(
+      `${weighed} of 5 components weighed`,
+    );
+  }
+  return sessionId;
+}
+
 function statusOf(page, device) {
   return page.locator(`[data-testid="status-bar"] [data-device="${device}"]`);
 }
@@ -70,5 +100,7 @@ module.exports = {
   setWeight,
   openAsOperator,
   openB24187,
+  scanExpected,
+  weighAllB24187,
   statusOf,
 };
