@@ -63,6 +63,7 @@ REFUSAL_STATUS = {
     RefusalReason.SCALE_UNAVAILABLE: 503,
     RefusalReason.BATCH_NOT_COMPLETE: 409,
     RefusalReason.WRITE_BACK_NOT_STARTED: 409,
+    RefusalReason.PRINT_JOB_NOT_FOUND: 404,
 }
 
 

@@ -68,7 +68,8 @@ PATH_OWNERS = {
     "/scales": ("devices/scale.py", "devices/static/devices/scale-client.js"),
     "/scanner": ("devices/scanner.py", "devices/static/devices/scanner-client.js"),
     "/printer": (None, "devices/static/devices/printer-client.js"),
-    "/tickets": (None, "devices/static/devices/printer-client.js"),
+    # The server only reads a printed ticket back (bolt 016); it never prints.
+    "/tickets": ("devices/printer.py", "devices/static/devices/printer-client.js"),
     # Training failure switches (story 008); the Dummies are reached only here.
     "/training/modes": (None, "station/static/station/training-client.js"),
 }

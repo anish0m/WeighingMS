@@ -87,6 +87,30 @@
     return result.writeBack;
   }
 
+  // Weighing ticket (bolt 016, FR-18): the server supplies the exact text, the
+  // printer client prints it, and the server decides "printed" by reading the
+  // printer back. Resolves to the server's print job.
+  async function printTicket(sessionId) {
+    const path = sessionPath(sessionId) + '/ticket/prints';
+    const started = await request('POST', path, {});
+    let report;
+    try {
+      const ticket = await window.WeighingMS.printer.printTicket(
+        started.content,
+        started.batchId,
+      );
+      report = { printed: true, ticketId: ticket.ticketId, reason: '' };
+    } catch (error) {
+      report = { printed: false, ticketId: null, reason: error.message || '' };
+    }
+    const result = await request(
+      'POST',
+      path + '/' + encodeURIComponent(started.job.jobId) + '/result',
+      report,
+    );
+    return result.job;
+  }
+
   window.WeighingMS = window.WeighingMS || {};
   window.WeighingMS.station = {
     StationError,
@@ -124,5 +148,8 @@
     writeBackStatus: (sessionId) =>
       request('GET', sessionPath(sessionId) + '/write-back').then((d) => d.writeBack),
     writeBack,
+    // Weighing ticket (bolt 016)
+    ticketPreview: (sessionId) => request('GET', sessionPath(sessionId) + '/ticket'),
+    printTicket,
   };
 })();

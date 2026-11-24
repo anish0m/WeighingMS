@@ -42,6 +42,7 @@ module.exports = defineConfig({
       ORGATEX_BASE_URL: `${BASE_URL}/api`,
       SCALE_BASE_URL: `${BASE_URL}/api`,
       SCANNER_BASE_URL: `${BASE_URL}/api`,
+      PRINTER_BASE_URL: `${BASE_URL}/api`,
     },
   },
 });

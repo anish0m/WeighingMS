@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "devices",
     "batches",
     "weighing",
+    "tickets",
     "station",
     "dummy_orgatex",
     "dummy_scale",
@@ -85,6 +86,7 @@ ORGATEX_TIMEOUT_SECONDS = float(os.environ.get("ORGATEX_TIMEOUT_SECONDS", "5"))
 # detecting a disconnected scale (IR-13).
 SCALE_BASE_URL = os.environ.get("SCALE_BASE_URL", "http://localhost:8000/api")
 SCANNER_BASE_URL = os.environ.get("SCANNER_BASE_URL", "http://localhost:8000/api")
+PRINTER_BASE_URL = os.environ.get("PRINTER_BASE_URL", "http://localhost:8000/api")
 DEVICE_TIMEOUT_SECONDS = float(os.environ.get("DEVICE_TIMEOUT_SECONDS", "2"))
 
 # Operator terminal (NFR-13): the station name shown in the header.
