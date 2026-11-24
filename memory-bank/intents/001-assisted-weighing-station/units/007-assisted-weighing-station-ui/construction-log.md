@@ -2,7 +2,7 @@
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:38:35Z
-last_updated: 2026-11-24T04:21:02Z
+last_updated: 2026-11-24T04:33:09Z
 ---
 
 # Construction Log: assisted-weighing-station-ui
@@ -31,7 +31,7 @@ last_updated: 2026-11-24T04:21:02Z
 | 007-assisted-weighing-station-ui | 001, 002 | ✅ completed | - |
 | 011-assisted-weighing-station-ui | 003, 004, 005, 008 | ✅ completed | - |
 | 013-assisted-weighing-station-ui | 006 | ✅ completed | - |
-| 017-assisted-weighing-station-ui | 007, 009 | ⏳ in-progress | - |
+| 017-assisted-weighing-station-ui | 007, 009 | ✅ completed | - |
 
 ## Execution History
 
@@ -53,6 +53,7 @@ last_updated: 2026-11-24T04:21:02Z
 | 2026-11-24T04:09:09Z | 017-assisted-weighing-station-ui | started | Stage 1: Plan |
 | 2026-11-24T04:11:07Z | 017-assisted-weighing-station-ui | stage-complete | Plan → Implement (APPROVE PLAN; write-back starts when View 3 opens, View 3 resumes after reload until Next batch, preview = exact ticket text, seed-change proof in the E2E database) |
 | 2026-11-24T04:21:02Z | 017-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `done.js` View 3, auto write-back, resume via sessionStorage, F1/F3, scan extended; 5 Playwright tests to update for View 3 replacing View 2 at 5 of 5) |
+| 2026-11-24T04:33:09Z | 017-assisted-weighing-station-ui | completed | All 3 stages done (APPROVE TESTS); Django 584/584, Playwright 68/68 (8 new); stories 007, 009 complete; Test stage fix: View 3 resume reads the batch for crumb and machine; unit 007 complete |
 
 ## Execution Summary
 
@@ -60,9 +61,9 @@ last_updated: 2026-11-24T04:21:02Z
 |--------|-------|
 | Original bolts planned | 4 |
 | Current bolt count | 4 |
-| Bolts completed | 3 |
-| Bolts in progress | 1 |
-| Bolts remaining | 1 |
+| Bolts completed | 4 |
+| Bolts in progress | 0 |
+| Bolts remaining | 0 |
 | Replanning events | 0 |
 
 ## Notes

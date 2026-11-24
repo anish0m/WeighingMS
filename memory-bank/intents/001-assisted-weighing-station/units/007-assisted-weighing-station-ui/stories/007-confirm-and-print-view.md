@@ -2,11 +2,11 @@
 id: 007-confirm-and-print-view
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
-created: 2026-11-20T04:51:01Z
+created: 2026-11-20T04:51:01.000Z
 assigned_bolt: 017-assisted-weighing-station-ui
-implemented: false
+implemented: true
 ---
 
 # Story: 007-confirm-and-print-view

@@ -2,11 +2,11 @@
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 phase: inception
-status: ready
+status: complete
 unit_type: frontend
 default_bolt_type: simple-construction-bolt
-created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:51:01Z
+created: 2026-11-20T04:22:15.000Z
+updated: 2026-11-20T04:51:01.000Z
 ---
 
 # Unit Brief: Operator Terminal UI

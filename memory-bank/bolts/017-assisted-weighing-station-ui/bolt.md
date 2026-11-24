@@ -3,35 +3,39 @@ id: 017-assisted-weighing-station-ui
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 007-confirm-and-print-view
   - 009-no-hard-coded-scenario-data
-created: 2026-11-20T05:15:14Z
-started: 2026-11-24T04:09:09Z
-completed: null
-current_stage: test
+created: 2026-11-20T05:15:14.000Z
+started: 2026-11-24T04:09:09.000Z
+completed: "2026-11-24T04:33:09Z"
+current_stage: null
 stages_completed:
   - name: plan
-    completed: 2026-11-24T04:11:07Z
+    completed: 2026-11-24T04:11:07.000Z
     artifact: implementation-plan.md
   - name: implement
-    completed: 2026-11-24T04:21:02Z
+    completed: 2026-11-24T04:21:02.000Z
     artifact: implementation-walkthrough.md
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [007-assisted-weighing-station-ui, 011-assisted-weighing-station-ui, 014-orgatex-integration, 015-weighing-station, 016-ticket-printing]
+  - name: test
+    completed: 2026-11-24T04:33:09Z
+    artifact: test-walkthrough.md
+requires_bolts:
+  - 007-assisted-weighing-station-ui
+  - 011-assisted-weighing-station-ui
+  - 014-orgatex-integration
+  - 015-weighing-station
+  - 016-ticket-printing
 enables_bolts: []
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 3
-workbook_step: "STEP 26"
+workbook_step: STEP 26
 ---
 
 # Bolt: 017-assisted-weighing-station-ui
@@ -58,7 +62,7 @@ View 3 · Confirm & print and the proof that no scenario data is hard-coded.
 
 - [x] **1. Plan**: Complete → implementation-plan.md
 - [x] **2. Implement**: Complete → source code + implementation-walkthrough.md
-- [ ] **3. Test**: Pending → tests + test-walkthrough.md
+- [x] **3. Test**: Complete → tests + test-walkthrough.md
 
 ## Expected Outcome
 
