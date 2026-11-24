@@ -2,7 +2,7 @@
 unit: 007-assisted-weighing-station-ui
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:38:35Z
-last_updated: 2026-11-23T07:04:51Z
+last_updated: 2026-11-24T04:09:09Z
 ---
 
 # Construction Log: assisted-weighing-station-ui
@@ -31,7 +31,7 @@ last_updated: 2026-11-23T07:04:51Z
 | 007-assisted-weighing-station-ui | 001, 002 | ✅ completed | - |
 | 011-assisted-weighing-station-ui | 003, 004, 005, 008 | ✅ completed | - |
 | 013-assisted-weighing-station-ui | 006 | ✅ completed | - |
-| 017-assisted-weighing-station-ui | 007, 009 | planned | - |
+| 017-assisted-weighing-station-ui | 007, 009 | ⏳ in-progress | - |
 
 ## Execution History
 
@@ -50,6 +50,7 @@ last_updated: 2026-11-23T07:04:51Z
 | 2026-11-23T09:33:57Z | 013-assisted-weighing-station-ui | stage-complete | Plan → Implement (APPROVE PLAN; recommended decisions: override reason visible in the panel and as the button title, quit shows the server's `ended.message`, race fix takes the state from the checkbox) |
 | 2026-11-23T09:39:38Z | 013-assisted-weighing-station-ui | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; surplus panel from `evaluation.overshoot`, override title from the server, quit `ended.message` in the notice, training-panel toggle takes the checkbox state; Django 475/475, Playwright 50/50) |
 | 2026-11-23T09:45:13Z | 013-assisted-weighing-station-ui | completed | All 3 stages done (APPROVE TESTS); Django 475/475, Playwright 56/56 (6 new in `overshoot.spec.js`); story 006 complete (AC 3 not applicable under the STEP 24 rule); Test stage fix: surplus panel only on a tared attempt; unit stays open for bolt 017 |
+| 2026-11-24T04:09:09Z | 017-assisted-weighing-station-ui | started | Stage 1: Plan |
 
 ## Execution Summary
 
@@ -58,7 +59,7 @@ last_updated: 2026-11-23T07:04:51Z
 | Original bolts planned | 4 |
 | Current bolt count | 4 |
 | Bolts completed | 3 |
-| Bolts in progress | 0 |
+| Bolts in progress | 1 |
 | Bolts remaining | 1 |
 | Replanning events | 0 |
 
