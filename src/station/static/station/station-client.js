@@ -144,6 +144,8 @@
       request('POST', componentPath(sessionId, sequence, 'quit'), {}),
     confirm: (sessionId, sequence) =>
       request('POST', componentPath(sessionId, sequence, 'confirm'), {}),
+    // View 3 · Confirm & print (bolt 017): {summary, writeBack} of a completed session.
+    summary: (sessionId) => request('GET', sessionPath(sessionId) + '/summary'),
     // OrgaTEX write-back (bolt 014)
     writeBackStatus: (sessionId) =>
       request('GET', sessionPath(sessionId) + '/write-back').then((d) => d.writeBack),

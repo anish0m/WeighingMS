@@ -199,6 +199,41 @@
       </div>
     </div>
 
+    <!-- View 3: confirm & print (bolt 017). Summary, write-back status and
+         ticket text are the server's (bolts 014–016); nothing is computed. -->
+    <div class="view" id="v-done" :class="{ active: view === 'done' }">
+      <div class="done-stage" x-show="done">
+        <div class="done-msg">
+          <span class="h" data-testid="done-heading" x-text="done ? 'Batch ' + done.summary.batchId + ' weighed' : ''"></span>
+          <div class="summary" data-testid="summary">
+            <div class="r"><span class="k">Components weighed</span><span class="v" data-testid="sum-components" x-text="done && done.summary.componentsText"></span></div>
+            <div class="r"><span class="k">All within tolerance</span><span class="v" data-testid="sum-within" :class="done && done.summary.allWithin ? 'good' : 'bad'" x-text="done && done.summary.allWithinText"></span></div>
+            <div class="r"><span class="k">Total dispensed</span><span class="v" data-testid="sum-total" x-text="done && done.summary.totalDispensedText"></span></div>
+            <div class="r"><span class="k">Elapsed</span><span class="v" data-testid="sum-elapsed" x-text="done && done.summary.elapsedText"></span></div>
+            <div class="r"><span class="k">Operator</span><span class="v" data-testid="sum-operator" x-text="done && done.summary.operator.name"></span></div>
+            <div class="r"><span class="k">Written to OrgaTEX</span><span class="v" data-testid="sum-orgatex" :class="{ good: writeBackConfirmed(), bad: writeBackNotWritten() }" x-text="writeBackText()"></span></div>
+          </div>
+          <p class="done-note" data-testid="done-note" x-show="writeBackConfirmed() && batch && batch.machine">
+            Actual consumption posted against the batch. Container released for transport to <span x-text="batch && batch.machine"></span>.
+          </p>
+          <div class="notice" role="alert" data-testid="writeback-reason" x-show="writeBackNotWritten()"
+               x-text="done && done.writeBack && done.writeBack.reason ? 'Not written to OrgaTEX: ' + done.writeBack.reason : 'Not written to OrgaTEX'"></div>
+          <div class="notice" role="alert" data-testid="done-message" x-show="doneMessage" x-text="doneMessage"></div>
+          <div class="actions">
+            <button type="button" class="key ok" data-testid="btn-print" :disabled="printing || !ticket" @click="printTicket()">Print ticket<span class="fn">F1</span></button>
+            <button type="button" class="key" data-testid="btn-next" @click="nextBatch()">Next batch<span class="fn">F3</span></button>
+            <button type="button" class="key ghost" data-testid="btn-retry-writeback" x-show="writeBackNotWritten()" @click="retryWriteBack()">Retry write-back</button>
+          </div>
+        </div>
+
+        <div>
+          {# The exact text the printer receives (story 006/001 AC 2). #}
+          <pre class="ticket" data-testid="ticket-preview" x-text="ticket ? ticket.content : ''"></pre>
+          <p class="print-result" data-testid="print-result" :class="{ bad: printFailed }" x-show="printMessage" x-text="printMessage"></p>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="strip" data-testid="status-bar">

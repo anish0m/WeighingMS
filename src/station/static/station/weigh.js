@@ -9,7 +9,10 @@
 (function () {
   'use strict';
 
-  const KEY_ACTIONS = { F1: 'confirmWeighing', F2: 'retare', F4: 'quitComponent' };
+  const KEY_ACTIONS = {
+    weigh: { F1: 'confirmWeighing', F2: 'retare', F4: 'quitComponent' },
+    done: { F1: 'printTicket', F3: 'nextBatch' }, // View 3 (done.js)
+  };
 
   function weighView() {
     const api = window.WeighingMS;
@@ -251,15 +254,22 @@
       },
 
       // ── Actions: OK · Confirm F1, Re-tare F2, Quit F4 ───────────────
-      confirmWeighing() {
+      // The last confirmation completes the batch (bolt 015): its response
+      // carries `completion`, and View 3 opens with it (done.js).
+      async confirmWeighing() {
         if (!this.canConfirm()) {
           return;
         }
         const sequence = this.activeSequence();
-        this.runAction(async () => {
+        let completion = null;
+        await this.runAction(async () => {
           const result = await api.station.confirm(this.session.sessionId, sequence);
+          completion = result.completion || null;
           return result.progress;
         });
+        if (completion) {
+          await this.openDone(completion.summary.sessionId, completion);
+        }
       },
 
       retare() {
@@ -304,10 +314,12 @@
         this.weighMessage = failure.message || 'WeighingMS unavailable';
       },
 
-      // F1 / F2 / F4 run exactly what the buttons run (NFR-9).
+      // F1 / F2 / F4 (View 2) and F1 / F3 (View 3) run exactly what the
+      // buttons run (NFR-9).
       onKey(event) {
-        const action = KEY_ACTIONS[event.key];
-        if (!action || this.view !== 'weigh') {
+        const keys = KEY_ACTIONS[this.view];
+        const action = keys && keys[event.key];
+        if (!action) {
           return;
         }
         event.preventDefault();

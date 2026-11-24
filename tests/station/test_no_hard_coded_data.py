@@ -27,6 +27,14 @@ SEED_VALUES = (
     "R. Karim",
     "OP-01",
     "SUP-01",
+    # View 3 / ticket values (bolt 017): summary, write-back and ticket text
+    # come from the server.
+    "Sodium Sulphate",
+    "Soda Ash",
+    "35.322",
+    "6 min 41 s",
+    "FCI DYEING",
+    "WMS-",
 )
 ARRAY_LITERAL = re.compile(
     r"\b(const|let|var)\s+(batches|queue|recipes?|components|operators)\s*=\s*\[",
@@ -54,6 +62,7 @@ class NoHardCodedDataTests(SimpleTestCase):
                 "weigh.js",
                 "training-panel.js",
                 "training-client.js",
+                "done.js",
             }
             <= names
         )

@@ -3,7 +3,7 @@
    Only the terminal is reproduced: the prototype's meeting aids (screen
    switcher, question pins, notes) are not part of it. Its simulate buttons
    live on in the training panel (story 008), outside the device.
-   View 3 styles are added by a later UI bolt. */
+   View 3 (Confirm & print) is the prototype's ticket view (bolt 017). */
 
 /* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
@@ -338,3 +338,24 @@ table.q tr.sel td { background: var(--hmi-panel-2); }
 }
 .toggle { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-family: var(--mono); font-size: 12px; }
 .training-message { font-family: var(--mono); font-size: 12px; color: var(--over); }
+
+/* ── View 3 · Confirm & print (bolt 017), from the prototype's ticket view ── */
+.done-stage { padding: 24px; display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+@media (max-width: 820px) { .done-stage { grid-template-columns: 1fr; } }
+.done-msg { display: flex; flex-direction: column; gap: 14px; }
+.done-msg .h { font-size: 24px; font-weight: 650; color: var(--ok); }
+.done-note { margin: 0; font-size: 13.5px; color: var(--hmi-muted); }
+.summary { border: 1px solid var(--hmi-line); border-radius: 3px; }
+.summary div.r { display: flex; justify-content: space-between; gap: 20px; padding: 10px 14px; border-bottom: 1px solid var(--hmi-line); font-size: 13px; }
+.summary div.r:last-child { border-bottom: 0; }
+.summary .k { color: var(--hmi-muted); }
+.summary .v { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.summary .v.good { color: var(--ok); }
+.summary .v.bad { color: var(--over); }
+.ticket {
+  margin: 0; background: #f6f4ef; color: #14171a; border-radius: 2px; padding: 18px 16px;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.65; white-space: pre; overflow-x: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+.print-result { margin: 10px 0 0; font-size: 12px; color: var(--ok); font-family: var(--mono); }
+.print-result.bad { color: var(--over); }

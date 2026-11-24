@@ -1,5 +1,6 @@
 // Operator terminal: Alpine.js view state for the header, status bar,
-// View 1 · Select batch and View 2 · Weigh (weigh.js, merged in below). It
+// View 1 · Select batch, View 2 · Weigh (weigh.js) and View 3 · Confirm &
+// print (done.js), both merged in below. It
 // holds no scenario data and applies no business rule (FR-21): operators,
 // batches, recipes and device states come from the APIs through the
 // per-integration clients; the server decides whether a batch opens
@@ -31,8 +32,8 @@
   function terminal() {
     const api = window.WeighingMS;
 
-    return Object.assign(api.weighView(), {
-      view: 'loading', // 'loading' | 'operator' | 'queue' | 'weigh'
+    return Object.assign(api.weighView(), api.doneView(), {
+      view: 'loading', // 'loading' | 'operator' | 'queue' | 'weigh' | 'done'
       clock: hhmmss(new Date()),
       operator: null,
       operators: [],
@@ -72,7 +73,8 @@
       },
 
       // Resume (NFR-6): an open session reopens View 2 at its active
-      // component; otherwise View 1 is shown.
+      // component; a completed batch not yet left with Next batch reopens
+      // View 3 (bolt 017); otherwise View 1 is shown.
       async resumeOrQueue() {
         let session = null;
         try {
@@ -81,7 +83,9 @@
           session = null;
         }
         if (!session) {
-          this.showQueue();
+          if (!(await this.resumeDone())) {
+            this.showQueue();
+          }
           return;
         }
         let batch = { batchId: session.batchId };
