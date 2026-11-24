@@ -64,11 +64,22 @@ class WriteBackFlowTests(WriteBackApiTestCase):
         super().setUp()
         self.weigh()
 
-    def test_status_before_the_first_start_is_null(self):
+    def test_completion_leaves_a_pending_write_back_before_the_first_start(self):
+        """Bolt 015 (ADR-013): the 5th confirm opens the write-back, 0 attempts."""
         response = Client().get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {"writeBack": None})
+        self.assertEqual(
+            response.json()["writeBack"],
+            {
+                "status": "pending",
+                "idempotencyKey": f"WMS-B-24187-S{self.session.pk}",
+                "attempts": 0,
+                "confirmedAt": None,
+                "reason": None,
+                "operatorId": "OP-01",
+            },
+        )
 
     def test_start_returns_key_and_body_with_every_actual(self):
         """Story 002 AC 1."""

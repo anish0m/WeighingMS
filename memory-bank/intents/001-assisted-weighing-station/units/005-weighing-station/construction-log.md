@@ -2,7 +2,7 @@
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:02:10Z
-last_updated: 2026-11-23T10:39:21Z
+last_updated: 2026-11-23T10:41:27Z
 ---
 
 # Construction Log: weighing-station
@@ -67,6 +67,7 @@ last_updated: 2026-11-23T10:39:21Z
 | 2026-11-23T10:24:09Z | 015-weighing-station | stage-complete | Domain Model → Technical Design (APPROVE MODEL; completion in the last confirm's transaction, pending WriteBack created with it, elapsed session start → completion "M min S s", history = all records of the batch, API only) |
 | 2026-11-23T10:35:24Z | 015-weighing-station | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; new `completion.py` / `history.py`, completion + pending WriteBack in the last confirm's transaction, confirm JSON `completion`, `GET sessions/<id>/summary`, `GET batch-history/<batch_id>`, no migration) |
 | 2026-11-23T10:39:21Z | 015-weighing-station | stage-complete | ADR Analysis → Implement (APPROVE ADR ALL, APPROVE ADR; ADR-013 completion in the last confirmation with the pending write-back, ADR-014 batch-history read; accepted and indexed) |
+| 2026-11-23T10:41:27Z | 015-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `completion.py`, `history.py`, `open_write_back`, completion in the last confirm, confirm JSON `completion`, `GET summary`, `GET batch-history`; write-back attributed to the confirming operator) |
 
 ## Execution Summary
 

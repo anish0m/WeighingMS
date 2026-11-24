@@ -2,7 +2,9 @@
 // weighed 5 of 5 through the terminal UI; then the page's own clients run
 // writeBack: the station API supplies body and key, the OrgaTEX client posts
 // to Dummy OrgaTEX (training contract), and the server decides the status.
-// View 3 (bolt 017) will call the same writeBack.
+// View 3 (bolt 017) will call the same writeBack. Since bolt 015 the 5th
+// confirmation completes the batch and opens the write-back (pending, 0
+// attempts), so the first writeBack is attempt 1.
 const { test, expect } = require('@playwright/test');
 const { resetDatabase, resetModes, setMode, openB24187 } = require('./helpers');
 
@@ -22,9 +24,14 @@ async function scanExpected(page) {
   await expect(page.getByTestId('scan-step')).toBeHidden();
 }
 
-// Weighs all five components: scan, Simulate dispense, F1.
+// Weighs all five components: scan, Simulate dispense, F1. Returns the
+// session id, read while the session is still current (bolt 015: a complete
+// session is no longer the current session).
 async function weighAll(page) {
   await openB24187(page);
+  const sessionId = await page.evaluate(
+    async () => (await window.WeighingMS.station.currentSession()).sessionId,
+  );
   for (let weighed = 1; weighed <= 5; weighed += 1) {
     await scanExpected(page);
     await page.getByTestId('sim-dispense').click();
@@ -34,14 +41,11 @@ async function weighAll(page) {
       `${weighed} of 5 components weighed`,
     );
   }
+  return sessionId;
 }
 
-function runWriteBack(page) {
-  return page.evaluate(async () => {
-    const station = window.WeighingMS.station;
-    const session = await station.currentSession();
-    return station.writeBack(session.sessionId);
-  });
+function runWriteBack(page, sessionId) {
+  return page.evaluate((id) => window.WeighingMS.station.writeBack(id), sessionId);
 }
 
 async function consumptions(request) {
@@ -50,12 +54,12 @@ async function consumptions(request) {
 }
 
 test('writeBack posts the consumption once and is CONFIRMED', async ({ page, request }) => {
-  await weighAll(page);
+  const sessionId = await weighAll(page);
 
   const posted = page.waitForRequest(
     (r) => r.method() === 'POST' && r.url().endsWith('/api/batches/B-24187/consumption'),
   );
-  const result = await runWriteBack(page);
+  const result = await runWriteBack(page, sessionId);
   const body = (await posted).postDataJSON();
 
   expect(result.status).toBe('confirmed');
@@ -74,7 +78,7 @@ test('writeBack posts the consumption once and is CONFIRMED', async ({ page, req
   }
 
   // Triggered again: already confirmed, nothing new in OrgaTEX.
-  const again = await runWriteBack(page);
+  const again = await runWriteBack(page, sessionId);
   expect(again.status).toBe('confirmed');
   expect(again.attempts).toBe(2);
   expect(await consumptions(request)).toHaveLength(1);
@@ -84,17 +88,17 @@ test('OrgaTEX unavailable: not written, then retry with the same key confirms', 
   page,
   request,
 }) => {
-  await weighAll(page);
+  const sessionId = await weighAll(page);
   await setMode(request, 'orgatex', 'unavailable');
 
-  const failed = await runWriteBack(page);
+  const failed = await runWriteBack(page, sessionId);
 
   expect(failed.status).toBe('not_written');
   expect(failed.reason).toBe('OrgaTEX unavailable');
   expect(failed.confirmedAt).toBeNull();
 
   await setMode(request, 'orgatex', 'ok');
-  const retried = await runWriteBack(page);
+  const retried = await runWriteBack(page, sessionId);
 
   expect(retried.status).toBe('confirmed');
   expect(retried.idempotencyKey).toBe(failed.idempotencyKey);
