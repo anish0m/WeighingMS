@@ -3,14 +3,14 @@ id: 016-ticket-printing
 unit: 006-ticket-printing
 intent: 001-assisted-weighing-station
 type: simple-construction-bolt
-status: planned
+status: in-progress
 stories:
   - 001-print-weighing-ticket
   - 002-reprint-and-print-failure
 created: 2026-11-20T05:15:14Z
-started: null
+started: 2026-11-24T03:42:20Z
 completed: null
-current_stage: null
+current_stage: plan
 stages_completed: []
 
 # Bolt Dependencies (for execution ordering)
