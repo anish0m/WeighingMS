@@ -1,10 +1,8 @@
 // Stories 002/002 and 002/003 (bolt 014): the browser's write-back. B-24187 is
-// weighed 5 of 5 through the terminal UI; then the page's own clients run
-// writeBack: the station API supplies body and key, the OrgaTEX client posts
-// to Dummy OrgaTEX (training contract), and the server decides the status.
-// View 3 (bolt 017) will call the same writeBack. Since bolt 015 the 5th
-// confirmation completes the batch and opens the write-back (pending, 0
-// attempts), so the first writeBack is attempt 1.
+// weighed 5 of 5 through the terminal UI; the 5th confirmation completes the
+// batch (bolt 015) and View 3 (bolt 017) runs writeBack by itself: the station
+// API supplies body and key, the OrgaTEX client posts to Dummy OrgaTEX
+// (training contract), and the server decides the status.
 const { test, expect } = require('@playwright/test');
 const { resetDatabase, resetModes, setMode, weighAllB24187 } = require('./helpers');
 
@@ -21,22 +19,26 @@ function runWriteBack(page, sessionId) {
   return page.evaluate((id) => window.WeighingMS.station.writeBack(id), sessionId);
 }
 
+function writeBackStatus(page, sessionId) {
+  return page.evaluate((id) => window.WeighingMS.station.writeBackStatus(id), sessionId);
+}
+
 async function consumptions(request) {
   const response = await request.get('/api/batches/B-24187/consumption');
   return (await response.json()).consumptions;
 }
 
-test('writeBack posts the consumption once and is CONFIRMED', async ({ page, request }) => {
-  const sessionId = await weighAllB24187(page);
-
+test('completion posts the consumption once and is CONFIRMED', async ({ page, request }) => {
   const posted = page.waitForRequest(
     (r) => r.method() === 'POST' && r.url().endsWith('/api/batches/B-24187/consumption'),
   );
-  const result = await runWriteBack(page, sessionId);
+  const sessionId = await weighAllB24187(page);
   const body = (await posted).postDataJSON();
+  const result = await writeBackStatus(page, sessionId);
 
   expect(result.status).toBe('confirmed');
   expect(result.confirmedAt).not.toBeNull();
+  expect(result.attempts).toBe(1);
   expect(body.idempotencyKey).toBe(result.idempotencyKey);
   expect(body.idempotencyKey).toMatch(/^WMS-B-24187-S\d+$/);
   expect(body.components.map((c) => c.code)).toEqual([
@@ -61,10 +63,11 @@ test('OrgaTEX unavailable: not written, then retry with the same key confirms', 
   page,
   request,
 }) => {
-  const sessionId = await weighAllB24187(page);
-  await setMode(request, 'orgatex', 'unavailable');
+  const sessionId = await weighAllB24187(page, {
+    beforeLast: () => setMode(request, 'orgatex', 'unavailable'),
+  });
 
-  const failed = await runWriteBack(page, sessionId);
+  const failed = await writeBackStatus(page, sessionId);
 
   expect(failed.status).toBe('not_written');
   expect(failed.reason).toBe('OrgaTEX unavailable');

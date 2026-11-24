@@ -401,6 +401,7 @@ test.describe('actions and function keys (story 005)', () => {
 test.describe('the whole batch', () => {
   test('five components in recipe order; the floor scale takes over after Yellow RGB', async ({
     page,
+    request,
   }) => {
     await openB24187(page);
 
@@ -413,18 +414,31 @@ test.describe('the whole batch', () => {
     await expect(page.getByTestId('scale-selected')).toContainText('32 kg floor');
     await expect(page.getByTestId('weighed-now')).toHaveText('0.000');
     await weighActive(page, 4);
-    await weighActive(page, 5);
 
     await expect(page.locator('.comp .st')).toHaveText([
       '✓ 1242.4',
       '✓ 386.8',
       '✓ 94.2',
       '✓ 24.048',
-      '✓ 9.619',
+      'WEIGHING',
     ]);
-    await expect(page.getByTestId('btn-ok')).toBeDisabled();
-    await expect(page.getByTestId('btn-retare')).toBeDisabled();
-    await expect(page.getByTestId('btn-quit')).toBeDisabled();
+    // The 5th confirmation completes the batch: View 3 replaces View 2
+    // (bolt 017), and the five actuals are stored (batch history, bolt 015).
+    await scanExpected(page);
+    await page.getByTestId('sim-dispense').click();
+    await expect(page.getByTestId('btn-ok')).toBeEnabled();
+    await page.keyboard.press('F1');
+    await expect(page.locator('#v-done')).toBeVisible();
+    await expect(page.locator('#v-weigh')).toBeHidden();
+    await expect(page.getByTestId('sum-components')).toHaveText('5 of 5');
+    const history = await (await request.get('/station/api/batch-history/B-24187')).json();
+    expect(history.records.map((r) => r.actualWeight)).toEqual([
+      '1242.4',
+      '386.8',
+      '94.2',
+      '24.048',
+      '9.619',
+    ]);
   });
 
   test('a reload resumes at the in-progress component with 2 of 5 kept', async ({ page }) => {

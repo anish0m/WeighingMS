@@ -71,7 +71,10 @@ async function scanExpected(page) {
 // the terminal UI (scan, Simulate dispense, F1). Returns the session id, read
 // while the session is still current: since bolt 015 the 5th confirmation
 // completes the batch, and a complete session is no longer current.
-async function weighAllB24187(page) {
+// `beforeLast` runs before the 5th F1 (e.g. to switch a Dummy to failing).
+// The 5th F1 opens View 3 · Confirm & print (bolt 017), which starts the
+// OrgaTEX write-back by itself; this waits until its status has settled.
+async function weighAllB24187(page, { beforeLast } = {}) {
   await openB24187(page);
   const sessionId = await page.evaluate(
     async () => (await window.WeighingMS.station.currentSession()).sessionId,
@@ -80,11 +83,19 @@ async function weighAllB24187(page) {
     await scanExpected(page);
     await page.getByTestId('sim-dispense').click();
     await expect(page.getByTestId('btn-ok')).toBeEnabled();
+    if (weighed === 5 && beforeLast) {
+      await beforeLast();
+    }
     await page.keyboard.press('F1');
-    await expect(page.getByTestId('rail-progress')).toHaveText(
-      `${weighed} of 5 components weighed`,
-    );
+    if (weighed < 5) {
+      await expect(page.getByTestId('rail-progress')).toHaveText(
+        `${weighed} of 5 components weighed`,
+      );
+    }
   }
+  await expect(page.locator('#v-done')).toBeVisible();
+  await expect(page.getByTestId('sum-components')).toHaveText('5 of 5');
+  await expect(page.getByTestId('sum-orgatex')).not.toHaveText('WRITING…');
   return sessionId;
 }
 

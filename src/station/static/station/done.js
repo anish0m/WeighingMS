@@ -57,6 +57,12 @@
         }
         try {
           const completion = await api.station.summary(sessionId);
+          try {
+            // Header crumb and machine, read from OrgaTEX for display only.
+            this.batch = await api.orgatex.fetchBatch(completion.summary.batchId);
+          } catch (unavailable) {
+            this.batch = { batchId: completion.summary.batchId };
+          }
           await this.openDone(sessionId, completion);
           return true;
         } catch (failure) {
