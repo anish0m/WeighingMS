@@ -340,7 +340,9 @@ table.q tr.sel td { background: var(--hmi-panel-2); }
 .training-message { font-family: var(--mono); font-size: 12px; color: var(--over); }
 
 /* ── View 3 · Confirm & print (bolt 017), from the prototype's ticket view ── */
-.done-stage { padding: 24px; display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+/* The ticket column is at least the prototype's 320px and grows to the
+   server's ticket text, so the preview never needs a horizontal scrollbar. */
+.done-stage { padding: 24px; display: grid; grid-template-columns: 1fr minmax(320px, max-content); gap: 24px; }
 @media (max-width: 820px) { .done-stage { grid-template-columns: 1fr; } }
 .done-msg { display: flex; flex-direction: column; gap: 14px; }
 .done-msg .h { font-size: 24px; font-weight: 650; color: var(--ok); }

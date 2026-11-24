@@ -74,3 +74,9 @@ created: 2026-11-24T04:40:00Z
   2. View 3 opens and shows "Written to OrgaTEX CONFIRMED hh:mm:ss".
   3. The Network tab lists `POST /api/batches/B-24187/consumption` (Payload: key and five components), answered `201`.
 - **Dev database:** B-24187 is at 1 of 5 there (STEP 25), so the STEP 26 run continues with Blue RSPL.
+
+### Post-completion fix (APPROVE TICKET FIX, 2026-11-24)
+
+- **Found:** during the workbook STEP 26 run, the ticket preview needed a horizontal scrollbar and the unit "kg" was cut off. The prototype's fixed 320 px ticket column is narrower than the server's ticket text (about 43 characters).
+- **Fix (`station.css`):** the View 3 grid's ticket column is `minmax(320px, max-content)`. It is at least the prototype's width and grows to the ticket text.
+- **Test (`playwright/confirm-print.spec.js`, test 3):** the preview's `scrollWidth` must not exceed its `clientWidth`. The spec passes 6/6.

@@ -85,6 +85,9 @@ test('Print ticket F1: the preview is the printed ticket; F1 again is a REPRINT 
   const preview = page.getByTestId('ticket-preview');
   await expect(preview).toContainText('FCI DYEING — WEIGHING TICKET');
   const shown = await preview.innerText();
+  // The whole ticket fits: no horizontal scrollbar, nothing cut off.
+  const overflow = await preview.evaluate((el) => el.scrollWidth - el.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
 
   const posted = page.waitForResponse(
     (r) => r.request().method() === 'POST' && r.url().endsWith('/api/tickets'),
