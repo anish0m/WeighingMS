@@ -2,7 +2,7 @@
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 created: 2026-11-20T09:02:10Z
-last_updated: 2026-11-23T10:41:27Z
+last_updated: 2026-11-24T03:40:29Z
 ---
 
 # Construction Log: weighing-station
@@ -33,7 +33,7 @@ last_updated: 2026-11-23T10:41:27Z
 | 009-weighing-station | 002, 004, 005 | ✅ completed | - |
 | 010-weighing-station | 003, 006, 008, 010 | ✅ completed | - |
 | 012-weighing-station | 007 | ✅ completed | - |
-| 015-weighing-station | 009, 011 | ⏳ in-progress | - |
+| 015-weighing-station | 009, 011 | ✅ completed | - |
 
 ## Execution History
 
@@ -68,6 +68,7 @@ last_updated: 2026-11-23T10:41:27Z
 | 2026-11-23T10:35:24Z | 015-weighing-station | stage-complete | Technical Design → ADR Analysis (APPROVE DESIGN; new `completion.py` / `history.py`, completion + pending WriteBack in the last confirm's transaction, confirm JSON `completion`, `GET sessions/<id>/summary`, `GET batch-history/<batch_id>`, no migration) |
 | 2026-11-23T10:39:21Z | 015-weighing-station | stage-complete | ADR Analysis → Implement (APPROVE ADR ALL, APPROVE ADR; ADR-013 completion in the last confirmation with the pending write-back, ADR-014 batch-history read; accepted and indexed) |
 | 2026-11-23T10:41:27Z | 015-weighing-station | stage-complete | Implement → Test (APPROVE IMPLEMENTATION; `completion.py`, `history.py`, `open_write_back`, completion in the last confirm, confirm JSON `completion`, `GET summary`, `GET batch-history`; write-back attributed to the confirming operator) |
+| 2026-11-24T03:40:29Z | 015-weighing-station | completed | All 5 stages done (APPROVE TESTS); Django 543/543 (27 new), Playwright 58/58; stories 009, 011 complete; unit 005 complete |
 
 ## Execution Summary
 
@@ -75,9 +76,9 @@ last_updated: 2026-11-23T10:41:27Z
 |--------|-------|
 | Original bolts planned | 5 |
 | Current bolt count | 5 |
-| Bolts completed | 4 |
-| Bolts in progress | 1 |
-| Bolts remaining | 1 |
+| Bolts completed | 5 |
+| Bolts in progress | 0 |
+| Bolts remaining | 0 |
 | Replanning events | 0 |
 
 ## Notes

@@ -2,11 +2,11 @@
 id: 011-retrieve-batch-history
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
-status: ready
+status: complete
 priority: must
-created: 2026-11-20T04:51:01Z
+created: 2026-11-20T04:51:01.000Z
 assigned_bolt: 015-weighing-station
-implemented: false
+implemented: true
 ---
 
 # Story: 011-retrieve-batch-history

@@ -3,41 +3,44 @@ id: 015-weighing-station
 unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 type: ddd-construction-bolt
-status: in-progress
+status: complete
 stories:
   - 009-complete-batch
   - 011-retrieve-batch-history
-created: 2026-11-20T05:15:14Z
-started: 2026-11-23T10:22:15Z
-completed: null
-current_stage: test
+created: 2026-11-20T05:15:14.000Z
+started: 2026-11-23T10:22:15.000Z
+completed: "2026-11-24T03:40:29Z"
+current_stage: null
 stages_completed:
   - name: model
-    completed: 2026-11-23T10:24:09Z
+    completed: 2026-11-23T10:24:09.000Z
     artifact: ddd-01-domain-model.md
   - name: design
-    completed: 2026-11-23T10:35:24Z
+    completed: 2026-11-23T10:35:24.000Z
     artifact: ddd-02-technical-design.md
   - name: adr
-    completed: 2026-11-23T10:39:21Z
+    completed: 2026-11-23T10:39:21.000Z
     artifact: adr-013-completion-in-last-confirmation.md, adr-014-batch-history-read.md
   - name: implement
-    completed: 2026-11-23T10:41:27Z
+    completed: 2026-11-23T10:41:27.000Z
     artifact: source code
-
-# Bolt Dependencies (for execution ordering)
-requires_bolts: [010-weighing-station, 014-orgatex-integration]
-enables_bolts: [016-ticket-printing, 017-assisted-weighing-station-ui]
-requires_units: []  # unit ordering is enforced through requires_bolts (see body)
+  - name: test
+    completed: 2026-11-24T03:40:29Z
+    artifact: ddd-03-test-report.md
+requires_bolts:
+  - 010-weighing-station
+  - 014-orgatex-integration
+enables_bolts:
+  - 016-ticket-printing
+  - 017-assisted-weighing-station-ui
+requires_units: []
 blocks: true
-
-# Complexity Assessment (aggregate of included stories)
 complexity:
   avg_complexity: 2
   avg_uncertainty: 1
   max_dependencies: 2
   testing_scope: 2
-workbook_step: "STEP 26"
+workbook_step: STEP 26
 ---
 
 # Bolt: 015-weighing-station
@@ -66,7 +69,7 @@ Batch completion summary, write-back trigger and batch history.
 - [x] **2. Technical Design**: Complete → ddd-02-technical-design.md
 - [x] **3. ADR Analysis (optional)**: Complete → adr-*.md
 - [x] **4. Implement**: Complete → source code
-- [ ] **5. Test**: Pending → ddd-03-test-report.md
+- [x] **5. Test**: Complete → ddd-03-test-report.md
 
 ## Expected Outcome
 

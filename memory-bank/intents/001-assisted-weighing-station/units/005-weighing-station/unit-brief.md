@@ -3,9 +3,9 @@ unit: 005-weighing-station
 intent: 001-assisted-weighing-station
 phase: inception
 default_bolt_type: ddd-construction-bolt
-status: ready
-created: 2026-11-20T04:22:15Z
-updated: 2026-11-20T04:51:01Z
+status: complete
+created: 2026-11-20T04:22:15.000Z
+updated: 2026-11-20T04:51:01.000Z
 ---
 
 # Unit Brief: Weighing Station (domain)
