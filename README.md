@@ -12,7 +12,7 @@ In a dyehouse, manual weighing without live feedback or component-level traceabi
 2. **Guided Weighing** — Automatically select the appropriate scale (`3 kg` precision scale for $\le 3\text{ kg}$, `32 kg` floor/heavy-duty scale for $> 3\text{ kg}$), track live dispensed weight against target and tolerance bands, handle overshoot scenarios, and enforce component progression.
 3. **Confirm & Print** — Record full component-level traceability, post actual consumption back to OrgaTEX, and generate a batch weighing ticket.
 
-> **Note:** External systems (OrgaTEX MES, weighing scales, barcode scanner, and ticket printer) are implemented as **Dummy APIs** for development, testing, and demonstration purposes.
+> **Note:** External systems (OrgaTEX MES, weighing scales, barcode scanner, and ticket printer) are implemented as **Dummy APIs** for development, testing, and demonstration purposes. The Dummy APIs are **training contracts** defined by this project. They are not the real OrgaTEX, scale, scanner or printer interfaces.
 
 ---
 
@@ -45,34 +45,43 @@ weighingms/
 ## Getting Started
 
 ### Prerequisites
-- **Node.js** 18+ (for `specs.md` CLI/dashboard and Playwright)
-- **Python** 3.10+ (for Django backend and Dummy APIs)
+- **Python** 3.12 (for the Django backend and Dummy APIs)
+- **Node.js** 24 with npm (for the `specs.md` CLI/dashboard and Playwright)
 
 ### Running the Application
 
-1. **Install dependencies** (once scaffolded during Construction):
+1. **Install dependencies:**
    ```bash
    python -m venv .venv
    source .venv/bin/activate   # On Windows: .venv\Scripts\activate
    pip install -r requirements.txt
    npm install
+   npx playwright install chromium
    ```
 
-2. **Run database migrations & start the development server:**
+2. **Create the database and seed the training scenario** (batch B-24187 with recipe Teal 4C, queued batches B-24188, B-24190 and B-24191, and the two Dummy scales):
    ```bash
    python manage.py migrate
-   npm run dev
+   python manage.py seed_training
    ```
 
-3. **View the `specs.md` AI-DLC Dashboard:**
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open http://localhost:8000.
+   - **Choose the operator:** pick **R. Karim · Shift A** (operator `OP-01`). The batch queue appears only after an operator is chosen.
+   - **Training panel:** the **TRAINING ONLY** panel below the terminal drives the Dummy devices. You can simulate dispensing, set an exact weight, simulate a scan, and switch failure modes.
+
+4. **View the `specs.md` AI-DLC Dashboard:**
    ```bash
    npx specsmd@latest dashboard
    ```
 
-4. **Run Tests:**
+5. **Run Tests:**
    ```bash
-   python manage.py test
-   npx playwright test
+   npm test                 # Django test suite (.venv/bin/python manage.py test tests)
+   npx playwright test      # E2E; starts its own server on port 8001 with a separate database
    ```
 
 ---
